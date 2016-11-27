@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/Content"
+    android:textSize="@dimen/ContentFont"
+    android:textColor="@color/ContentFont"
+    android:layout_marginBottom="5sp"
+    android:textAlignment="center"
+    android:paddingStart="@dimen/padding_start"
+    android:paddingEnd="@dimen/padding_end"
+    android:paddingLeft="@dimen/padding_start"
+    android:paddingRight="@dimen/padding_end"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>
