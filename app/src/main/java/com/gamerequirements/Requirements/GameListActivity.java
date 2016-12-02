@@ -100,9 +100,12 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
             {
 
                 JSONArray jarr = response.getJSONArray(i);
-                int id = jarr.getInt(0);
-                String name = jarr.getString(1);
-                gamelist.add(new Information(id, name));
+                int id = jarr.getInt(1);
+                String summary=jarr.getString(2).replace("\n",",");;
+                String genre=jarr.getString(3).replace("\n",",");
+                String date=jarr.getString(4);
+                String name = jarr.getString(6);
+                gamelist.add(new Information(id, name,summary,genre,date));
             }
         } catch (JSONException e)
         {

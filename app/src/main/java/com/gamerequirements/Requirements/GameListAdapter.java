@@ -46,6 +46,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     {
         Information in=info.get(position);
         holder.title_TV.setText(in.title);
+        holder.date_TV.setText("Release Date: "+in.date);
+        holder.genre_TV.setText("Genre: "+in.genre);
+        holder.summart_TV.setText(in.summary);
         String url= Singelton.getImageurl()+in.id;
         Picasso.with(context)
                 .load(url)
@@ -65,14 +68,17 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         LinearLayout linearLayout;
-        TextView title_TV;
+        TextView title_TV,genre_TV,date_TV,summart_TV;
         ImageView imageView;
         public MyViewHolder(View itemView)
         {
             super(itemView);
             linearLayout= (LinearLayout) itemView.findViewById(R.id.Game_list_LL);
             title_TV= (TextView) itemView.findViewById(R.id.name_of_game);
+            genre_TV= (TextView) itemView.findViewById(R.id.genre);
+            date_TV= (TextView) itemView.findViewById(R.id.date);
             imageView= (ImageView) itemView.findViewById(R.id.image);
+            summart_TV=(TextView) itemView.findViewById(R.id.summary);
             linearLayout.setOnClickListener(this);
         }
 

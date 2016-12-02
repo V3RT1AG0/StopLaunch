@@ -10,12 +10,15 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 public class Information
 {
-    String title;
+    String title,date,summary,genre;
     int id;
-    Information(int id,String title)
+    Information(int id, String title, String summary, String genre,String date)
     {
         this.id=id;
         this.title=title;
+        this.date=date;
+        this.summary=summary;
+        this.genre=genre;
     }
 
  /*   Information(Parcel parcel)
