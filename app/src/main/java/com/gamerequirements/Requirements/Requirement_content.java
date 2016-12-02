@@ -2,6 +2,9 @@ package com.gamerequirements.Requirements;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +17,7 @@ import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +27,8 @@ public class Requirement_content extends ActivitySuperClass
     private static final String requirementurl = Singelton.getURL() + "getreq/";
     int id;
     String title;
-    TextView[] Headingtextview,ContentTextview,RHeadingtextview,RContentTextview;
+    ImageView poster_image;
+    TextView[] Headingtextview, ContentTextview, RHeadingtextview, RContentTextview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,10 +36,15 @@ public class Requirement_content extends ActivitySuperClass
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
         id = getIntent().getIntExtra("id", 0);
-        title=getIntent().getStringExtra("title");
-        ((TextView)findViewById(R.id.game_title)).setText(title);
+        title = getIntent().getStringExtra("title");
+        ((TextView) findViewById(R.id.game_title)).setText(title);
+        poster_image = (ImageView) findViewById(R.id.image);
+        Picasso.with(this)
+                .load(Singelton.getImageurl() + id)
+                .into(poster_image);
 
-        Headingtextview= new TextView[]{
+
+        Headingtextview = new TextView[]{
                 ((TextView) findViewById(R.id.HEADING_intelCPU)),
                 ((TextView) findViewById(R.id.HEADING_AMD_CPU)),
                 ((TextView) findViewById(R.id.HEADING_NvidiaGPU)),
@@ -45,7 +55,7 @@ public class Requirement_content extends ActivitySuperClass
 
         };
 
-        ContentTextview= new TextView[]{
+        ContentTextview = new TextView[]{
                 ((TextView) findViewById(R.id.CONTENT_intelCPU)),
                 ((TextView) findViewById(R.id.CONTENT_AMD_CPU)),
                 ((TextView) findViewById(R.id.CONTENT_NvidiaGPU)),
@@ -56,7 +66,7 @@ public class Requirement_content extends ActivitySuperClass
 
         };
 
-        RHeadingtextview= new TextView[]{
+        RHeadingtextview = new TextView[]{
                 ((TextView) findViewById(R.id.RHEADING_intelCPU)),
                 ((TextView) findViewById(R.id.RHEADING_AMD_CPU)),
                 ((TextView) findViewById(R.id.RHEADING_NvidiaGPU)),
@@ -67,7 +77,7 @@ public class Requirement_content extends ActivitySuperClass
 
         };
 
-        RContentTextview= new TextView[]{
+        RContentTextview = new TextView[]{
                 ((TextView) findViewById(R.id.RCONTENT_intelCPU)),
                 ((TextView) findViewById(R.id.RCONTENT_AMD_CPU)),
                 ((TextView) findViewById(R.id.RCONTENT_NvidiaGPU)),
@@ -115,23 +125,30 @@ public class Requirement_content extends ActivitySuperClass
             try
             {
                 load_minimum(jarr);
-            }
-            catch (JSONException e)
+            } catch (JSONException e)
             {
                 e.printStackTrace();
             }
 
             JSONArray recommended_array = response.getJSONArray(1);
-            if(recommended_array.length()!=1)
+            if (recommended_array.length() != 1)
             {
                 load_recommended(recommended_array);
+            }
+            else
+            {
+                (findViewById(R.id.RecommendedLL)).setVisibility(View.GONE);
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
+
         }
     }
-/**throws cause the calling method to handle exceptio instead of handling the exception here**/
+
+    /**
+     * throws cause the calling method to handle exceptio instead of handling the exception here
+     **/
     void load_minimum(JSONArray jarr) throws JSONException
     {
         String Intel_CPU = jarr.getString(0);
@@ -141,9 +158,9 @@ public class Requirement_content extends ActivitySuperClass
         String RAM = jarr.getString(4);
         String OS = jarr.getString(5);
         String HDD = jarr.getString(6);
-        String[] ContentArray={Intel_CPU,AMD_CPU,NvidiaGPU,AMDGpu,RAM,OS,HDD};
-        String[] HeadingArray={"Intel CPU","AMD CPU","Nvidia Graphics Card","AMD Graphics Card","RAM","Operating System","Hard Drive Space"};
-        for(int i=0;i<Headingtextview.length;i++)
+        String[] ContentArray = {Intel_CPU, AMD_CPU, NvidiaGPU, AMDGpu, RAM, OS, HDD};
+        String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "RAM", "Operating System", "Hard Drive Space"};
+        for (int i = 0; i < jarr.length(); i++)
         {
             Headingtextview[i].setText(HeadingArray[i]);
             ContentTextview[i].setText(ContentArray[i]);
@@ -160,10 +177,19 @@ public class Requirement_content extends ActivitySuperClass
         String AMDGpu2 = recommended_array.getString(3);
         String RAM2 = recommended_array.getString(4);
         String OS2 = recommended_array.getString(5);
-        String HDD2 = recommended_array.getString(6);
-        String[] ContentArray={Intel_CPU2,AMD_CPU2,NvidiaGPU2,AMDGpu2,RAM2,OS2,HDD2};
-        String[] HeadingArray={"Intel CPU","AMD CPU","Nvidia Graphics Card","AMD Graphics Card","RAM","Operating System","Hard Drive Space"};
-        for(int i=0;i<Headingtextview.length;i++)
+        String HDD2="";
+        if (recommended_array.length() == 7)
+        {
+            HDD2 = recommended_array.getString(6);
+        }
+        else
+        {
+            RHeadingtextview[6].setVisibility(View.GONE);
+            RContentTextview[6].setVisibility(View.GONE);
+        }
+        String[] ContentArray = {Intel_CPU2, AMD_CPU2, NvidiaGPU2, AMDGpu2, RAM2, OS2, HDD2};
+        String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "RAM", "Operating System", "Hard Drive Space"};
+        for (int i = 0; i < recommended_array.length(); i++)
         {
             RHeadingtextview[i].setText(HeadingArray[i]);
             RContentTextview[i].setText(ContentArray[i]);

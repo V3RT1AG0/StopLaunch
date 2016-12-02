@@ -6,11 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -43,6 +46,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     {
         Information in=info.get(position);
         holder.title_TV.setText(in.title);
+        String url= Singelton.getImageurl()+in.id;
+        Picasso.with(context)
+                .load(url)
+                 // optional
+                //.error(R.mipmap.ic_launcher)      // optional
+                //.resize(400, 400)
+                .into(holder.imageView);
+
     }
 
     @Override
@@ -55,11 +66,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     {
         LinearLayout linearLayout;
         TextView title_TV;
+        ImageView imageView;
         public MyViewHolder(View itemView)
         {
             super(itemView);
             linearLayout= (LinearLayout) itemView.findViewById(R.id.Game_list_LL);
             title_TV= (TextView) itemView.findViewById(R.id.name_of_game);
+            imageView= (ImageView) itemView.findViewById(R.id.image);
             linearLayout.setOnClickListener(this);
         }
 

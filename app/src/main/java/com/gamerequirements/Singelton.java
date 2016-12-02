@@ -6,10 +6,18 @@ package com.gamerequirements;
 
 public class Singelton
 {
-    private static final String URL="http://192.168.0.101:5000/";
+    private static final String URL="http://192.168.0.100:5000/";
+    private static final String imageurl="http://www.game-debate.com/pic.php?g_id=";
+
+
 
     public static String getURL()
     {
         return URL;
+    }
+
+    public static String getImageurl()
+    {
+        return imageurl;
     }
 }

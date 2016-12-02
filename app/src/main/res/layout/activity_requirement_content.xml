@@ -27,11 +27,21 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:background="@color/HeaderTitle"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textColor="#2c3e50"/>
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="110sp"
+                android:layout_height="154sp"
+                android:background="@color/black"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5sp"
+                />
 
 
             <LinearLayout
@@ -170,6 +180,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/RecommendedLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
