@@ -2,6 +2,7 @@ package com.gamerequirements.Requirements;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +89,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
             switch (view.getId())
             {
                 case R.id.Game_list_LL:
-                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(),Requirement_content.class).putExtra("id",info.get(getAdapterPosition()).id).putExtra("title",info.get(getAdapterPosition()).title));
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("id",info.get(getAdapterPosition()).id);
+                    bundle.putString("title",info.get(getAdapterPosition()).title);
+                    bundle.putString("genre",info.get(getAdapterPosition()).genre);
+                    bundle.putString("date",info.get(getAdapterPosition()).date);
+                    bundle.putString("summary",info.get(getAdapterPosition()).summary);
+                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(),Requirement_content.class).putExtras(bundle));
                     break;
             }
         }

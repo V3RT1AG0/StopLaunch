@@ -29,15 +29,22 @@ public class Requirement_content extends ActivitySuperClass
     String title;
     ImageView poster_image;
     TextView[] Headingtextview, ContentTextview, RHeadingtextview, RContentTextview;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
-        id = getIntent().getIntExtra("id", 0);
-        title = getIntent().getStringExtra("title");
+        Bundle bundle=getIntent().getExtras();
+        id = bundle.getInt("id");
+        title = bundle.getString("title");
+        String genre=bundle.getString("genre");
+        String date=bundle.getString("date");
+        String summary=bundle.getString("summary");
         ((TextView) findViewById(R.id.game_title)).setText(title);
+        ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre);
+        ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
+        ((TextView) findViewById(R.id.summary)).setText(summary);
+
         poster_image = (ImageView) findViewById(R.id.image);
         Picasso.with(this)
                 .load(Singelton.getImageurl() + id)
@@ -157,7 +164,16 @@ public class Requirement_content extends ActivitySuperClass
         String AMDGpu = jarr.getString(3);
         String RAM = jarr.getString(4);
         String OS = jarr.getString(5);
-        String HDD = jarr.getString(6);
+        String HDD = "";
+        if (jarr.length() == 7)
+        {
+            HDD = jarr.getString(6);
+        }
+        else
+        {
+            Headingtextview[6].setVisibility(View.GONE);
+            ContentTextview[6].setVisibility(View.GONE);
+        }
         String[] ContentArray = {Intel_CPU, AMD_CPU, NvidiaGPU, AMDGpu, RAM, OS, HDD};
         String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "RAM", "Operating System", "Hard Drive Space"};
         for (int i = 0; i < jarr.length(); i++)
