@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".Requirements.Requirement_content">
         </activity>
+        <activity android:name=".Canyourunit.CanYouRunIt">
+        </activity>
     </application>
 
 </manifest>

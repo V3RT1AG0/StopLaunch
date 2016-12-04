@@ -2,4 +2,5 @@
     <string name="app_name">gamerequirements</string>
     <string name="minimum_requirements">Minimum Requirements</string>
     <string name="recommended_requirements">Recommended Requirements</string>
+    <string name="can_you_run_it">Can you run it?</string>
 </resources>

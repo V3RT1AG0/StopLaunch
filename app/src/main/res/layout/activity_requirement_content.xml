@@ -20,7 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/plainWhite">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,8 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-
-                >
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -132,7 +134,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_intelCPU"
@@ -148,7 +150,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_AMD_CPU"
@@ -164,7 +166,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_NvidiaGPU"
@@ -180,7 +182,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_AMDGpu"
@@ -196,7 +198,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_RAM"
@@ -212,7 +214,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_OS"
@@ -228,7 +230,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/HEADING_HDD"
@@ -249,6 +251,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
                 >
 
                 <TextView
@@ -268,7 +273,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_intelCPU"
@@ -284,7 +289,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_AMD_CPU"
@@ -300,7 +305,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_NvidiaGPU"
@@ -316,7 +321,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_AMDGpu"
@@ -332,7 +337,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_RAM"
@@ -348,7 +353,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_OS"
@@ -364,7 +369,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <include
                         android:id="@+id/RHEADING_HDD"
@@ -379,6 +384,13 @@
 
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/canYouRunIt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="canYouRunIt"
+                android:text="@string/can_you_run_it"/>
 
         </LinearLayout>
     </ScrollView>

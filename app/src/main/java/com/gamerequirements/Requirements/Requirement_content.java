@@ -1,5 +1,6 @@
 package com.gamerequirements.Requirements;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.gamerequirements.ActivitySuperClass;
+import com.gamerequirements.Canyourunit.CanYouRunIt;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
@@ -210,6 +212,12 @@ public class Requirement_content extends ActivitySuperClass
             RHeadingtextview[i].setText(HeadingArray[i]);
             RContentTextview[i].setText(ContentArray[i]);
         }
+    }
+
+    public void canYouRunIt(View view)
+    {
+        Intent i= new Intent(this,CanYouRunIt.class);
+        startActivity(i);
     }
    /* void performdatascrapping(final String url)
     {
