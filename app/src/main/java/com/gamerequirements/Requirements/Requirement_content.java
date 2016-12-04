@@ -1,11 +1,12 @@
 package com.gamerequirements.Requirements;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Requirement_content extends ActivitySuperClass
+public class Requirement_content extends ActivitySuperClass implements View.OnClickListener
 {
     private static final String requirementurl = Singelton.getURL() + "getreq/";
     int id;
@@ -51,6 +52,8 @@ public class Requirement_content extends ActivitySuperClass
         Picasso.with(this)
                 .load(Singelton.getImageurl() + id)
                 .into(poster_image);
+
+        poster_image.setOnClickListener(this);
 
 
         Headingtextview = new TextView[]{
@@ -218,6 +221,26 @@ public class Requirement_content extends ActivitySuperClass
     {
         Intent i= new Intent(this,CanYouRunIt.class);
         startActivity(i);
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.image:
+                Dialog settingsDialog = new Dialog(this);
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.image_layout
+                        , null));
+                ImageView imageView= (ImageView) settingsDialog.findViewById(R.id.imageview1);
+                settingsDialog.show();
+                Picasso.with(this)
+                        .load(Singelton.getImageurl() + id)
+                        .into(imageView);
+
+
+        }
     }
    /* void performdatascrapping(final String url)
     {

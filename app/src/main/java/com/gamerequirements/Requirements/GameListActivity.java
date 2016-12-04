@@ -33,6 +33,8 @@ import org.json.JSONException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameListActivity extends ActivitySuperClass implements TextWatcher, FloatingSearchView.OnQueryChangeListener
 {
@@ -44,12 +46,14 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     FloatingSearchView searchView;
     boolean doubleBackToExitPressedOnce = false;
     CircularProgressView progressView;
+    Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
+        timer = new Timer();
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
         progressView.startAnimation();
         gamelist = new ArrayList<>();
@@ -101,11 +105,12 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
 
                 JSONArray jarr = response.getJSONArray(i);
                 int id = jarr.getInt(1);
-                String summary=jarr.getString(2).replace("\n",",");;
-                String genre=jarr.getString(3).replace("\n",",");
-                String date=jarr.getString(4);
+                String summary = jarr.getString(2).replace("\n", ",");
+                ;
+                String genre = jarr.getString(3).replace("\n", ",");
+                String date = jarr.getString(4);
                 String name = jarr.getString(6);
-                gamelist.add(new Information(id, name,summary,genre,date));
+                gamelist.add(new Information(id, name, summary, genre, date));
             }
         } catch (JSONException e)
         {
@@ -209,30 +214,48 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         // gameListAdapter.notifyDataSetChanged();  // data set c
 
         */
-
         newQuery = newQuery.toString().toLowerCase();
         final List<Information> filteredList = new ArrayList<>();
 
+        if (timer != null)
+            timer.cancel();
+        final String finalNewQuery = newQuery;
+        timer = new Timer();
+        timer.schedule(
+                new TimerTask()
+                {
+                    @Override
+                    public void run()
+                    {
+                        for (int j = 0; j < gamelist.size(); j++)
+                        {
 
-        for (int j = 0; j < gamelist.size(); j++)
-        {
+                            final String text = gamelist.get(j).title.toLowerCase();
+                            if (text.contains(finalNewQuery))
+                            {
+                                filteredList.add(gamelist.get(j));
+                            }
+                        }
 
-            final String text = gamelist.get(j).title.toLowerCase();
-            if (text.contains(newQuery))
-            {
-                filteredList.add(gamelist.get(j));
-            }
-        }
+                        runOnUiThread(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                recyclerView.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
+                                gameListAdapter = new GameListAdapter(filteredList);
+                                recyclerView.setAdapter(gameListAdapter);
+                                gameListAdapter.notifyDataSetChanged();
+                            }
+                        });
 
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gameListAdapter = new GameListAdapter(filteredList);
-        recyclerView.setAdapter(gameListAdapter);
-        gameListAdapter.notifyDataSetChanged();
+                    }
+                },
+                200
+        );
 
 
     }
-
 
 
 }

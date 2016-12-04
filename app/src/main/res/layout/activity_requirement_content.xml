@@ -83,6 +83,19 @@
                         android:textColor="@color/whitedark1"
                         android:textSize="15sp"/>
 
+                    <Button
+                        android:background="@drawable/buttonshape"
+                        android:textColor="@color/plainWhite"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:onClick="canYouRunIt"
+                        android:text="@string/can_you_run_it"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp"/>
+
                 </LinearLayout>
 
 
@@ -126,6 +139,7 @@
                     android:paddingEnd="3sp"
                     android:paddingStart="3sp"
                     android:paddingTop="3sp"
+                    android:layout_marginBottom="7sp"
                     android:text="@string/minimum_requirements"
                     android:textAlignment="center"
                     android:textColor="#ECEFF1"
@@ -265,6 +279,7 @@
                     android:paddingEnd="3sp"
                     android:paddingStart="3sp"
                     android:paddingTop="3sp"
+                    android:layout_marginBottom="7sp"
                     android:text="@string/recommended_requirements"
                     android:textAlignment="center"
                     android:textColor="#ECEFF1"
@@ -386,11 +401,17 @@
             </LinearLayout>
 
             <Button
+                android:background="#03A9F4"
+                android:textColor="@color/plainWhite"
                 android:id="@+id/canYouRunIt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="canYouRunIt"
-                android:text="@string/can_you_run_it"/>
+                android:layout_marginStart="10dp"
+                android:text="@string/can_you_run_it"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"/>
 
         </LinearLayout>
     </ScrollView>
