@@ -220,7 +220,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
 
     public void canYouRunIt(View view)
     {
-        Intent i= new Intent(this,CanYouRunIt.class);
+        Intent i= new Intent(this,CanYouRunIt.class).putExtra("gid",id);
         startActivity(i);
     }
 

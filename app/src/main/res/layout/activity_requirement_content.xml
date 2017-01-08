@@ -400,7 +400,7 @@
 
             </LinearLayout>
 
-            <Button
+         <!--   <Button
                 android:background="#03A9F4"
                 android:textColor="@color/plainWhite"
                 android:id="@+id/canYouRunIt"
@@ -411,7 +411,7 @@
                 android:text="@string/can_you_run_it"
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"/> -->
 
         </LinearLayout>
     </ScrollView>
