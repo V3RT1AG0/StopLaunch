@@ -27,7 +27,7 @@ import org.json.JSONException;
 
 public class Requirement_content extends ActivitySuperClass implements View.OnClickListener
 {
-    private static final String requirementurl = Singelton.getURL() + "getreq/";
+    String requirementurl;
     int id;
     String title;
     ImageView poster_image;
@@ -37,6 +37,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
+        requirementurl = Singelton.getURL() + "getreq/";
         Bundle bundle=getIntent().getExtras();
         id = bundle.getInt("id");
         title = bundle.getString("title");
