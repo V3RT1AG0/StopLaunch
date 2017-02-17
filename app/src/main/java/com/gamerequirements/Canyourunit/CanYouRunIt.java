@@ -15,6 +15,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.apache.http.util.EncodingUtils;
@@ -60,7 +61,7 @@ public class CanYouRunIt extends ActivitySuperClass
         }
 
 
-        webView.postUrl("http://flipaccounts.com/game.php", EncodingUtils.getBytes(postData, "BASE64"));
+        webView.postUrl(Singelton.getURL()+"request.php", EncodingUtils.getBytes(postData, "BASE64"));
         //webView.loadUrl(url);
     }
 }

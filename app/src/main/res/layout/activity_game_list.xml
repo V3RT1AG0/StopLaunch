@@ -32,6 +32,33 @@
             app:cpv_animAutostart="true"
             app:cpv_indeterminate="true" />
 
+        <LinearLayout
+            android:id="@+id/errorlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginTop="70sp"
+            android:visibility="gone"
+
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Check your connection and try again"/>
+
+            <Button
+                android:id="@+id/RetryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="RETRY"
+                />
+
+        </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:layout_marginTop="60sp"
             android:layout_width="match_parent"

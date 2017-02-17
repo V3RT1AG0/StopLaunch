@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
         holder.genre_TV.setText("Genre: "+in.genre);
         holder.summart_TV.setText(in.summary);
         String url= Singelton.getImageurl()+in.id;
+        Log.d("custom",url);
         Picasso.with(context)
                 .load(url)
                  // optional

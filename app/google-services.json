@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1095969075292",
+    "firebase_url": "https://gamerequirements-93b43.firebaseio.com",
+    "project_id": "gamerequirements-93b43",
+    "storage_bucket": "gamerequirements-93b43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095969075292:android:6d01b5cb31f6c1ce",
+        "android_client_info": {
+          "package_name": "com.gamerequirements"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095969075292-hsb865llrc5i7bc9mhiio8fcahfkc5oo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWUgWZGKP-srro2CLLM3oOyKDvD85AUVY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

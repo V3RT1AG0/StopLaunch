@@ -37,7 +37,8 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
-        requirementurl = Singelton.getURL() + "getreq/";
+        //requirementurl = Singelton.getURL() + "getreq/";   //for python server
+        requirementurl = Singelton.getURL() + "min.php";
         Bundle bundle=getIntent().getExtras();
         id = bundle.getInt("id");
         title = bundle.getString("title");
@@ -108,7 +109,8 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
 
     void displaydata(int id)
     {
-        String url = requirementurl + id;
+        String url = requirementurl +"?gid=" +id;
+        //String url = requirementurl + id; for python server
         JsonArrayRequest jsonarrayrequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>()
         {
             @Override
