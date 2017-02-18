@@ -46,7 +46,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         String date=bundle.getString("date");
         String summary=bundle.getString("summary");
         ((TextView) findViewById(R.id.game_title)).setText(title);
-        ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre);
+        ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre.replace("\n",", "));
         ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
         ((TextView) findViewById(R.id.summary)).setText(summary);
 

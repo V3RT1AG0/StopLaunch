@@ -1,7 +1,10 @@
 package com.gamerequirements.Requirements;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,14 +29,18 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
+import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +61,15 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     CircularProgressView progressView;
     Timer timer;
     LinearLayout errorlayout;
+    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
+        sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
+
         timer = new Timer();
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
         progressView.startAnimation();
@@ -75,7 +85,10 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Log.e("Error", gamelisturl);
-        VolleyOperation();
+        if(Singelton.isDatabaseisuptodate())
+        loaddatalocally();  //yes
+        else
+        VolleyOperation();  //no
     }
 
     /**code for python server**/
@@ -205,7 +218,12 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
             progressView.setVisibility(View.GONE);
             gameListAdapter = new GameListAdapter(gamelist);
             recyclerView.setAdapter(gameListAdapter);
-
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(gamelist);
+            editor.putString("database", json);
+            editor.putInt("dbv",Singelton.getDatabaseversion());
+            editor.commit();
         }
     }
 
@@ -340,6 +358,26 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         );
 
 
+    }
+
+    void loaddatalocally()
+    {
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("database", null);
+        if(json!=null)
+        {
+            Type type = new TypeToken<ArrayList<Information>>() {}.getType();
+            gamelist = gson.fromJson(json, type);
+            recyclerView.setVisibility(View.VISIBLE);
+            errorlayout.setVisibility(View.GONE);
+            progressView.setVisibility(View.GONE);
+            gameListAdapter = new GameListAdapter(gamelist);
+            recyclerView.setAdapter(gameListAdapter);
+        }
+        else
+        {
+            VolleyOperation();
+        }
     }
 
 

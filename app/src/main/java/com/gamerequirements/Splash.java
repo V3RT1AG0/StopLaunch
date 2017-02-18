@@ -1,6 +1,8 @@
 package com.gamerequirements;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +23,9 @@ public class Splash extends ActivitySuperClass
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(
+                "com.gamerequirements", Context.MODE_PRIVATE);
+        final int stored_db_version= sharedPref.getInt("dbv", 0);
         new Thread(new Runnable() {
             @Override
             public void run()
@@ -30,6 +35,7 @@ public class Splash extends ActivitySuperClass
                 {
                     URL url;
                     String ServerURL;
+                    int current_dp_version;
                     url = new URL("http://pastebin.com/raw/UPLBJJtz");
                     while (in == null)
                     {
@@ -37,6 +43,16 @@ public class Splash extends ActivitySuperClass
                     }
                     ServerURL = in.readLine();
                     Singelton.setURL(ServerURL);
+                    current_dp_version= Integer.parseInt(in.readLine());
+                    Singelton.setDatabaseversion(current_dp_version);
+                    if(current_dp_version==stored_db_version)
+                    {
+                        Singelton.setDatabaseisuptodate(true);
+                    }
+                    else
+                    {
+                        Singelton.setDatabaseisuptodate(false);
+                    }
                     in.close();
                     Log.d("Server"+ServerURL,Singelton.getURL());
                     startActivity(new Intent(Splash.this,GameListActivity.class));
