@@ -20,6 +20,9 @@ import com.gamerequirements.Canyourunit.CanYouRunIt;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,6 +52,15 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre.replace("\n",", "));
         ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
         ((TextView) findViewById(R.id.summary)).setText(summary);
+
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id3));
+        AdView mAdView = (AdView) findViewById(R.id.adView3);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("92E6517DC022A908D6E9828A8C2EE0CB").
+                        addTestDevice("9CF2934004AD49BD731B33A065A2621E").build();
+        mAdView.loadAd(adRequest);
+
 
         poster_image = (ImageView) findViewById(R.id.image);
         Picasso.with(this)

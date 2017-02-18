@@ -17,6 +17,10 @@ import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -34,6 +38,16 @@ public class CanYouRunIt extends ActivitySuperClass
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_can_you_run_it);
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id1));
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id2));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdView adView2 = (AdView)findViewById(R.id.adView2);
+        AdRequest adRequest = new AdRequest.Builder()
+        .addTestDevice("92E6517DC022A908D6E9828A8C2EE0CB").
+                        addTestDevice("9CF2934004AD49BD731B33A065A2621E").build();
+
+        mAdView.loadAd(adRequest);
+        adView2.loadAd(adRequest);
         String url="http://flipaccounts.com/game.html";
         gid=getIntent().getIntExtra("gid",0);
         final CircularProgressView circularProgressView= (CircularProgressView)findViewById(R.id.progress_circle);

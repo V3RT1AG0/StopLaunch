@@ -3,4 +3,7 @@
     <string name="minimum_requirements">Minimum Requirements</string>
     <string name="recommended_requirements">Recommended Requirements</string>
     <string name="can_you_run_it">Can you run it ?</string>
+    <string name="banner_ad_unit_id1">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id2">ca-app-pub-1544435087195516/5193803784</string>
+    <string name="banner_ad_unit_id3">ca-app-pub-1544435087195516/5193803784</string>
 </resources>
