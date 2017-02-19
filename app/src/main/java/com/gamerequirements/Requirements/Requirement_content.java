@@ -115,7 +115,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         };
 
         //MYURL="http://www.game-debate.com/games/index.php?g_id=" + id;
-        Toast.makeText(this, id + "", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, id + "", Toast.LENGTH_LONG).show();
         displaydata(id);
     }
 
