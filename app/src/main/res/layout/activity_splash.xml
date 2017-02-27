@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/black"
+    android:background="@color/colorPrimary"
     android:gravity="center"
     tools:context="com.gamerequirements.Splash">
 
     <ImageView
-        android:src="@mipmap/ic_launcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/web_hi_res_512"
+        android:layout_width="100sp"
+        android:layout_height="100sp"/>
 
 
 </LinearLayout>

@@ -149,6 +149,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
 
     void VolleyOperation()
     {
+        Toast.makeText(this,"Updating game list.This might take a while",Toast.LENGTH_LONG).show();
         Log.d("custom","volley");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, gamelisturl, null, new Response.Listener<JSONObject>()
         {
