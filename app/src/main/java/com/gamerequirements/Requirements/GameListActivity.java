@@ -36,6 +36,7 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.codechimp.apprater.AppRater;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,7 +79,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         //searcheditText= (EditText) findViewById(R.id.search_TV);
         //searcheditText.addTextChangedListener(this);
         errorlayout = (LinearLayout)findViewById(R.id.errorlayout);
-
+        findViewById(R.id.Share).setVisibility(View.VISIBLE);
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);
@@ -89,6 +90,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         loaddatalocally();  //yes
         else
         VolleyOperation();  //no
+        AppRater.app_launched(this);
     }
 
     /**code for python server**/
