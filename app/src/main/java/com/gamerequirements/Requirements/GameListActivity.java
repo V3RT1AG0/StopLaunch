@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -36,11 +37,14 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.codechimp.apprater.AppRater;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -205,7 +209,9 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
             {
                 JSONObject jsonObject = result.getJSONObject(i);
                 int gid = jsonObject.getInt("gid");
-                String summary = jsonObject.getString("summary");
+                //String summary = new String(jsonObject.getString("summary").getBytes("ISO-8859-1"), "UTF-8");
+                String summary= String.valueOf(Html.fromHtml(jsonObject.getString("summary")));
+                //EntityUtils.toString(res, HTTP.UTF_8);
                 String genre = jsonObject.getString("genre");
                 String date = jsonObject.getString("date");
                 String name = jsonObject.getString("gname");
@@ -214,7 +220,8 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         } catch (JSONException e)
         {
             e.printStackTrace();
-        } finally
+        }
+        finally
         {
             recyclerView.setVisibility(View.VISIBLE);
             errorlayout.setVisibility(View.GONE);
