@@ -1,70 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:id="@+id/activity_can_you_run_it"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gamerequirements.Canyourunit.CanYouRunIt"
     android:orientation="vertical"
-    xmlns:ads="http://schemas.android.com/apk/res-auto">
+    tools:context="com.gamerequirements.Canyourunit.CanYouRunIt">
 
-        <include layout="@layout/custom_toolbar"/>
+    <include layout="@layout/custom_toolbar"/>
 
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id1">
-        </com.google.android.gms.ads.AdView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true">
-
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/progress_circle"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cpv_animAutostart="true"
-            app:cpv_indeterminate="true" />
-
-        <WebView
-            android:id="@+id/webview"
+    <!--    <com.google.android.gms.ads.NativeExpressAdView
+            android:id="@+id/adViewTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
-        </WebView>
+            android:layout_gravity="center_horizontal"
+            ads:adSize="320x200"
+            ads:adUnitId="@string/native_top_ad">
+        </com.google.android.gms.ads.NativeExpressAdView> -->
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
+                android:id="@+id/progress_circle"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                app:cpv_animAutostart="true"
+                app:cpv_indeterminate="true"/>
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+            </WebView>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-        <com.google.android.gms.ads.AdView
+     <com.google.android.gms.ads.NativeExpressAdView
             android:layout_alignParentBottom="true"
-            android:id="@+id/adView2"
-            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/adViewBottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id2">
-        </com.google.android.gms.ads.AdView>
+            android:layout_gravity="center_horizontal"
+            ads:adSize="350x200"
+            ads:adUnitId="@string/native_bottom_ad">
+        </com.google.android.gms.ads.NativeExpressAdView>
 
 
     </RelativeLayout>

@@ -103,12 +103,26 @@
 
             </LinearLayout>
 
+
+
             <View
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
                 android:background="@color/whitedark1"
                 android:layout_margin="7dp"
                 />
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adViewContentBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/game_content_bottom_ad">
+            </com.google.android.gms.ads.AdView>
 
             <TextView
                 android:id="@+id/summary"
@@ -123,6 +137,8 @@
 
                 android:gravity="start"
                 />
+
+
 
 
             <LinearLayout
@@ -415,15 +431,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"/> -->
 
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id3">
-            </com.google.android.gms.ads.AdView>
+
+
 
         </LinearLayout>
 

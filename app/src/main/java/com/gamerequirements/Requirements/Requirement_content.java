@@ -35,6 +35,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     String title;
     ImageView poster_image;
     TextView[] Headingtextview, ContentTextview, RHeadingtextview, RContentTextview;
+    AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -54,11 +55,10 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         ((TextView) findViewById(R.id.summary)).setText(summary);
 
 
-        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id3));
-        AdView mAdView = (AdView) findViewById(R.id.adView3);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("92E6517DC022A908D6E9828A8C2EE0CB").
-                        addTestDevice("9CF2934004AD49BD731B33A065A2621E").build();
+        mAdView = (AdView) findViewById(R.id.adViewContentBottom);
+       AdRequest adRequest = new AdRequest.Builder()
+               // .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
+                .build();
         mAdView.loadAd(adRequest);
 
 

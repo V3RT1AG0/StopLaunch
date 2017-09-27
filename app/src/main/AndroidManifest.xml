@@ -20,9 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Requirements.GameListActivity">
+        <activity android:name=".Requirements.GameListActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Requirements.Requirement_content">
+        <activity android:name=".Requirements.Requirement_content"
+                  android:screenOrientation="portrait">
         </activity>
         <activity android:name=".Canyourunit.CanYouRunIt"
                   android:screenOrientation="portrait"
