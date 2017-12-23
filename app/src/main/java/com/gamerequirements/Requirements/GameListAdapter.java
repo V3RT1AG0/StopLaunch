@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.SaveCofig.SelectConfig;
 import com.gamerequirements.Singelton;
 import com.squareup.picasso.Picasso;
 
@@ -97,7 +98,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
                     bundle.putString("genre",info.get(getAdapterPosition()).genre);
                     bundle.putString("date",info.get(getAdapterPosition()).date);
                     bundle.putString("summary",info.get(getAdapterPosition()).summary);
-                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(),Requirement_content.class).putExtras(bundle));
+                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(),SelectConfig.class).putExtras(bundle));
                     break;
             }
         }

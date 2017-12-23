@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.gamerequirements"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gamerequirements">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MyApplication"
@@ -15,21 +15,22 @@
             android:name=".Splash"
             android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Requirements.GameListActivity"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".Requirements.Requirement_content"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".Canyourunit.CanYouRunIt"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden|adjustPan">
-        </activity>
+        <activity
+            android:name=".Requirements.GameListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Requirements.Requirement_content"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Canyourunit.CanYouRunIt"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".SaveCofig.SelectConfig"></activity>
     </application>
 
 </manifest>

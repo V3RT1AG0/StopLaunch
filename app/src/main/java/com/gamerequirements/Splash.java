@@ -43,7 +43,7 @@ public class Splash extends AppCompatActivity
             @Override
             public void run()
             {
-                if (!hasInternetAccess(Splash.this))
+                if (!isNetworkAvailable(Splash.this))
                 {
                     runOnUiThread(new Runnable()
                     {
