@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.gamerequirements.ActivitySuperClass;
+import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
@@ -80,15 +81,24 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         progressView.startAnimation();
         gamelist = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
+        LinearLayoutManager lmanager = new LinearLayoutManager(this);
         //searcheditText= (EditText) findViewById(R.id.search_TV);
         //searcheditText.addTextChangedListener(this);
         errorlayout = (LinearLayout)findViewById(R.id.errorlayout);
+        findViewById(R.id.Conf).setVisibility(View.VISIBLE);
         findViewById(R.id.Share).setVisibility(View.VISIBLE);
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(lmanager);
+
+        recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+
+            }
+        });
         Log.e("Error", gamelisturl);
         if(Singelton.isDatabaseisuptodate())
         loaddatalocally();  //yes

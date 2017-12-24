@@ -22,15 +22,16 @@
         </activity>
         <activity
             android:name=".Requirements.GameListActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Requirements.Requirement_content"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Canyourunit.CanYouRunIt"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
-        <activity android:name=".SaveCofig.SelectConfig"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".SaveCofig.SelectConfig" />
+        <activity android:name=".SaveCofig.MainActivityConfig"></activity>
     </application>
 
 </manifest>

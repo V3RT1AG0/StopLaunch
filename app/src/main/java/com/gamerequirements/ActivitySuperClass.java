@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.gamerequirements.SaveCofig.MainActivityConfig;
+
 /**
  * Created by v3rt1ag0 on 11/25/16.
  */
@@ -36,6 +38,14 @@ public class ActivitySuperClass extends AppCompatActivity
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        myToolbar.findViewById(R.id.Share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
         });
     }
