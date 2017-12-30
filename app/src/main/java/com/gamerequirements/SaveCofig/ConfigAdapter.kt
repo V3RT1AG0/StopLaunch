@@ -13,58 +13,78 @@ import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
 import com.gamerequirements.R
+import com.gamerequirements.Singelton
 
 /**
  * Created by v3rt1ag0 on 12/23/17.
  */
 
-class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplication.getContext()) : RecyclerView.Adapter<ConfigAdapter.myViewHolder>() {
-//TODO
-    var selectedposition:Int = -1
-    val pref: SharedPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE)
+class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplication.getContext()) : RecyclerView.Adapter<ConfigAdapter.myViewHolder>()
+{
+    //TODO
+    var selectedposition: Int = -1
+    val pref: SharedPreferences = context.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
     val editor: SharedPreferences.Editor = pref.edit()
-    init {
+
+    init
+    {
 
 
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
         return info.size
     }
 
-    override fun onBindViewHolder(holder: myViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: myViewHolder, position: Int)
+    {
         var configInfo: ConfigInfo = info.get(position)
         holder.CPU.setText("CPU: ${configInfo.CPUname}")
         holder.GPU.setText("GPU: ${configInfo.GPUname}")
         holder.RAM.setText("RAM: ${configInfo.RAMname}")
-        if(selectedposition==position&&configInfo.Activated==false)
+        if (selectedposition == position && configInfo.Activated == false)
         {
-            configInfo.Activated=true
+            configInfo.Activated = true
             holder.toggle.setChecked(true)
-        }
-        else if(selectedposition==position&&configInfo.Activated==true)
+            storeOffline(configInfo)
+        } else if (selectedposition == position && configInfo.Activated == true)
         {
-            configInfo.Activated=false
+            configInfo.Activated = false
             holder.toggle.setChecked(false)
+            editor.putBoolean("StoredConfigEnabled", false)
+            editor.commit()
+        }else if (selectedposition==-1)
+        {
+            holder.toggle.isChecked = configInfo.Activated
         }
         else
         {
-            configInfo.Activated=false
+            configInfo.Activated = false
             holder.toggle.setChecked(false)
         }
 
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): myViewHolder {
+    private fun storeOffline(configInfo: ConfigInfo)
+    {
+        editor.putString("CPUkey", configInfo.CPUid.toString())
+        editor.putString("GPUkey", configInfo.GPUid.toString())
+        editor.putString("RAMkey", configInfo.RAMid.toString())
+        editor.putBoolean("StoredConfigEnabled", true)
+        editor.commit()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): myViewHolder
+    {
         val v = LayoutInflater.from(parent!!.context)
                 .inflate(R.layout.config_cardview, parent, false)
         return myViewHolder(v)
     }
 
-    inner class myViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
-
-
+    inner class myViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview)
+    {
 
 
         /*  override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -116,10 +136,11 @@ class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplica
         val RAM: TextView = itemview.findViewById(R.id.RAM_text) as TextView
         val toggle: Switch = itemview.findViewById(R.id.toggle) as Switch
 
-        init {
-          //  toggle.setOnCheckedChangeListener(this)
-            toggle.setOnClickListener{v:View ->
-                selectedposition =  getAdapterPosition()
+        init
+        {
+            //  toggle.setOnCheckedChangeListener(this)
+            toggle.setOnClickListener { v: View ->
+                selectedposition = getAdapterPosition()
                 notifyDataSetChanged()
             }
         }

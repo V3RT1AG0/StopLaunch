@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,18 +14,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
@@ -38,16 +32,12 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.codechimp.apprater.AppRater;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -57,6 +47,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
 {
     /**code for python server**/
     //private static final String gamelisturl = Singelton.getURL() + "loadlist";
+            private static final String COUNT = "count";
     private static final String gamelisturl = Singelton.getURL() + "index.php";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
@@ -68,6 +59,8 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     Timer timer;
     LinearLayout errorlayout;
     SharedPreferences sharedPrefs;
+    int curSize;
+    Boolean nexttexnupdate= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -93,17 +86,22 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
 
+        VolleyOperation(0);
+
         recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-
+                Log.d("Tag1", page + " " + totalItemsCount + " ");
+                curSize = gameListAdapter.getItemCount();
+                nexttexnupdate = true;
+                VolleyOperation(page * 10);
             }
         });
         Log.e("Error", gamelisturl);
-        if(Singelton.isDatabaseisuptodate())
+        /*if(Singelton.isDatabaseisuptodate())
         loaddatalocally();  //yes
         else
-        VolleyOperation();  //no
+        VolleyOperation();  //no*/
         AppRater.app_launched(this);
     }
 
@@ -163,10 +161,12 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         }
     }*/
 
-    void VolleyOperation()
+    void VolleyOperation(int cnt)
     {
-        Toast.makeText(this,"Updating game list.This might take a while",Toast.LENGTH_LONG).show();
-        Log.d("custom","volley");
+       // Toast.makeText(this,"Updating game list.This might take a while",Toast.LENGTH_LONG).show();
+        //Log.d("custom","volley");
+
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, gamelisturl, null, new Response.Listener<JSONObject>()
         {
             @Override
@@ -190,7 +190,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
                         Log.d("custom","volley2");
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
-                        VolleyOperation();
+                        VolleyOperation(0);
                     }
                 });
                 Log.d("Error", error.toString());
@@ -233,17 +233,27 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         }
         finally
         {
-            recyclerView.setVisibility(View.VISIBLE);
+
             errorlayout.setVisibility(View.GONE);
             progressView.setVisibility(View.GONE);
-            gameListAdapter = new GameListAdapter(gamelist);
-            recyclerView.setAdapter(gameListAdapter);
-            SharedPreferences.Editor editor = sharedPrefs.edit();
+
+            if (nexttexnupdate)   //add 10 more data
+            {
+                gameListAdapter.notifyItemRangeInserted(curSize, gamelist.size() - 1);
+                nexttexnupdate = false;
+            }
+            else
+            {
+                recyclerView.setVisibility(View.VISIBLE);
+                gameListAdapter = new GameListAdapter(gamelist);
+                recyclerView.setAdapter(gameListAdapter);
+            }
+            /*SharedPreferences.Editor editor = sharedPrefs.edit();
             Gson gson = new Gson();
             String json = gson.toJson(gamelist);
             editor.putString("database", json);
             editor.putInt("dbv",Singelton.getDatabaseversion());
-            editor.commit();
+            editor.commit();*/
         }
     }
 
@@ -396,7 +406,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         }
         else
         {
-            VolleyOperation();
+            VolleyOperation(0);
         }
     }
 

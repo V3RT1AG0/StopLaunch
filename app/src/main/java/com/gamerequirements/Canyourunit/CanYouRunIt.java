@@ -1,5 +1,7 @@
 package com.gamerequirements.Canyourunit;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.gamerequirements.ActivitySuperClass;
+import com.gamerequirements.Default;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
@@ -38,43 +41,61 @@ public class CanYouRunIt extends ActivitySuperClass
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_can_you_run_it);
-        //NativeExpressAdView mAdView = (NativeExpressAdView) findViewById(R.id.adViewTop);
-        // mAdView.loadAd(request);
-        NativeExpressAdView adView2 = (NativeExpressAdView)findViewById(R.id.adViewBottom);
-        AdRequest request = new AdRequest.Builder()
-                //.addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
-                .build();
-        adView2.loadAd(request);
-
-
-        String url="http://flipaccounts.com/game.html";
-        gid=getIntent().getIntExtra("gid",0);
-        final CircularProgressView circularProgressView= (CircularProgressView)findViewById(R.id.progress_circle);
-        final WebView webView= (WebView) findViewById(R.id.webview);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                if (progress == 100) {
-                    circularProgressView.setVisibility(View.GONE);
-                    webView.setVisibility(View.VISIBLE);
-
-                }else {
-                    circularProgressView.setVisibility(View.VISIBLE);
-
-                }
-            }
-        });
         String postData = null;
+        SharedPreferences sharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
         try
         {
-            postData = "gid="+ URLEncoder.encode(Integer.toString(gid), "UTF-8");
+            Boolean bool = sharedPreferences.getBoolean("StoredConfigEnabled", false);
+            Log.d("Hello",bool.toString());
+            if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
+            {
+                String CPUid = sharedPreferences.getString("CPUkey", null),
+                        GPUid = sharedPreferences.getString("GPUkey", null),
+                        RAMid = sharedPreferences.getString("RAMkey", null);
+
+                postData = "p_id=" + URLEncoder.encode((CPUid), "UTF-8") +
+                        "gc_id=" + URLEncoder.encode((GPUid), "UTF-8") +
+                        "ram=" + URLEncoder.encode((RAMid), "UTF-8") +
+                        "g_id=" + URLEncoder.encode(Integer.toString(gid), "UTF-8");
+            } else
+            {
+                postData = "gid=" + URLEncoder.encode(Integer.toString(gid), "UTF-8");
+            }
         } catch (UnsupportedEncodingException e)
         {
             e.printStackTrace();
         }
 
+        NativeExpressAdView adView2 = (NativeExpressAdView) findViewById(R.id.adViewBottom);
+        AdRequest request = new AdRequest.Builder()
+                .build();
+        adView2.loadAd(request);
 
-        webView.postUrl(Singelton.getURL()+"request.php", EncodingUtils.getBytes(postData, "BASE64"));
+
+        String url = "http://flipaccounts.com/game.html";
+        gid = getIntent().getIntExtra("gid", 0);
+        final CircularProgressView circularProgressView = (CircularProgressView) findViewById(R.id.progress_circle);
+        final WebView webView = (WebView) findViewById(R.id.webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebChromeClient(new WebChromeClient()
+        {
+            public void onProgressChanged(WebView view, int progress)
+            {
+                if (progress == 100)
+                {
+                    circularProgressView.setVisibility(View.GONE);
+                    webView.setVisibility(View.VISIBLE);
+
+                } else
+                {
+                    circularProgressView.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+
+
+        webView.postUrl(Singelton.getURL() + "request.php", EncodingUtils.getBytes(postData, "BASE64"));
         //webView.loadUrl(url);
     }
 }

@@ -10,11 +10,16 @@ public class Singelton
     private static final String imageurl="http://www.game-debate.com/pic.php?g_id=";
     private static boolean databaseisuptodate;
     private  static int databaseversion;
+    private static final String SharedPrefrenceKey="gameRequirementsShared";
 
 
     public static String getURL()
     {
         return URL;
+    }
+
+    public static String getSharedPrefrenceKey() {
+        return SharedPrefrenceKey;
     }
 
     public static String getImageurl()
