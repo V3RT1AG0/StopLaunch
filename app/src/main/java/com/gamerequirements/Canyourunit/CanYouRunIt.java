@@ -35,36 +35,39 @@ import java.util.Map;
 public class CanYouRunIt extends ActivitySuperClass
 {
     int gid;
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_can_you_run_it);
-        String postData = null;
+        //String postData = null;
+        gid = getIntent().getIntExtra("gid", 0);
         SharedPreferences sharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
-        try
-        {
-            Boolean bool = sharedPreferences.getBoolean("StoredConfigEnabled", false);
-            Log.d("Hello",bool.toString());
-            if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
-            {
-                String CPUid = sharedPreferences.getString("CPUkey", null),
-                        GPUid = sharedPreferences.getString("GPUkey", null),
-                        RAMid = sharedPreferences.getString("RAMkey", null);
 
-                postData = "p_id=" + URLEncoder.encode((CPUid), "UTF-8") +
+        Boolean bool = sharedPreferences.getBoolean("StoredConfigEnabled", false);
+        Log.d("Hello", bool.toString());
+        if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
+        {
+            String CPUid = sharedPreferences.getString("CPUkey", null),
+                    GPUid = sharedPreferences.getString("GPUkey", null),
+                    RAMid = sharedPreferences.getString("RAMkey", null);
+
+               /* postData = "p_id=" + URLEncoder.encode((CPUid), "UTF-8") +
                         "gc_id=" + URLEncoder.encode((GPUid), "UTF-8") +
                         "ram=" + URLEncoder.encode((RAMid), "UTF-8") +
-                        "g_id=" + URLEncoder.encode(Integer.toString(gid), "UTF-8");
-            } else
-            {
-                postData = "gid=" + URLEncoder.encode(Integer.toString(gid), "UTF-8");
-            }
-        } catch (UnsupportedEncodingException e)
+                        "g_id=" + URLEncoder.encode(Integer.toString(gid), "UTF-8");*/
+
+            url = Singelton.getURL() + "request.php?g_id=" + gid + "&p_id=" + CPUid + "&ram=" + RAMid + "&gc_id=" + GPUid;
+            //https://f8ct.com/gr/request.php?g_id=8514&p_id=2391&ram=3&gc_id=517
+        } else
         {
-            e.printStackTrace();
+               /* postData = "gid=" + URLEncoder.encode(Integer.toString(gid), "UTF-8"); */
+            url = Singelton.getURL() + "request.php?g_id=" + gid;
+            //https://f8ct.com/gr/request.php?g_id=8514
         }
+
 
         NativeExpressAdView adView2 = (NativeExpressAdView) findViewById(R.id.adViewBottom);
         AdRequest request = new AdRequest.Builder()
@@ -72,8 +75,8 @@ public class CanYouRunIt extends ActivitySuperClass
         adView2.loadAd(request);
 
 
-        String url = "http://flipaccounts.com/game.html";
-        gid = getIntent().getIntExtra("gid", 0);
+        // String url = "http://flipaccounts.com/game.html";
+
         final CircularProgressView circularProgressView = (CircularProgressView) findViewById(R.id.progress_circle);
         final WebView webView = (WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -95,7 +98,9 @@ public class CanYouRunIt extends ActivitySuperClass
         });
 
 
-        webView.postUrl(Singelton.getURL() + "request.php", EncodingUtils.getBytes(postData, "BASE64"));
-        //webView.loadUrl(url);
+        //webView.postUrl(Singelton.getURL() + "request.php", EncodingUtils.getBytes(postData, "BASE64"));
+        // String url = Singelton.getURL() + "request.php?g_id="+ gid;
+        Log.d("Hello", url);
+        webView.loadUrl(url);
     }
 }
