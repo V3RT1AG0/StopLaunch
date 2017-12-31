@@ -2,23 +2,26 @@ package com.gamerequirements.SaveCofig
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.android.volley.*
+import android.view.MotionEvent
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.gamerequirements.JSONCustom.CustomVolleyRequest
 import com.gamerequirements.R
-import org.json.JSONArray
-import gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
-import android.view.MotionEvent
-import android.view.View
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.IStatusListener
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.OnItemSelectedListener
-import android.widget.*
 import com.gamerequirements.Singelton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
+import gr.escsoft.michaelprimez.searchablespinner.interfaces.IStatusListener
+import gr.escsoft.michaelprimez.searchablespinner.interfaces.OnItemSelectedListener
+import org.json.JSONArray
 
 
 class SelectConfig : AppCompatActivity()

@@ -75,8 +75,8 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
         LinearLayoutManager lmanager = new LinearLayoutManager(this);
         errorlayout = (LinearLayout) findViewById(R.id.errorlayout);
-        findViewById(R.id.Conf).setVisibility(View.VISIBLE);
-        findViewById(R.id.Share).setVisibility(View.VISIBLE);
+        findViewById(R.id.back_arrow).setVisibility(View.GONE);
+        //findViewById(R.id.Share).setVisibility(View.VISIBLE);
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);

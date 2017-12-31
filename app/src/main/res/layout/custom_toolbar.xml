@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
     android:id="@+id/my_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -9,26 +10,26 @@
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+    <ImageView
+        android:gravity="center_vertical"
+        android:layout_marginStart="8sp"
+        android:layout_marginEnd="10sp"
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back"
+        android:tint="@color/plainWhite"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="GameRequirements"
         android:textColor="@color/BackGroundColor"
-        android:textSize="20sp" />
+        android:textSize="18sp"
+        android:paddingBottom="2sp"/>
 
-    <ImageView
-        android:id="@+id/Conf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_share_black_24dp"
-        android:tint="@color/plainWhite"
-        android:visibility="gone" />
+
 
     <ImageView
         android:id="@+id/Notify"
@@ -39,9 +40,21 @@
         android:layout_gravity="end"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_share_black_24dp"
+        android:src="@drawable/ic_notifications"
         android:tint="@color/plainWhite"
-        android:visibility="gone" />
+         />
+
+    <ImageView
+        android:id="@+id/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_settings"
+        android:tint="@color/plainWhite" />
 <!--
     <ImageView
         android:id="@+id/Share"

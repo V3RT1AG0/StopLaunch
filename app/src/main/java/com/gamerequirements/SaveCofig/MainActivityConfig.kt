@@ -3,8 +3,8 @@ package com.gamerequirements.SaveCofig
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -26,6 +26,7 @@ class MainActivityConfig : AppCompatActivity()
         findViewById(R.id.AddConf).setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, SelectConfig::class.java)) //TODO why not overide OnClick method
         })
+
         recyclerView = findViewById(R.id.configRecyclerView) as RecyclerView
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(this)

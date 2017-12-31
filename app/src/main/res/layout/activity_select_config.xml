@@ -7,7 +7,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.gamerequirements.SaveCofig.SelectConfig">
-    
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        >
+
+    <TextView android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:text="GameRequirements"
+        android:textColor="@color/BackGroundColor"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        />
+    </android.support.v7.widget.Toolbar>
     <!--<Spinner
         android:id="@+id/myCpu"
         android:layout_width="match_parent"
