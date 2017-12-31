@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,15 +18,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Splash extends AppCompatActivity
 {
     DatabaseReference databaseref;
     int stored_db_version;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,7 +70,7 @@ public class Splash extends AppCompatActivity
         {
             URL url;
             String ServerURL;
-            int current_dp_version;
+            //int current_dp_version;
             url = new URL("http://pastebin.com/raw/UPLBJJtz");
             while (in == null)
             {
@@ -79,15 +78,6 @@ public class Splash extends AppCompatActivity
             }
             ServerURL = in.readLine();
             Singelton.setURL(ServerURL);
-            current_dp_version = Integer.parseInt(in.readLine());
-            Singelton.setDatabaseversion(current_dp_version);
-            if (current_dp_version == stored_db_version)
-            {
-                Singelton.setDatabaseisuptodate(true);
-            } else
-            {
-                Singelton.setDatabaseisuptodate(false);
-            }
             in.close();
             Log.d("Server" + ServerURL, Singelton.getURL());
             startActivity(new Intent(Splash.this, GameListActivity.class));
@@ -108,16 +98,7 @@ public class Splash extends AppCompatActivity
                 Log.d("log", dataSnapshot.getKey());
                 Default def = dataSnapshot.getValue(Default.class);
                 String ServerURL = def.getserver_url();
-                int current_dp_version = def.getdb_version();
                 Singelton.setURL(ServerURL);
-                Singelton.setDatabaseversion(current_dp_version);
-                if (current_dp_version == stored_db_version)
-                {
-                    Singelton.setDatabaseisuptodate(true);
-                } else
-                {
-                    Singelton.setDatabaseisuptodate(false);
-                }
                 startActivity(new Intent(Splash.this, GameListActivity.class));
             }
 
@@ -128,35 +109,6 @@ public class Splash extends AppCompatActivity
             }
         });
 
-    }
-
-
-    public boolean hasInternetAccess(Context context)
-    {
-
-
-        if (isNetworkAvailable(context))
-        {
-            try
-            {
-                HttpURLConnection urlc = (HttpURLConnection)
-                        (new URL("http://clients3.google.com/generate_204")
-                                .openConnection());
-                urlc.setRequestProperty("User-Agent", "Android");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return (urlc.getResponseCode() == 204 &&
-                        urlc.getContentLength() == 0);
-            } catch (IOException e)
-            {
-                Log.e("tag", "Error checking internet connection", e);
-            }
-        } else
-        {
-            Log.d("TAG", "No network available!");
-        }
-        return false;
     }
 
     private boolean isNetworkAvailable(Context context)

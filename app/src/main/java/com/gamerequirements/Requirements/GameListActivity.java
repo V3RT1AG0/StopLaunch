@@ -6,53 +6,49 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import com.android.volley.DefaultRetryPolicy;
+
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.EndlessRecyclerView;
+import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
-import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.codechimp.apprater.AppRater;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameListActivity extends ActivitySuperClass implements TextWatcher, FloatingSearchView.OnQueryChangeListener
+public class GameListActivity extends ActivitySuperClass implements FloatingSearchView.OnQueryChangeListener
 {
-    /**code for python server**/
+    /**
+     * code for python server
+     **/
     //private static final String gamelisturl = Singelton.getURL() + "loadlist";
-            private static final String COUNT = "count";
-    private static final String gamelisturl = Singelton.getURL() + "index.php";
+    private static final String COUNT = "count";
+    //private static final String gamelisturl = Singelton.getURL() + "index.php";
+    private static final String gamelisturl = "http://192.168.1.9:5000/gameslist";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     RecyclerView recyclerView;
-    EditText searcheditText;
     FloatingSearchView searchView;
     boolean doubleBackToExitPressedOnce = false;
     CircularProgressView progressView;
@@ -60,7 +56,10 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     LinearLayout errorlayout;
     SharedPreferences sharedPrefs;
     int curSize;
-    Boolean nexttexnupdate= false;
+    Boolean nexttexnupdate = false;
+    //JSONObject idListjsonObject=new JSONObject();
+    ArrayList<String> idArrayList = new ArrayList<>();
+    final List<Information> filteredList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,9 +74,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         gamelist = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
         LinearLayoutManager lmanager = new LinearLayoutManager(this);
-        //searcheditText= (EditText) findViewById(R.id.search_TV);
-        //searcheditText.addTextChangedListener(this);
-        errorlayout = (LinearLayout)findViewById(R.id.errorlayout);
+        errorlayout = (LinearLayout) findViewById(R.id.errorlayout);
         findViewById(R.id.Conf).setVisibility(View.VISIBLE);
         findViewById(R.id.Share).setVisibility(View.VISIBLE);
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
@@ -86,88 +83,32 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
 
-        VolleyOperation(0);
+        VolleyOperation();
 
-        recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager) {
+       recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager)
+        {
             @Override
-            public void onLoadMore(int page, int totalItemsCount) {
+            public void onLoadMore(int page, int totalItemsCount)
+            {
                 Log.d("Tag1", page + " " + totalItemsCount + " ");
                 curSize = gameListAdapter.getItemCount();
                 nexttexnupdate = true;
-                VolleyOperation(page * 10);
+                VolleyOperation();
             }
         });
         Log.e("Error", gamelisturl);
-        /*if(Singelton.isDatabaseisuptodate())
-        loaddatalocally();  //yes
-        else
-        VolleyOperation();  //no*/
         AppRater.app_launched(this);
     }
 
-    /**code for python server**/
-/*
     void VolleyOperation()
     {
-        JsonArrayRequest jsonarrayrequest = new JsonArrayRequest(Request.Method.GET, gamelisturl, null, new Response.Listener<JSONArray>()
-        {
-            @Override
-            public void onResponse(JSONArray response)
-            {
-                handleresponse(response);
-            }
-        }, new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Log.e("Error", error.toString());
-                if (error instanceof NoConnectionError)
-                {
-                    Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
-        requestqueue.add(jsonarrayrequest);
-    }
 
-    void handleresponse(JSONArray response)
-    {
-        try
-        {
-            Log.d("TAG", response.toString());
-            for (int i = 0; i < response.length(); i++)
-            {
+        HashMap<String, String> params = new HashMap<>();
+        JSONArray jsonArray = new JSONArray(idArrayList);
 
-                JSONArray jarr = response.getJSONArray(i);
-                int id = jarr.getInt(1);
-                String summary = jarr.getString(2).replace("\n", ",");
-                ;
-                String genre = jarr.getString(3).replace("\n", ",");
-                String date = jarr.getString(4);
-                String name = jarr.getString(6);
-                gamelist.add(new Information(id, name, summary, genre, date));
-            }
-        } catch (JSONException e)
-        {
-            e.printStackTrace();
-        } finally
-        {
-            progressView.setVisibility(View.GONE);
-            gameListAdapter = new GameListAdapter(gamelist);
-            recyclerView.setAdapter(gameListAdapter);
-
-        }
-    }*/
-
-    void VolleyOperation(int cnt)
-    {
-       // Toast.makeText(this,"Updating game list.This might take a while",Toast.LENGTH_LONG).show();
-        //Log.d("custom","volley");
-
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, gamelisturl, null, new Response.Listener<JSONObject>()
+        params.put("list", jsonArray.toString());
+        Log.d("array",params.toString());
+        CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.POST, gamelisturl, params, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
@@ -187,10 +128,10 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
                     @Override
                     public void onClick(View v)
                     {
-                        Log.d("custom","volley2");
+                        Log.d("custom", "volley2");
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
-                        VolleyOperation(0);
+                        VolleyOperation();
                     }
                 });
                 Log.d("Error", error.toString());
@@ -201,10 +142,10 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
             }
         });
 
-       jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+      /* jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
                 2,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)); */
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
     }
@@ -213,25 +154,26 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     {
         try
         {
-            JSONArray result=response.getJSONArray("result");
+            JSONArray result = response.getJSONArray("result");
             Log.d("TAG", response.toString());
             for (int i = 0; i < result.length(); i++)
             {
                 JSONObject jsonObject = result.getJSONObject(i);
                 int gid = jsonObject.getInt("gid");
                 //String summary = new String(jsonObject.getString("summary").getBytes("ISO-8859-1"), "UTF-8");
-                String summary= String.valueOf(Html.fromHtml(jsonObject.getString("summary")));
+                String summary = String.valueOf(Html.fromHtml(jsonObject.getString("summary")));
                 //EntityUtils.toString(res, HTTP.UTF_8);
                 String genre = jsonObject.getString("genre");
                 String date = jsonObject.getString("date");
                 String name = jsonObject.getString("gname");
+                // idarray.add(Integer.toString(gid));
+                idArrayList.add(Integer.toString(gid));
                 gamelist.add(new Information(gid, name, summary, genre, date));
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
 
             errorlayout.setVisibility(View.GONE);
@@ -241,8 +183,7 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
             {
                 gameListAdapter.notifyItemRangeInserted(curSize, gamelist.size() - 1);
                 nexttexnupdate = false;
-            }
-            else
+            } else
             {
                 recyclerView.setVisibility(View.VISIBLE);
                 gameListAdapter = new GameListAdapter(gamelist);
@@ -257,40 +198,6 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
         }
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-    {
-        //searcheditText.getText().clear();
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-    {
-        charSequence = charSequence.toString().toLowerCase();
-        final List<Information> filteredList = new ArrayList<>();
-
-        for (int j = 0; j < gamelist.size(); j++)
-        {
-
-            final String text = gamelist.get(j).title.toLowerCase();
-            if (text.contains(charSequence))
-            {
-
-                filteredList.add(gamelist.get(j));
-            }
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gameListAdapter = new GameListAdapter(filteredList);
-        recyclerView.setAdapter(gameListAdapter);
-        gameListAdapter.notifyDataSetChanged();  // data set changed
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable)
-    {
-
-    }
 
     @Override
     public void onBackPressed()
@@ -318,51 +225,25 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
     @Override
     public void onSearchTextChanged(String oldQuery, String newQuery)
     {
-        /*
-        newQuery = newQuery.toLowerCase();
-        //final List<Information> filteredList = new ArrayList<>();
-        final List<SearchSuggestion> filteredList = new ArrayList<>();
-        //searchView.showProgress();
-
-        for (int j = 0; j < gamelist.size(); j++)
+        if (newQuery.equals(""))
         {
-
-            final String text = gamelist.get(j).title.toLowerCase();
-            if (text.contains(newQuery))
-            {
-
-                filteredList.add(gamelist.get(j));
-                if (filteredList.size() == 20)
-                    break;
-            }
+            VolleyOperation();
+            return;
         }
-
-        searchView.swapSuggestions(filteredList);
-        //searchView.hideProgress();
-
-
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // gameListAdapter = new GameListAdapter(filteredList);
-        //recyclerView.setAdapter(gameListAdapter);
-        // gameListAdapter.notifyDataSetChanged();  // data set c
-
-        */
         newQuery = newQuery.toString().toLowerCase();
-        final List<Information> filteredList = new ArrayList<>();
-
         if (timer != null)
             timer.cancel();
         final String finalNewQuery = newQuery;
         timer = new Timer();
-        timer.schedule(
-                new TimerTask()
-                {
-                    @Override
-                    public void run()
-                    {
-                        for (int j = 0; j < gamelist.size(); j++)
-                        {
+        timer.schedule(new TimerTask()
+                       {
+                           @Override
+                           public void run()
+                           {
 
+                               VolleySearchRequest(finalNewQuery);
+                        /*for (int j = 0; j < gamelist.size(); j++)
+                        {
                             final String text = gamelist.get(j).title.toLowerCase();
                             if (text.contains(finalNewQuery))
                             {
@@ -380,34 +261,95 @@ public class GameListActivity extends ActivitySuperClass implements TextWatcher,
                                 recyclerView.setAdapter(gameListAdapter);
                                 gameListAdapter.notifyDataSetChanged();
                             }
-                        });
+                        });*/
 
-                    }
-                },
+                           }
+                       },
                 200
         );
 
 
     }
 
-    void loaddatalocally()
+
+    void VolleySearchRequest(final String query)
     {
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString("database", null);
-        if(json!=null)
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
+        requestqueue.cancelAll("search");
+        String searchurl = "http://192.168.1.9:5000/gameslist/search/" + query;
+        CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, searchurl, null, new Response.Listener<JSONObject>()
         {
-            Type type = new TypeToken<ArrayList<Information>>() {}.getType();
-            gamelist = gson.fromJson(json, type);
-            recyclerView.setVisibility(View.VISIBLE);
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                handleSearchResponse(response);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                progressView.setVisibility(View.GONE);
+                errorlayout.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                   errorlayout.findViewById(R.id.RetryButton).setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Log.d("custom","volley2");
+                            errorlayout.setVisibility(View.GONE);
+                            progressView.setVisibility(View.VISIBLE);
+                            searchView.clearQuery();
+                            VolleyOperation();
+                        }
+                    });
+                Log.d("Error", error.toString());
+                if (error instanceof NoConnectionError)
+                {
+                    Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        jsonObjectRequest.setTag("search");
+        requestqueue.add(jsonObjectRequest);
+
+    }
+
+    private void handleSearchResponse(JSONObject response)
+    {
+
+
+        JSONArray result;
+        try
+        {
+            filteredList.clear();
+            result = response.getJSONArray("result");
+            Log.d("TAG", response.toString());
+            for (int i = 0; i < result.length(); i++)
+            {
+                JSONObject jsonObject = result.getJSONObject(i);
+                int gid = jsonObject.getInt("gid");
+                String summary = String.valueOf(Html.fromHtml(jsonObject.getString("summary")));
+                String genre = jsonObject.getString("genre");
+                String date = jsonObject.getString("date");
+                String name = jsonObject.getString("gname");
+                filteredList.add(new Information(gid, name, summary, genre, date));
+            }
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        } finally
+        {
             errorlayout.setVisibility(View.GONE);
             progressView.setVisibility(View.GONE);
-            gameListAdapter = new GameListAdapter(gamelist);
+            recyclerView.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
+            gameListAdapter = new GameListAdapter(filteredList);
             recyclerView.setAdapter(gameListAdapter);
+            gameListAdapter.notifyDataSetChanged();
         }
-        else
-        {
-            VolleyOperation(0);
-        }
+
     }
 
 

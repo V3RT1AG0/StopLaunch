@@ -31,6 +31,19 @@
         android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/Notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_share_black_24dp"
+        android:tint="@color/plainWhite"
+        android:visibility="gone" />
+<!--
+    <ImageView
         android:id="@+id/Share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +55,6 @@
         android:src="@drawable/ic_share_black_24dp"
         android:tint="@color/plainWhite"
         android:visibility="gone" />
-
+-->
 
 </android.support.v7.widget.Toolbar>
