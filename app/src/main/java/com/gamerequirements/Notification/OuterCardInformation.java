@@ -8,11 +8,14 @@ import java.util.List;
 
 public class OuterCardInformation
 {
-    String data;
+
+    String data, count;
     List<InnerCardInformation> innerCardList;
-    OuterCardInformation(String data,List<InnerCardInformation> innerCardList)
+
+    OuterCardInformation(String data, List<InnerCardInformation> innerCardList, String count)
     {
-        this.data= data;
+        this.count = count + " Games added";
+        this.data = data;
         this.innerCardList = innerCardList;
     }
 }

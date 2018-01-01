@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.Canyourunit.CanYouRunIt;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
@@ -22,37 +21,35 @@ import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Requirement_content extends ActivitySuperClass implements View.OnClickListener
 {
     String requirementurl;
     int id;
-    String title;
     ImageView poster_image;
     TextView[] Headingtextview, ContentTextview, RHeadingtextview, RContentTextview;
     AdView mAdView;
+    String summary,genre,date,title;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
         //requirementurl = Singelton.getURL() + "getreq/";   //for python server
-        requirementurl = Singelton.getURL() + "min.php";
+        requirementurl = Singelton.getURL() + "game/";
         Bundle bundle=getIntent().getExtras();
         id = bundle.getInt("id");
         title = bundle.getString("title");
-        String genre=bundle.getString("genre");
-        String date=bundle.getString("date");
-        String summary=bundle.getString("summary");
-        ((TextView) findViewById(R.id.game_title)).setText(title);
-        ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre.replace("\n",", "));
-        ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
-        ((TextView) findViewById(R.id.summary)).setText(summary);
+        genre=bundle.getString("genre");
+        date=bundle.getString("date");
+        summary=bundle.getString("summary");
+
+
 
 
         mAdView = (AdView) findViewById(R.id.adViewContentBottom);
@@ -121,12 +118,11 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
 
     void displaydata(int id)
     {
-        String url = requirementurl +"?gid=" +id;
-        //String url = requirementurl + id; for python server
-        JsonArrayRequest jsonarrayrequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>()
+        String url = requirementurl + id;
+        JsonObjectRequest jsonarrayrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>()
         {
             @Override
-            public void onResponse(JSONArray response)
+            public void onResponse(JSONObject response)
             {
                 handleresponse(response);
             }
@@ -143,23 +139,34 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     }
 
 
-    void handleresponse(JSONArray response)
+    void handleresponse(JSONObject response)
     {
         try
         {
             Log.d("TAG", response.toString());
-            JSONArray jarr = response.getJSONArray(0);
+            title = response.getString("title");
+            genre = response.getString("genre");
+            summary = response.getString("summary");
+            date = response.getString("release_date");
+            ((TextView) findViewById(R.id.game_title)).setText(title);
+            ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre.replace("\n",", "));
+            ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
+            ((TextView) findViewById(R.id.summary)).setText(summary);
+
+            JSONArray jarr = response.getJSONArray("minimum_req");
             try
             {
+                Log.d("TAG", jarr.toString());
                 load_minimum(jarr);
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
 
-            JSONArray recommended_array = response.getJSONArray(1);
+            JSONArray recommended_array = response.getJSONArray("recommended_req");
             if (recommended_array.length() != 1)
             {
+                Log.d("TAG", recommended_array.toString());
                 load_recommended(recommended_array);
             }
             else

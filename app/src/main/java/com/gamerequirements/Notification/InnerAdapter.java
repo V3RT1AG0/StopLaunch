@@ -1,6 +1,8 @@
 package com.gamerequirements.Notification;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Requirements.Requirement_content;
 import com.gamerequirements.Singelton;
 import com.squareup.picasso.Picasso;
 
@@ -22,8 +25,8 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
 
     InnerAdapter(List<InnerCardInformation> info)
     {
-        this.info=info;
-        context= MyApplication.getContext();
+        this.info = info;
+        context = MyApplication.getContext();
     }
 
     @Override
@@ -38,9 +41,9 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(com.gamerequirements.Notification.InnerAdapter.MyViewHolder holder, int position)
     {
-        InnerCardInformation innerInfo =  info.get(position);
+        InnerCardInformation innerInfo = info.get(position);
         holder.title.setText(innerInfo.name);
-        String url = Singelton.getImageurl()+innerInfo.gid;
+        String url = Singelton.getImageurl() + innerInfo.gid;
         Picasso.with(context)
                 .load(url)
                 .into(holder.imageView);
@@ -54,17 +57,25 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
         return info.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView title;
         ImageView imageView;
 
-        public MyViewHolder(View itemView)
+        MyViewHolder(View itemView)
         {
             super(itemView);
-            title  = (TextView) itemView.findViewById(R.id.inner_title);
+            itemView.setOnClickListener(this);
+            title = (TextView) itemView.findViewById(R.id.inner_title);
             imageView = (ImageView) itemView.findViewById(R.id.inner_image);
         }
 
+        @Override
+        public void onClick(View v)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", Integer.parseInt(info.get(getAdapterPosition()).gid));
+            context.startActivity(new Intent(v.getContext(), Requirement_content.class).putExtras(bundle));
+        }
     }
 }

@@ -11,7 +11,12 @@ import android.widget.TextView;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
 
 /**
  * Created by v3rt1ag0 on 12/31/17.
@@ -19,13 +24,17 @@ import java.util.List;
 
 public class OuterAdapter extends RecyclerView.Adapter<OuterAdapter.MyViewHolder>
 {
-    List<OuterCardInformation> outerlist;
-    Context context;
+    private List<OuterCardInformation> outerlist;
+    private Context context;
+    private SimpleDateFormat dateFormat;
+    private Calendar calendar;
 
     OuterAdapter(List<OuterCardInformation> outerlist)
     {
-        this.outerlist=outerlist;
-        context= MyApplication.getContext();
+        this.outerlist = outerlist;
+        context = MyApplication.getContext();
+        dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+        calendar = Calendar.getInstance();
     }
 
     @Override
@@ -40,12 +49,13 @@ public class OuterAdapter extends RecyclerView.Adapter<OuterAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position)
     {
-        OuterCardInformation outerCardInformation =  outerlist.get(position);
-        holder.data.setText(outerCardInformation.data);
+        OuterCardInformation outerCardInformation = outerlist.get(position);
+        holder.data.setText(getDate(outerCardInformation.data));
+        holder.gamesadded.setText(outerCardInformation.count);
         InnerAdapter innerAdapter = new InnerAdapter(outerCardInformation.innerCardList);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setHasFixedSize(true);
-        holder.recyclerView.setAdapter(innerAdapter);;
+        holder.recyclerView.setAdapter(innerAdapter);
     }
 
 
@@ -55,23 +65,34 @@ public class OuterAdapter extends RecyclerView.Adapter<OuterAdapter.MyViewHolder
         return outerlist.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    class MyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView data;
+        TextView data,gamesadded;
         RecyclerView recyclerView;
-        public MyViewHolder(View itemView)
+
+         MyViewHolder(View itemView)
         {
             super(itemView);
-            data  = (TextView) itemView.findViewById(R.id.data);
+            data = (TextView) itemView.findViewById(R.id.data);
+            gamesadded= (TextView) itemView.findViewById(R.id.games_added);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.innerRecycler);
         }
+    }
 
-        @Override
-        public void onClick(View view)
+    String getDate(String data)
+    {
+        Date date;
+        String month = null;
+        try
         {
-            switch (view.getId())
-            {
-            }
+            date = dateFormat.parse(data);  // here we are getting date in format "Tue, 12 Jan 2016 09:40:07 GMT"
+            calendar.setTime(date);
+            month = new SimpleDateFormat("MMMM").format(date);
+
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
         }
+        return calendar.get(Calendar.DATE) + " " + month.substring(0,3) + " '" + Integer.toString(calendar.get(Calendar.YEAR)).substring(2,4);
     }
 }

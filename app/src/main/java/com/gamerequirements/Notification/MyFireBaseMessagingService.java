@@ -11,7 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.gamerequirements.R;
-import com.gamerequirements.Requirements.Requirement_content;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -41,15 +40,17 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         mymap=remoteMessage.getData();
-        if(mymap.containsKey("gid"))
+        if(mymap.containsKey("update"))
         {
-            value = Integer.parseInt(mymap.get("gid").toString());
-            key="gid";
-            intent = new Intent(this, Requirement_content.class);
+            value = Integer.parseInt(mymap.get("update").toString());
+            key="update";
+            intent = new Intent(this, NotificationActivity.class);
         }
         //Calling method to generate notification
         sendNotification(remoteMessage.getNotification().getBody(),value,key);
+
     }
+
 
     //This method is only generating push notification
     //It is same as we did in earlier posts

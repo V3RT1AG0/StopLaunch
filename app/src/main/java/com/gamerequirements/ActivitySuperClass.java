@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.gamerequirements.Notification.NotificationActivity;
+import com.gamerequirements.SaveCofig.MainActivityConfig;
 
 /**
  * Created by v3rt1ag0 on 11/25/16.
@@ -52,7 +53,7 @@ public class ActivitySuperClass extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getApplicationContext(), Settings.class));
+                startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
         });
 

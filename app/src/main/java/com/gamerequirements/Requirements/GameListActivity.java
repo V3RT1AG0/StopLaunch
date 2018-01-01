@@ -1,9 +1,12 @@
 package com.gamerequirements.Requirements;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -24,6 +27,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.codechimp.apprater.AppRater;
@@ -45,7 +49,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //private static final String gamelisturl = Singelton.getURL() + "loadlist";
     private static final String COUNT = "count";
     //private static final String gamelisturl = Singelton.getURL() + "index.php";
-    private static final String gamelisturl = "http://192.168.1.9:5000/gameslist";
+    private static final String gamelisturl = Singelton.getURL()+"gameslist";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     RecyclerView recyclerView;
@@ -98,6 +102,24 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         });
         Log.e("Error", gamelisturl);
         AppRater.app_launched(this);
+        MiAutoStart();
+    }
+
+    void MiAutoStart()
+    {
+        SharedPreferences sharedpreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String manufacturer = "xiaomi";
+        if(manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER) && !sharedpreferences.getBoolean("autostart",false)) {
+            //this will open auto start screen where user can enable permission for your app
+            Toast.makeText(this,"Allow autostart permission for GameRequirements",Toast.LENGTH_LONG).show();
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putBoolean("autostart",true);
+            editor.apply();
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+            startActivity(intent);
+
+        }
     }
 
     void VolleyOperation()

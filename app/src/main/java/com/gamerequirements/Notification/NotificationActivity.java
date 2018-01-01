@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,10 +25,9 @@ import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity
 {
-
     List<OuterCardInformation> info = new ArrayList<>();
     List<InnerCardInformation> innerInfo = new ArrayList<>();
-    private static final String notificationurl = "http://192.168.1.9:5000/newgames";
+    private static final String notificationurl = Singelton.getURL() + "newgames";
     RecyclerView my_recycler_view;
     OuterAdapter adapter;
 
@@ -55,7 +56,7 @@ public class NotificationActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
+                Log.d("TAG", error.toString());
             }
         });
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
@@ -74,14 +75,15 @@ public class NotificationActivity extends AppCompatActivity
                 JSONObject jsonObject = result.getJSONObject(i);
                 String data = jsonObject.getString("date");
                 JSONArray innerDataArray = jsonObject.getJSONArray("gamelist");
+                String count = String.valueOf(innerDataArray.length());
                 for (int j = 0; j < innerDataArray.length(); j++)
                 {
                     JSONObject innerjsonObject = innerDataArray.getJSONObject(j);
                     String gid = innerjsonObject.getString("gid");
                     String name = innerjsonObject.getString("gname");
-                    innerInfo.add(new InnerCardInformation(gid,name));
+                    innerInfo.add(new InnerCardInformation(gid, name));
                 }
-                info.add(new OuterCardInformation(data,innerInfo));
+                info.add(new OuterCardInformation(data, innerInfo, count));
             }
         } catch (JSONException e)
         {
@@ -90,12 +92,12 @@ public class NotificationActivity extends AppCompatActivity
         {
             adapter = new OuterAdapter(info);
             my_recycler_view.setAdapter(adapter);
+            Log.d("TAG", "finally");
         }
-            /*SharedPreferences.Editor editor = sharedPrefs.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(gamelist);
-            editor.putString("database", json);
-            editor.putInt("dbv",Singelton.getDatabaseversion());
-            editor.commit();*/
+    }
+
+    public void back(View view)
+    {
+        finish();
     }
 }

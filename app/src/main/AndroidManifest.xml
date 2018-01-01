@@ -44,7 +44,6 @@
         <activity android:name=".SaveCofig.SelectConfig" />
         <activity android:name=".SaveCofig.MainActivityConfig" />
         <activity android:name=".Notification.NotificationActivity" />
-        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>

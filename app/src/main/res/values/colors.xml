@@ -11,6 +11,8 @@
     <color name="plainWhite">#FFFFFF</color>
     <color name="secondHeader">#212121</color>
     <color name="BackGroundColor">#FFFFFF</color>
+    <color name="Bgcolor">#34373e</color>
     <color name="whitedark1">#7F7F7F</color>#323232
     <color name="blacklight1">#666666</color>
+    <color name="listbackground">#f2f2f2</color>
 </resources>

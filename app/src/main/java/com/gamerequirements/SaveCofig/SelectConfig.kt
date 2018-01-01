@@ -26,8 +26,6 @@ import org.json.JSONArray
 
 class SelectConfig : AppCompatActivity()
 {
-
-
     var CPUlist = ArrayList<Information>()
     var GPUlist = ArrayList<Information>()
     var RAMlist = ArrayList<Information>()
@@ -52,7 +50,6 @@ class SelectConfig : AppCompatActivity()
         var CPUid: Int? = null
         var GPUid: Int? = null
         var RAMid: Int? = null
-
 
         // toggle = findViewById(R.id.toggle) as Switch
         loadAllList()
@@ -81,225 +78,209 @@ class SelectConfig : AppCompatActivity()
                     ConfigList = gson.fromJson(config, type)
                 }
 
-                    //val ConfigList = ArrayList<ConfigInfo>()
-                    ConfigList.add(ConfigInfo(CPUname!!, CPUid!!, GPUname!!, GPUid!!, RAMname!!, RAMid!!, false))
-                    val json = gson.toJson(ConfigList)
-                    Log.d("OKButton Pressed", json.toString())
-                    editor.putString("Config", json)
-                    editor.commit()
-                    finish()
-                }
-
-
-            })
-
-
-
-
-            CPUspinner!!.setStatusListener(
-            object : IStatusListener
-            {
-                override fun spinnerIsOpening()
-                {
-                    GPUspinner!!.hideEdit()
-                    RAMspinner!!.hideEdit()
-                }
-
-                override fun spinnerIsClosing()
-                {
-
-                }
-            })
-
-            GPUspinner!!.setStatusListener(
-            object : IStatusListener
-            {
-                override fun spinnerIsOpening()
-                {
-                    CPUspinner!!.hideEdit()
-                    RAMspinner!!.hideEdit()
-                }
-
-                override fun spinnerIsClosing()
-                {
-
-                }
-            })
-
-            RAMspinner!!.setStatusListener(
-            object : IStatusListener
-            {
-                override fun spinnerIsOpening()
-                {
-                    CPUspinner!!.hideEdit()
-                    GPUspinner!!.hideEdit()
-                }
-
-                override fun spinnerIsClosing()
-                {
-
-                }
-            })
-
-
-            CPUspinner!!.setOnItemSelectedListener(
-            object : OnItemSelectedListener
-            {
-                override fun onNothingSelected()
-                {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onItemSelected(view: View?, position: Int, id: Long)
-                {
-                    Log.d("pos", position.toString())
-                    CPUname = CPUlist.get(position).title
-                    CPUid = CPUlist.get(position).id
-
-                    /* editor.putInt("CPU", CPUlist.get(position).id)
-                     editor.putInt("CPUindex", position)
-                     editor.commit();*/
-
-                }
-
-            })
-
-            GPUspinner!!.setOnItemSelectedListener(
-            object : OnItemSelectedListener
-            {
-                override fun onNothingSelected()
-                {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onItemSelected(view: View?, position: Int, id: Long)
-                {
-
-                    GPUname = GPUlist.get(position).title
-                    GPUid = GPUlist.get(position).id
-                    /*editor.putInt("GPU", GPUlist.get(position).id)
-                    editor.putInt("GPUindex", position)
-                    editor.commit();*/
-
-                }
-
-            })
-
-            RAMspinner!!.setOnItemSelectedListener(
-            object : OnItemSelectedListener
-            {
-                override fun onNothingSelected()
-                {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-                override fun onItemSelected(view: View?, position: Int, id: Long)
-                {
-                    RAMname = RAMlist.get(position).title
-                    RAMid = RAMlist.get(position).id
-                    /* editor.putInt("RAM", RAMlist.get(position).id)
-                     editor.putInt("RAMindex", position)
-                     editor.commit();*/
-
-                }
-
-            })
-
-        }
-
-
-                fun loadAllList()
-        {
-            getData("cpu")
-            getData("gpu")
-            getRAM()
-        }
-
-        fun getRAM()
-        {
-            RAMlist.add(Information(1, "1GB"))
-            RAMlist.add(Information(2, "2GB"))
-            RAMlist.add(Information(3, "3GB"))
-            RAMlist.add(Information(4, "4GB"))
-            RAMlist.add(Information(5, "5GB"))
-            RAMlist.add(Information(6, "6GB"))
-            RAMlist.add(Information(8, "8GB"))
-            RAMlist.add(Information(10, "10GB"))
-            RAMlist.add(Information(12, "12GB"))
-            RAMlist.add(Information(14, "14GB"))
-            RAMlist.add(Information(16, "16GB"))
-            RAMlist.add(Information(32, "32GB"))
-            RAMlist.add(Information(64, "64GB"))
-            RAMlist.add(Information(128, "128GB"))
-            val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, RAMlist)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            RAMspinner!!.setAdapter(adapter)
-        }
-
-
-        override fun onTouchEvent(event: MotionEvent): Boolean
-        {
-            if (!CPUspinner!!.isInsideSearchEditText(event))
-            {
-                CPUspinner!!.hideEdit()
-            }
-            if (!GPUspinner!!.isInsideSearchEditText(event))
-            {
-                GPUspinner!!.hideEdit()
-            }
-            if (!RAMspinner!!.isInsideSearchEditText(event))
-            {
-                RAMspinner!!.hideEdit()
-            }
-            return super.onTouchEvent(event)
-        }
-
-
-        fun getData(type: String): Unit
-        {
-
-            val url = "https://www.game-debate.com/$type/api/list"
-            val jsonarrayrequest = JsonArrayRequest(Request.Method.GET, url, null, Response.Listener { response -> handleresponse(response, type) }, Response.ErrorListener { error -> Log.e("Error", error.toString()) })
-            val requestqueue = CustomVolleyRequest.getInstance(this.applicationContext).requestQueue
-            requestqueue.add(jsonarrayrequest)
-        }
-
-        fun handleresponse(response: JSONArray, type: String): Unit
-        {
-            if (type.equals("cpu"))
-            {
-                for (i in 0 until response.length())
-                {
-                    val jsonObject = response.getJSONObject(i)
-                    val pid = jsonObject.getInt("p_id")
-                    val name = jsonObject.getString("p_deriv")
-                    CPUlist.add(Information(pid, name))
-                }
-                Log.e("Kotlin", CPUlist.get(0).title)
-                val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, CPUlist)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                CPUspinner!!.setAdapter(adapter)
-                Log.e("pos2", sharedPrefrence!!.getInt("CPUindex", 1).toString())
-            } else
-            {
-                for (i in 0 until response.length())
-                {
-                    val jsonObject = response.getJSONObject(i)
-                    val pid = jsonObject.getInt("gc_id")
-                    val name = jsonObject.getString("gc_deriv")
-                    GPUlist.add(Information(pid, name))
-                }
-                Log.e("Kotlin", GPUlist.get(0).title)
-                val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, GPUlist)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                GPUspinner!!.setAdapter(adapter)
+                //val ConfigList = ArrayList<ConfigInfo>()
+                ConfigList.add(ConfigInfo(CPUname!!, CPUid!!, GPUname!!, GPUid!!, RAMname!!, RAMid!!, false))
+                val json = gson.toJson(ConfigList)
+                Log.d("OKButton Pressed", json.toString())
+                editor.putString("Config", json)
+                editor.commit()
+                finish()
             }
 
-            /*GPUspinner!!.setSelectedItem(sharedPrefrence!!.getInt("GPUindex", 1))
-            RAMspinner!!.setSelectedItem(sharedPrefrence!!.getInt("RAMindex", 1))*/
-        }
+
+        })
+
+
+
+
+        CPUspinner!!.setStatusListener(
+                object : IStatusListener
+                {
+                    override fun spinnerIsOpening()
+                    {
+                        GPUspinner!!.hideEdit()
+                        RAMspinner!!.hideEdit()
+                    }
+
+                    override fun spinnerIsClosing()
+                    {
+
+                    }
+                })
+
+        GPUspinner!!.setStatusListener(
+                object : IStatusListener
+                {
+                    override fun spinnerIsOpening()
+                    {
+                        CPUspinner!!.hideEdit()
+                        RAMspinner!!.hideEdit()
+                    }
+
+                    override fun spinnerIsClosing()
+                    {
+
+                    }
+                })
+
+        RAMspinner!!.setStatusListener(
+                object : IStatusListener
+                {
+                    override fun spinnerIsOpening()
+                    {
+                        CPUspinner!!.hideEdit()
+                        GPUspinner!!.hideEdit()
+                    }
+
+                    override fun spinnerIsClosing()
+                    {
+
+                    }
+                })
+
+
+        CPUspinner!!.setOnItemSelectedListener(
+                object : OnItemSelectedListener
+                {
+                    override fun onNothingSelected()
+                    {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onItemSelected(view: View?, position: Int, id: Long)
+                    {
+                        Log.d("pos", position.toString())
+                        CPUname = CPUlist.get(position).title
+                        CPUid = CPUlist.get(position).id
+
+
+                    }
+
+                })
+
+        GPUspinner!!.setOnItemSelectedListener(
+                object : OnItemSelectedListener
+                {
+                    override fun onNothingSelected()
+                    {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onItemSelected(view: View?, position: Int, id: Long)
+                    {
+                        GPUname = GPUlist.get(position).title
+                        GPUid = GPUlist.get(position).id
+                    }
+                })
+
+        RAMspinner!!.setOnItemSelectedListener(
+                object : OnItemSelectedListener
+                {
+                    override fun onNothingSelected()
+                    {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onItemSelected(view: View?, position: Int, id: Long)
+                    {
+                        RAMname = RAMlist.get(position).title
+                        RAMid = RAMlist.get(position).id
+
+                    }
+
+                })
 
     }
+
+
+    fun loadAllList()
+    {
+        getData("cpu")
+        getData("gpu")
+        getRAM()
+    }
+
+    fun getRAM()
+    {
+        RAMlist.add(Information(1, "1GB"))
+        RAMlist.add(Information(2, "2GB"))
+        RAMlist.add(Information(3, "3GB"))
+        RAMlist.add(Information(4, "4GB"))
+        RAMlist.add(Information(5, "5GB"))
+        RAMlist.add(Information(6, "6GB"))
+        RAMlist.add(Information(8, "8GB"))
+        RAMlist.add(Information(10, "10GB"))
+        RAMlist.add(Information(12, "12GB"))
+        RAMlist.add(Information(14, "14GB"))
+        RAMlist.add(Information(16, "16GB"))
+        RAMlist.add(Information(32, "32GB"))
+        RAMlist.add(Information(64, "64GB"))
+        RAMlist.add(Information(128, "128GB"))
+        val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, RAMlist)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        RAMspinner!!.setAdapter(adapter)
+    }
+
+
+    override fun onTouchEvent(event: MotionEvent): Boolean
+    {
+        if (!CPUspinner!!.isInsideSearchEditText(event))
+        {
+            CPUspinner!!.hideEdit()
+        }
+        if (!GPUspinner!!.isInsideSearchEditText(event))
+        {
+            GPUspinner!!.hideEdit()
+        }
+        if (!RAMspinner!!.isInsideSearchEditText(event))
+        {
+            RAMspinner!!.hideEdit()
+        }
+        return super.onTouchEvent(event)
+    }
+
+
+    fun getData(type: String): Unit
+    {
+        val url = "https://www.game-debate.com/$type/api/list"
+        val jsonarrayrequest = JsonArrayRequest(Request.Method.GET, url, null, Response.Listener { response -> handleresponse(response, type) }, Response.ErrorListener { error -> Log.e("Error", error.toString()) })
+        val requestqueue = CustomVolleyRequest.getInstance(this.applicationContext).requestQueue
+        requestqueue.add(jsonarrayrequest)
+    }
+
+    fun handleresponse(response: JSONArray, type: String): Unit
+    {
+        if (type.equals("cpu"))
+        {
+            for (i in 0 until response.length())
+            {
+                val jsonObject = response.getJSONObject(i)
+                val pid = jsonObject.getInt("p_id")
+                val name = jsonObject.getString("p_deriv")
+                CPUlist.add(Information(pid, name))
+            }
+            Log.e("Kotlin", CPUlist.get(0).title)
+            val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, CPUlist)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            CPUspinner!!.setAdapter(adapter)
+            Log.e("pos2", sharedPrefrence!!.getInt("CPUindex", 1).toString())
+        } else
+        {
+            for (i in 0 until response.length())
+            {
+                val jsonObject = response.getJSONObject(i)
+                val pid = jsonObject.getInt("gc_id")
+                val name = jsonObject.getString("gc_deriv")
+                GPUlist.add(Information(pid, name))
+            }
+            Log.e("Kotlin", GPUlist.get(0).title)
+            val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, GPUlist)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            GPUspinner!!.setAdapter(adapter)
+        }
+    }
+
+}
 
 
 

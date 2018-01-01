@@ -9,10 +9,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.widget.Switch
 import com.gamerequirements.R
 import com.gamerequirements.Singelton
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
 
 class MainActivityConfig : AppCompatActivity()
 {
@@ -31,7 +34,7 @@ class MainActivityConfig : AppCompatActivity()
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(this)
         val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
-
+        val editor: SharedPreferences.Editor = pref.edit()
         var config: String? = pref.getString("Config", null)
         val gson = Gson()
         if (config != null)
@@ -47,6 +50,24 @@ class MainActivityConfig : AppCompatActivity()
         {
 
         }
+
+        val myswitch = findViewById(R.id.notificationSwitch) as Switch
+        myswitch.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked)
+            {
+                FirebaseMessaging.getInstance().subscribeToTopic("notifications")
+                editor.putBoolean("notification_toggle", true)
+                editor.commit()
+            } else
+            {
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("notifications")
+                editor.putBoolean("notification_toggle", false)
+                editor.commit()
+            }
+        }
+
+        myswitch.isChecked = pref.getBoolean("notification_toggle", true)
     }
 
     override fun onResume()
@@ -78,6 +99,11 @@ class MainActivityConfig : AppCompatActivity()
         editor.putString("Config", json)
         editor.commit()
         Log.d("Hello", json)
+    }
+
+    fun back(view: View)
+    {
+        finish()
     }
 
 }
