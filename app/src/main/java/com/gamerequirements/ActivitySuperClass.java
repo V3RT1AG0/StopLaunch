@@ -61,7 +61,9 @@ public class ActivitySuperClass extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                findViewById(R.id.badge).setVisibility(View.GONE);
                 startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+
             }
         });
     }

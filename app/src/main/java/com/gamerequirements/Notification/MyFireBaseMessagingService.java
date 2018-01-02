@@ -40,6 +40,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         mymap=remoteMessage.getData();
+        Log.d("mymap",mymap.toString());
         if(mymap.containsKey("update"))
         {
             value = Integer.parseInt(mymap.get("update").toString());

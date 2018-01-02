@@ -137,7 +137,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
             summary = response.getString("summary");
             date = response.getString("release_date");
             ((TextView) findViewById(R.id.game_title)).setText(title);
-            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.replace("\n", ", "));
+            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2,genre.length()-2).replace("\\n", ", "));
             ((TextView) findViewById(R.id.date)).setText("Release Date: " + date);
             ((TextView) findViewById(R.id.summary)).setText(summary);
             try

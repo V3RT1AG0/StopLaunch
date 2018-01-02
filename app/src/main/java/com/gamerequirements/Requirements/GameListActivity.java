@@ -13,6 +13,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
@@ -49,13 +50,15 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //private static final String gamelisturl = Singelton.getURL() + "loadlist";
     private static final String COUNT = "count";
     //private static final String gamelisturl = Singelton.getURL() + "index.php";
-    private static final String gamelisturl = Singelton.getURL()+"gameslist";
+    private static final String gamelisturl = Singelton.getURL() + "gameslist";
+    private static final String notificationCountUrl = Singelton.getURL() + "newgamescount";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     RecyclerView recyclerView;
     FloatingSearchView searchView;
     boolean doubleBackToExitPressedOnce = false;
     CircularProgressView progressView;
+    TextView notificationCounttextview;
     Timer timer;
     LinearLayout errorlayout;
     SharedPreferences sharedPrefs;
@@ -77,6 +80,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         progressView.startAnimation();
         gamelist = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
+        notificationCounttextview = (TextView) findViewById(R.id.badge);
         LinearLayoutManager lmanager = new LinearLayoutManager(this);
         errorlayout = (LinearLayout) findViewById(R.id.errorlayout);
         findViewById(R.id.back_arrow).setVisibility(View.GONE);
@@ -88,8 +92,9 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         recyclerView.setLayoutManager(lmanager);
 
         VolleyOperation();
+        getNotificationCount();
 
-       recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager)
+        recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager)
         {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
@@ -105,15 +110,53 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         MiAutoStart();
     }
 
+    private void getNotificationCount()
+    {
+
+        CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, notificationCountUrl, null, new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try
+                {
+                    int count = response.getInt("count");
+                    int storedCount = sharedPrefs.getInt("count", 0);
+                    if (storedCount == count)
+                        return;
+                    notificationCounttextview.setText(Integer.toString(count - storedCount));
+                    notificationCounttextview.setVisibility(View.VISIBLE);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putInt("count", count);
+                    editor.commit();
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.d("Error", error.toString());
+            }
+        });
+
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
+        requestqueue.add(jsonObjectRequest);
+    }
+
     void MiAutoStart()
     {
-        SharedPreferences sharedpreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String manufacturer = "xiaomi";
-        if(manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER) && !sharedpreferences.getBoolean("autostart",false)) {
+        if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER) && !sharedpreferences.getBoolean("autostart", false))
+        {
             //this will open auto start screen where user can enable permission for your app
-            Toast.makeText(this,"Allow autostart permission for GameRequirements",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Allow autostart permission for GameRequirements", Toast.LENGTH_LONG).show();
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putBoolean("autostart",true);
+            editor.putBoolean("autostart", true);
             editor.apply();
             Intent intent = new Intent();
             intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
@@ -129,7 +172,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         JSONArray jsonArray = new JSONArray(idArrayList);
 
         params.put("list", jsonArray.toString());
-        Log.d("array",params.toString());
+        Log.d("array", params.toString());
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.POST, gamelisturl, params, new Response.Listener<JSONObject>()
         {
             @Override
@@ -323,18 +366,18 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
-                   errorlayout.findViewById(R.id.RetryButton).setOnClickListener(new View.OnClickListener()
+                errorlayout.findViewById(R.id.RetryButton).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
                     {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Log.d("custom","volley2");
-                            errorlayout.setVisibility(View.GONE);
-                            progressView.setVisibility(View.VISIBLE);
-                            searchView.clearQuery();
-                            VolleyOperation();
-                        }
-                    });
+                        Log.d("custom", "volley2");
+                        errorlayout.setVisibility(View.GONE);
+                        progressView.setVisibility(View.VISIBLE);
+                        searchView.clearQuery();
+                        VolleyOperation();
+                    }
+                });
                 Log.d("Error", error.toString());
                 if (error instanceof NoConnectionError)
                 {
