@@ -145,6 +145,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
+                resetRecyclerViewData();
                 errorlayout.findViewById(R.id.RetryButton).setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -170,6 +171,14 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)); */
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
+    }
+
+    private void resetRecyclerViewData()
+    {
+        gamelist.clear();
+        nexttexnupdate = false;
+        idArrayList.clear();
+        gameListAdapter.notifyDataSetChanged();
     }
 
     void handleresponse(JSONObject response)

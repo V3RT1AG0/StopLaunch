@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/listbackground"
     tools:context="com.gamerequirements.SaveCofig.SelectConfig">
 
     <android.support.v7.widget.Toolbar
@@ -34,7 +35,23 @@
         android:layout_height="wrap_content"/>
     Spinner/> -->
 
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress_view"
+        android:layout_marginTop="30sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true" />
 
+    <LinearLayout
+        android:id="@+id/ContentLL"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
         android:id="@+id/myCpu"
@@ -48,7 +65,7 @@
         android:gravity="center_horizontal"
         app:ShowBorders="true"
         app:BordersSize="1dp"
-        app:RevealEmptyText="CPU"
+        app:RevealEmptyText="   CPU"
         app:BoarderColor="@color/colorPrimary"
         app:SpinnerExpandHeight="250dp"/>
 
@@ -64,7 +81,7 @@
         android:gravity="center_horizontal"
         app:ShowBorders="true"
         app:BordersSize="1dp"
-        app:RevealEmptyText="GPU"
+        app:RevealEmptyText="   GPU"
         app:BoarderColor="@color/colorPrimary"
         app:SpinnerExpandHeight="250dp"/>
 
@@ -80,7 +97,7 @@
         android:gravity="center_horizontal"
         app:ShowBorders="true"
         app:BordersSize="1dp"
-        app:RevealEmptyText="RAM"
+        app:RevealEmptyText="   RAM"
         app:BoarderColor="@color/colorPrimary"
         app:SpinnerExpandHeight="250dp"/>
 
@@ -89,7 +106,11 @@
         android:text="@string/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/plainWhite"
+        android:backgroundTint="@color/colorAccent"
         android:gravity="center"
         android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
 
 </LinearLayout>

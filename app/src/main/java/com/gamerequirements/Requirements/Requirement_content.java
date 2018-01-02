@@ -23,7 +23,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +33,8 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     ImageView poster_image;
     TextView[] Headingtextview, ContentTextview, RHeadingtextview, RContentTextview;
     AdView mAdView;
-    String summary,genre,date,title;
+    String summary, genre, date, title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,75 +42,63 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         setContentView(R.layout.activity_requirement_content);
         //requirementurl = Singelton.getURL() + "getreq/";   //for python server
         requirementurl = Singelton.getURL() + "game/";
-        Bundle bundle=getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("id");
-        title = bundle.getString("title");
-        genre=bundle.getString("genre");
-        date=bundle.getString("date");
-        summary=bundle.getString("summary");
-
-
-
-
         mAdView = (AdView) findViewById(R.id.adViewContentBottom);
-       AdRequest adRequest = new AdRequest.Builder()
-               // .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
+                // .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
                 .build();
         mAdView.loadAd(adRequest);
-
-
         poster_image = (ImageView) findViewById(R.id.image);
         Picasso.with(this)
                 .load(Singelton.getImageurl() + id)
                 .into(poster_image);
-
         poster_image.setOnClickListener(this);
-
-
         Headingtextview = new TextView[]{
                 ((TextView) findViewById(R.id.HEADING_intelCPU)),
                 ((TextView) findViewById(R.id.HEADING_AMD_CPU)),
                 ((TextView) findViewById(R.id.HEADING_NvidiaGPU)),
                 ((TextView) findViewById(R.id.HEADING_AMDGpu)),
+                ((TextView) findViewById(R.id.HEADING_VRAM)),
                 ((TextView) findViewById(R.id.HEADING_RAM)),
                 ((TextView) findViewById(R.id.HEADING_OS)),
                 ((TextView) findViewById(R.id.HEADING_HDD)),
 
         };
-
         ContentTextview = new TextView[]{
                 ((TextView) findViewById(R.id.CONTENT_intelCPU)),
                 ((TextView) findViewById(R.id.CONTENT_AMD_CPU)),
                 ((TextView) findViewById(R.id.CONTENT_NvidiaGPU)),
                 ((TextView) findViewById(R.id.CONTENT_AMDGpu)),
+                ((TextView) findViewById(R.id.CONTENT_VRAM)),
                 ((TextView) findViewById(R.id.CONTENT_RAM)),
                 ((TextView) findViewById(R.id.CONTENT_OS)),
                 ((TextView) findViewById(R.id.CONTENT_HDD)),
 
         };
-
         RHeadingtextview = new TextView[]{
                 ((TextView) findViewById(R.id.RHEADING_intelCPU)),
                 ((TextView) findViewById(R.id.RHEADING_AMD_CPU)),
                 ((TextView) findViewById(R.id.RHEADING_NvidiaGPU)),
                 ((TextView) findViewById(R.id.RHEADING_AMDGpu)),
+                ((TextView) findViewById(R.id.RHEADING_VRAM)),
                 ((TextView) findViewById(R.id.RHEADING_RAM)),
                 ((TextView) findViewById(R.id.RHEADING_OS)),
                 ((TextView) findViewById(R.id.RHEADING_HDD)),
 
         };
-
         RContentTextview = new TextView[]{
                 ((TextView) findViewById(R.id.RCONTENT_intelCPU)),
                 ((TextView) findViewById(R.id.RCONTENT_AMD_CPU)),
                 ((TextView) findViewById(R.id.RCONTENT_NvidiaGPU)),
                 ((TextView) findViewById(R.id.RCONTENT_AMDGpu)),
+                ((TextView) findViewById(R.id.RCONTENT_VRAM)),
                 ((TextView) findViewById(R.id.RCONTENT_RAM)),
                 ((TextView) findViewById(R.id.RCONTENT_OS)),
                 ((TextView) findViewById(R.id.RCONTENT_HDD)),
 
         };
-
         //MYURL="http://www.game-debate.com/games/index.php?g_id=" + id;
         //Toast.makeText(this, id + "", Toast.LENGTH_LONG).show();
         displaydata(id);
@@ -149,27 +137,23 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
             summary = response.getString("summary");
             date = response.getString("release_date");
             ((TextView) findViewById(R.id.game_title)).setText(title);
-            ((TextView) findViewById(R.id.genre)).setText("Genre: "+genre.replace("\n",", "));
-            ((TextView) findViewById(R.id.date)).setText("Release Date: "+date);
+            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.replace("\n", ", "));
+            ((TextView) findViewById(R.id.date)).setText("Release Date: " + date);
             ((TextView) findViewById(R.id.summary)).setText(summary);
-
-            JSONArray jarr = response.getJSONArray("minimum_req");
             try
             {
-                Log.d("TAG", jarr.toString());
-                load_minimum(jarr);
+                JSONObject min_jobj = response.getJSONObject("minimum_req");
+                load_requirements(min_jobj, "minimum");
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
-
-            JSONArray recommended_array = response.getJSONArray("recommended_req");
-            if (recommended_array.length() != 1)
+            JSONObject rec_jobj = response.getJSONObject("recommended_req");
+            if (rec_jobj.length() != 1)
             {
-                Log.d("TAG", recommended_array.toString());
-                load_recommended(recommended_array);
-            }
-            else
+                Log.d("TAG", rec_jobj.toString());
+                load_requirements(rec_jobj, "recommended");
+            } else
             {
                 (findViewById(R.id.RecommendedLL)).setVisibility(View.GONE);
             }
@@ -183,65 +167,56 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     /**
      * throws cause the calling method to handle exceptio instead of handling the exception here
      **/
-    void load_minimum(JSONArray jarr) throws JSONException
+    void load_requirements(JSONObject jarr, String type) throws JSONException
     {
-        String Intel_CPU = jarr.getString(0);
-        String AMD_CPU = jarr.getString(1);
-        String NvidiaGPU = jarr.getString(2);
-        String AMDGpu = jarr.getString(3);
-        String RAM = jarr.getString(4);
-        String OS = jarr.getString(5);
-        String HDD = "";
-        if (jarr.length() == 7)
-        {
-            HDD = jarr.getString(6);
-        }
+        String Intel_CPU = jarr.getString("intel_cpu");
+        String AMD_CPU = jarr.getString("amd_cpu");
+        String NvidiaGPU = jarr.getString("nvidia_gpu");
+        String AMDGpu = jarr.getString("amd_gpu");
+        String RAM = jarr.getString("ram");
+        String OS = jarr.getString("os");
+        String HDD = jarr.getString("hdd");
+        String vram = jarr.getString("vram");
+        String[] ContentArray = {Intel_CPU, AMD_CPU, NvidiaGPU, AMDGpu, vram, RAM, OS, HDD};
+        String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "VRAM", "RAM", "Operating System", "Hard Drive Space"};
+        Log.d("array", String.valueOf(jarr.length()));
+        if (type.equals("minimum"))
+            for (int i = 0; i < jarr.length() - 1; i++)
+            {
+                Headingtextview[i].setText(HeadingArray[i]);
+                ContentTextview[i].setText(ContentArray[i]);
+            }
         else
-        {
-            Headingtextview[6].setVisibility(View.GONE);
-            ContentTextview[6].setVisibility(View.GONE);
-        }
-        String[] ContentArray = {Intel_CPU, AMD_CPU, NvidiaGPU, AMDGpu, RAM, OS, HDD};
-        String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "RAM", "Operating System", "Hard Drive Space"};
-        for (int i = 0; i < jarr.length(); i++)
-        {
-            Headingtextview[i].setText(HeadingArray[i]);
-            ContentTextview[i].setText(ContentArray[i]);
-        }
-
-        Log.d("TAG", HDD);
+            for (int i = 0; i < jarr.length() - 1; i++)
+            {
+                RHeadingtextview[i].setText(HeadingArray[i]);
+                RContentTextview[i].setText(ContentArray[i]);
+            }
     }
 
-    void load_recommended(JSONArray recommended_array) throws JSONException
+   /* void load_recommended(JSONObject jarr) throws JSONException
     {
-        String Intel_CPU2 = recommended_array.getString(0);
-        String AMD_CPU2 = recommended_array.getString(1);
-        String NvidiaGPU2 = recommended_array.getString(2);
-        String AMDGpu2 = recommended_array.getString(3);
-        String RAM2 = recommended_array.getString(4);
-        String OS2 = recommended_array.getString(5);
-        String HDD2="";
-        if (recommended_array.length() == 7)
-        {
-            HDD2 = recommended_array.getString(6);
-        }
-        else
-        {
-            RHeadingtextview[6].setVisibility(View.GONE);
-            RContentTextview[6].setVisibility(View.GONE);
-        }
-        String[] ContentArray = {Intel_CPU2, AMD_CPU2, NvidiaGPU2, AMDGpu2, RAM2, OS2, HDD2};
+        String Intel_CPU = jarr.getString("intel_cpu");
+        String AMD_CPU = jarr.getString("amd_cpu");
+        String NvidiaGPU = jarr.getString("nvidia_gpu");
+        String AMDGpu = jarr.getString("amd_gpu");
+        String RAM = jarr.getString("ram");
+        String OS = jarr.getString( "os");
+        String HDD = jarr.getString("hdd");
+        String vram = jarr.getString("vram");
+
+        String[] ContentArray = {Intel_CPU, AMD_CPU, NvidiaGPU, AMDGpu, RAM, OS, HDD};
         String[] HeadingArray = {"Intel CPU", "AMD CPU", "Nvidia Graphics Card", "AMD Graphics Card", "RAM", "Operating System", "Hard Drive Space"};
         for (int i = 0; i < recommended_array.length(); i++)
         {
             RHeadingtextview[i].setText(HeadingArray[i]);
             RContentTextview[i].setText(ContentArray[i]);
         }
-    }
+    } */
 
     public void canYouRunIt(View view)
     {
-        Intent i= new Intent(this,CanYouRunIt.class).putExtra("gid",id);
+        Intent i = new Intent(this, CanYouRunIt.class).putExtra("gid", id);
         startActivity(i);
     }
 
@@ -255,7 +230,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
                 settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.image_layout
                         , null));
-                ImageView imageView= (ImageView) settingsDialog.findViewById(R.id.imageview1);
+                ImageView imageView = (ImageView) settingsDialog.findViewById(R.id.imageview1);
                 settingsDialog.show();
                 Picasso.with(this)
                         .load(Singelton.getImageurl() + id)

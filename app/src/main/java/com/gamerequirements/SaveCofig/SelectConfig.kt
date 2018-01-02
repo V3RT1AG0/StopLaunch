@@ -9,13 +9,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.gamerequirements.JSONCustom.CustomVolleyRequest
 import com.gamerequirements.R
 import com.gamerequirements.Singelton
+import com.github.rahatarmanahmed.cpv.CircularProgressView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
@@ -32,8 +35,11 @@ class SelectConfig : AppCompatActivity()
     var CPUspinner: SearchableSpinner? = null
     var GPUspinner: SearchableSpinner? = null
     var RAMspinner: SearchableSpinner? = null
+    var progressView: CircularProgressView? = null
     // var toggle: Switch? = null
     var sharedPrefrence: SharedPreferences? = null
+    var ContentLL: LinearLayout ?=null
+    var count = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -44,6 +50,9 @@ class SelectConfig : AppCompatActivity()
         GPUspinner = findViewById(R.id.myGpu) as SearchableSpinner
         RAMspinner = findViewById(R.id.myRam) as SearchableSpinner
         val SaveButton: Button = findViewById(R.id.SaveConfig) as Button
+        progressView = findViewById(R.id.progress_view) as CircularProgressView
+        progressView?.startAnimation()
+        ContentLL = findViewById(R.id.ContentLL) as LinearLayout
         var CPUname: String? = null
         var GPUname: String? = null
         var RAMname: String? = null
@@ -245,6 +254,10 @@ class SelectConfig : AppCompatActivity()
         val url = "https://www.game-debate.com/$type/api/list"
         val jsonarrayrequest = JsonArrayRequest(Request.Method.GET, url, null, Response.Listener { response -> handleresponse(response, type) }, Response.ErrorListener { error -> Log.e("Error", error.toString()) })
         val requestqueue = CustomVolleyRequest.getInstance(this.applicationContext).requestQueue
+        jsonarrayrequest.retryPolicy = DefaultRetryPolicy(
+                7000,
+                2,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         requestqueue.add(jsonarrayrequest)
     }
 
@@ -263,6 +276,7 @@ class SelectConfig : AppCompatActivity()
             val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, CPUlist)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             CPUspinner!!.setAdapter(adapter)
+            count++
             Log.e("pos2", sharedPrefrence!!.getInt("CPUindex", 1).toString())
         } else
         {
@@ -277,6 +291,13 @@ class SelectConfig : AppCompatActivity()
             val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, GPUlist)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             GPUspinner!!.setAdapter(adapter)
+            count++
+        }
+        Log.d("count", count.toString())
+        if(count==2)
+        {
+            ContentLL!!.visibility = View.VISIBLE
+            progressView!!.visibility = View.GONE
         }
     }
 

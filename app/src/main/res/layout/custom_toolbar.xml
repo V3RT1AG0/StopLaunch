@@ -29,7 +29,17 @@
         android:textSize="18sp"
         android:paddingBottom="2sp"/>
 
-
+    <ImageView
+        android:id="@+id/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_settings"
+        android:tint="@color/plainWhite" />
 
     <ImageView
         android:id="@+id/Notify"
@@ -44,17 +54,7 @@
         android:tint="@color/plainWhite"
          />
 
-    <ImageView
-        android:id="@+id/Settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_settings"
-        android:tint="@color/plainWhite" />
+
 <!--
     <ImageView
         android:id="@+id/Share"

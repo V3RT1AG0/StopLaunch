@@ -15,6 +15,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,16 +31,19 @@ public class NotificationActivity extends AppCompatActivity
     private static final String notificationurl = Singelton.getURL() + "newgames";
     RecyclerView my_recycler_view;
     OuterAdapter adapter;
+    CircularProgressView progressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        VolleyRequest();
+        progressView = (CircularProgressView) findViewById(R.id.progress_view);
+        progressView.startAnimation();
         my_recycler_view = (RecyclerView) findViewById(R.id.outerRecycler);
         my_recycler_view.setHasFixedSize(true);
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        VolleyRequest();
     }
 
     private void VolleyRequest()
@@ -56,6 +60,7 @@ public class NotificationActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error)
             {
+                progressView.setVisibility(View.GONE);
                 Log.d("TAG", error.toString());
             }
         });
@@ -90,6 +95,7 @@ public class NotificationActivity extends AppCompatActivity
             e.printStackTrace();
         } finally
         {
+            progressView.setVisibility(View.GONE);
             adapter = new OuterAdapter(info);
             my_recycler_view.setAdapter(adapter);
             Log.d("TAG", "finally");

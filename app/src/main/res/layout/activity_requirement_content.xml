@@ -233,6 +233,22 @@
                     android:orientation="horizontal">
 
                     <include
+                        android:id="@+id/HEADING_VRAM"
+                        layout="@layout/heading_textview"
+                        />
+
+                    <include
+                        android:id="@+id/CONTENT_VRAM"
+                        layout="@layout/content_textview"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include
                         android:id="@+id/HEADING_RAM"
                         layout="@layout/heading_textview"
                         />
@@ -363,6 +379,22 @@
 
                     <include
                         android:id="@+id/RCONTENT_AMDGpu"
+                        layout="@layout/content_textview"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/RHEADING_VRAM"
+                        layout="@layout/heading_textview"
+                        />
+
+                    <include
+                        android:id="@+id/RCONTENT_VRAM"
                         layout="@layout/content_textview"/>
 
                 </LinearLayout>
