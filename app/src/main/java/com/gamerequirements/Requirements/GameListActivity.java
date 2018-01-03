@@ -52,6 +52,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //private static final String gamelisturl = Singelton.getURL() + "index.php";
     private static final String gamelisturl = Singelton.getURL() + "gameslist";
     private static final String notificationCountUrl = Singelton.getURL() + "newgamescount";
+    private static final String SEARCHURL = Singelton.getURL()+"gameslist/search/";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     RecyclerView recyclerView;
@@ -350,7 +351,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     {
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("search");
-        String searchurl = "http://192.168.1.9:5000/gameslist/search/" + query;
+        String searchurl = SEARCHURL + query;
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, searchurl, null, new Response.Listener<JSONObject>()
         {
             @Override

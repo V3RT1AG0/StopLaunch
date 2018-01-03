@@ -132,13 +132,17 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         try
         {
             Log.d("TAG", response.toString());
+            TextView date_TV = ((TextView) findViewById(R.id.date));
             title = response.getString("title");
             genre = response.getString("genre");
             summary = response.getString("summary");
             date = response.getString("release_date");
+            if(date.equals(""))
+                date_TV.setVisibility(View.GONE);
+            else
+                date_TV.setText("Release Date: " + date);
             ((TextView) findViewById(R.id.game_title)).setText(title);
-            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2,genre.length()-2).replace("\\n", ", "));
-            ((TextView) findViewById(R.id.date)).setText("Release Date: " + date);
+            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2, genre.length() - 2).replace("\\n", ", "));
             ((TextView) findViewById(R.id.summary)).setText(summary);
             try
             {
@@ -146,17 +150,14 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
                 load_requirements(min_jobj, "minimum");
             } catch (JSONException e)
             {
+                findViewById(R.id.MinimumLL).setVisibility(View.GONE);
                 e.printStackTrace();
             }
             JSONObject rec_jobj = response.getJSONObject("recommended_req");
-            if (rec_jobj.length() != 1)
-            {
-                Log.d("TAG", rec_jobj.toString());
-                load_requirements(rec_jobj, "recommended");
-            } else
-            {
-                (findViewById(R.id.RecommendedLL)).setVisibility(View.GONE);
-            }
+
+            Log.d("TAG", rec_jobj.toString());
+            load_requirements(rec_jobj, "recommended");
+
         } catch (JSONException e)
         {
             e.printStackTrace();

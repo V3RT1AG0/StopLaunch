@@ -20,7 +20,7 @@ import com.google.gson.reflect.TypeToken
 class MainActivityConfig : AppCompatActivity()
 {
     var adapt: ConfigAdapter? = null
-    var configList: List<ConfigInfo> = ArrayList()
+    var configList: MutableList<ConfigInfo> = ArrayList()
     var recyclerView: RecyclerView? = null
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -101,8 +101,17 @@ class MainActivityConfig : AppCompatActivity()
         Log.d("Hello", json)
     }
 
+
+
     fun back(view: View)
     {
+        val gson = Gson()
+        val json = gson.toJson(configList)
+        val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val editor=pref.edit()
+        editor.putString("Config", json)
+        editor.commit()
+        Log.d("Hello", json)
         finish()
     }
 

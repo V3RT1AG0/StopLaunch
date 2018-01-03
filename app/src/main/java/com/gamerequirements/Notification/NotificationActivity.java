@@ -27,7 +27,7 @@ import java.util.List;
 public class NotificationActivity extends AppCompatActivity
 {
     List<OuterCardInformation> info = new ArrayList<>();
-    List<InnerCardInformation> innerInfo = new ArrayList<>();
+
     private static final String notificationurl = Singelton.getURL() + "newgames";
     RecyclerView my_recycler_view;
     OuterAdapter adapter;
@@ -77,17 +77,21 @@ public class NotificationActivity extends AppCompatActivity
             Log.d("TAG", response.toString());
             for (int i = 0; i < result.length(); i++)
             {
+                List<InnerCardInformation> innerInfo = new ArrayList<>();
                 JSONObject jsonObject = result.getJSONObject(i);
                 String data = jsonObject.getString("date");
                 JSONArray innerDataArray = jsonObject.getJSONArray("gamelist");
                 String count = String.valueOf(innerDataArray.length());
                 for (int j = 0; j < innerDataArray.length(); j++)
                 {
+                    //Log.d("TAG", innerDataArray.toString());
                     JSONObject innerjsonObject = innerDataArray.getJSONObject(j);
                     String gid = innerjsonObject.getString("gid");
                     String name = innerjsonObject.getString("gname");
+                    Log.d("TAG1", gid +" "+ name);
                     innerInfo.add(new InnerCardInformation(gid, name));
                 }
+                Log.d("TAG2", data +" "+ count + "  " + innerInfo.get(0).name);
                 info.add(new OuterCardInformation(data, innerInfo, count));
             }
         } catch (JSONException e)

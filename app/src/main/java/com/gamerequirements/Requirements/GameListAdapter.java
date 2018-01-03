@@ -48,7 +48,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     {
         Information in=info.get(position);
         holder.title_TV.setText(in.title);
-        holder.date_TV.setText("Release Date: "+in.date);
+
+        if(in.date.equals(""))
+            holder.date_TV.setVisibility(View.GONE);
+        else
+            holder.date_TV.setText("Release Date: "+in.date);
         holder.genre_TV.setText("Genre: "+in.genre.substring(2,in.genre.length()-2).replace("\\n",", "));
         holder.summart_TV.setText(in.summary);
         String url= Singelton.getImageurl()+in.id;

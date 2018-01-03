@@ -36,11 +36,11 @@ public class CanYouRunIt extends ActivitySuperClass
                     GPUid = sharedPreferences.getString("GPUkey", null),
                     RAMid = sharedPreferences.getString("RAMkey", null);
 
-            url = Singelton.getURL() + "request2.php?g_id=" + gid + "&p_id=" + CPUid + "&ram=" + RAMid + "&gc_id=" + GPUid;
+            url = Singelton.getURL() + "gamerequirement?g_id=" + gid + "&p_id=" + CPUid + "&ram=" + RAMid + "&gc_id=" + GPUid;
             //https://f8ct.com/gr/request.php?g_id=8514&p_id=2391&ram=3&gc_id=517
         } else
         {
-            url = Singelton.getURL() + "request2.php?g_id=" + gid;
+            url = Singelton.getURL() + "gamerequirement?g_id=" + gid;
             //https://f8ct.com/gr/request.php?g_id=8514
         }
 

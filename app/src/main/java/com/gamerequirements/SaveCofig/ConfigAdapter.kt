@@ -3,15 +3,13 @@ package com.gamerequirements.SaveCofig
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.gamerequirements.MyApplication
-import android.view.LayoutInflater
-import android.widget.CompoundButton
-import android.widget.RadioGroup
+import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
+import com.gamerequirements.MyApplication
 import com.gamerequirements.R
 import com.gamerequirements.Singelton
 
@@ -19,7 +17,9 @@ import com.gamerequirements.Singelton
  * Created by v3rt1ag0 on 12/23/17.
  */
 
-class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplication.getContext()) : RecyclerView.Adapter<ConfigAdapter.myViewHolder>()
+
+/**The list is stored to sharedprefrence when back button is pressed**/
+class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = MyApplication.getContext()) : RecyclerView.Adapter<ConfigAdapter.myViewHolder>()
 {
     //TODO
     var selectedposition: Int = -1
@@ -135,6 +135,7 @@ class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplica
         val GPU: TextView = itemview.findViewById(R.id.GPU_text) as TextView
         val RAM: TextView = itemview.findViewById(R.id.RAM_text) as TextView
         val toggle: Switch = itemview.findViewById(R.id.toggle) as Switch
+        val bin:ImageView = itemview.findViewById(R.id.Bin) as ImageView
 
         init
         {
@@ -142,6 +143,11 @@ class ConfigAdapter(var info: List<ConfigInfo>, var context: Context = MyApplica
             toggle.setOnClickListener { v: View ->
                 selectedposition = getAdapterPosition()
                 notifyDataSetChanged()
+            }
+
+            bin.setOnClickListener{v:View ->
+                info.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition);
             }
         }
 

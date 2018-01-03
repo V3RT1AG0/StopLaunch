@@ -88,7 +88,7 @@ Intent intent;
             URL url;
             String ServerURL;
             //int current_dp_version;
-            url = new URL("http://pastebin.com/raw/UPLBJJtz");
+            url = new URL("http://pastebin.com/raw/CEnw1cxr");
             while (in == null)
             {
                 in = new BufferedReader(new InputStreamReader(url.openStream()));
