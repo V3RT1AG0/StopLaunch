@@ -5,17 +5,17 @@ package com.gamerequirements;
  * Fire ase Class File
  */
 
-public class Default
+public class StopLaunch
 {
     String server_url;
     int db_version;
-    Default(String server_url,int db_version)
+    StopLaunch(String server_url, int db_version)
     {
         this.server_url=server_url;
         this.db_version=db_version;
     }
 
-    Default()
+    StopLaunch()
     {
 
     }

@@ -146,8 +146,15 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
             }
 
             bin.setOnClickListener{v:View ->
+                if(info.get(adapterPosition).Activated)
+                {
+                    info.get(adapterPosition).Activated = false;
+                    editor.putBoolean("StoredConfigEnabled", false)
+                    editor.commit()
+                }
                 info.removeAt(adapterPosition)
-                notifyItemRemoved(adapterPosition);
+                notifyItemRemoved(adapterPosition)
+
             }
         }
 

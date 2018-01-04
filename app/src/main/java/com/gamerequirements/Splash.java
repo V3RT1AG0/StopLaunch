@@ -59,15 +59,6 @@ Intent intent;
                 } else
                 {
                     getdatafrompastebin();
-                    if (getIntent().hasExtra("update")){
-                        intent = new Intent(Splash.this, NotificationActivity.class);
-                    }
-                    else
-                    {
-                        intent = new Intent(Splash.this, GameListActivity.class);
-                    }
-                    startActivity(intent);
-
                 }
             }
         }).start();
@@ -97,6 +88,7 @@ Intent intent;
             Singelton.setURL(ServerURL);
             in.close();
             Log.d("Server" + ServerURL, Singelton.getURL());
+            startNextActivity();
 
         } catch (Exception e)
         {
@@ -105,23 +97,38 @@ Intent intent;
         }
     }
 
+    private void startNextActivity()
+    {
+
+        if (getIntent().hasExtra("update")){
+            intent = new Intent(Splash.this, NotificationActivity.class);
+        }
+        else
+        {
+            intent = new Intent(Splash.this, GameListActivity.class);
+        }
+        startActivity(intent);
+    }
+
     void tryfromfirebasedatabase()
     {
-        databaseref.child("Default").addListenerForSingleValueEvent(new ValueEventListener()
+        databaseref.child("StopLaunch").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 Log.d("log", dataSnapshot.getKey());
-                Default def = dataSnapshot.getValue(Default.class);
+                StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 String ServerURL = def.getserver_url();
                 Singelton.setURL(ServerURL);
+                startNextActivity();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-
+                Toast.makeText(Splash.this,"Bad network connection. Please try again later",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -209,10 +210,10 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
             }
         });
 
-      /* jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+      jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
                 2,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)); */
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
     }

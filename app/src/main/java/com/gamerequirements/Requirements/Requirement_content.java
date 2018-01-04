@@ -137,12 +137,22 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
             genre = response.getString("genre");
             summary = response.getString("summary");
             date = response.getString("release_date");
-            if(date.equals(""))
+
+
+            if (date.equals(""))
                 date_TV.setVisibility(View.GONE);
             else
                 date_TV.setText("Release Date: " + date);
             ((TextView) findViewById(R.id.game_title)).setText(title);
-            ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2, genre.length() - 2).replace("\\n", ", "));
+
+            try
+            {
+                ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2, genre.length() - 2).replace("\\n", ", "));
+            } catch (StringIndexOutOfBoundsException e)
+            {
+                Log.d("Error", e.toString() + "gid = " + id);
+            }
+
             ((TextView) findViewById(R.id.summary)).setText(summary);
             try
             {

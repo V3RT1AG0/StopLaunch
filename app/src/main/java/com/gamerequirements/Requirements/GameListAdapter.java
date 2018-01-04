@@ -53,7 +53,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
             holder.date_TV.setVisibility(View.GONE);
         else
             holder.date_TV.setText("Release Date: "+in.date);
-        holder.genre_TV.setText("Genre: "+in.genre.substring(2,in.genre.length()-2).replace("\\n",", "));
+        try
+        {
+            holder.genre_TV.setText("Genre: " + in.genre.substring(2, in.genre.length() - 2).replace("\\n", ", "));
+        }
+        catch (StringIndexOutOfBoundsException e)
+        {
+            Log.d("Error",e.toString()  + "gid = " + in.id);
+        }
+
+
         holder.summart_TV.setText(in.summary);
         String url= Singelton.getImageurl()+in.id;
         Log.d("custom",url);
