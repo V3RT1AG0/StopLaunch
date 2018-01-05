@@ -63,6 +63,14 @@
             android:id="@+id/my_gamelist_recycler"
             />
 
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="60sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/my_filtered_recycler"
+            android:visibility="gone"
+            />
+
         <LinearLayout
             android:id="@+id/search_LL"
             android:layout_width="match_parent"

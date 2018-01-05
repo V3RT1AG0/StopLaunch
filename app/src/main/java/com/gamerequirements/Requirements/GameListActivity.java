@@ -53,10 +53,11 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //private static final String gamelisturl = Singelton.getURL() + "index.php";
     private static final String gamelisturl = Singelton.getURL() + "gameslist";
     private static final String notificationCountUrl = Singelton.getURL() + "newgamescount";
-    private static final String SEARCHURL = Singelton.getURL()+"gameslist/search/";
+    private static final String SEARCHURL = Singelton.getURL() + "gameslist/search/";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
-    RecyclerView recyclerView;
+    GameListAdapter searchAdapter;
+    RecyclerView recyclerView, filteredRecyclerView;
     FloatingSearchView searchView;
     boolean doubleBackToExitPressedOnce = false;
     CircularProgressView progressView;
@@ -69,6 +70,8 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //JSONObject idListjsonObject=new JSONObject();
     ArrayList<String> idArrayList = new ArrayList<>();
     final List<Information> filteredList = new ArrayList<>();
+    LinearLayoutManager lmanager;
+    EndlessRecyclerView endlessRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,21 +85,42 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         progressView.startAnimation();
         gamelist = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
+        filteredRecyclerView = (RecyclerView) findViewById(R.id.my_filtered_recycler);
         notificationCounttextview = (TextView) findViewById(R.id.badge);
-        LinearLayoutManager lmanager = new LinearLayoutManager(this);
+        lmanager = new LinearLayoutManager(this);
         errorlayout = (LinearLayout) findViewById(R.id.errorlayout);
         findViewById(R.id.back_arrow).setVisibility(View.GONE);
-        //findViewById(R.id.Share).setVisibility(View.VISIBLE);
+
+        gameListAdapter = new GameListAdapter(gamelist);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(lmanager);
+        recyclerView.setAdapter(gameListAdapter);
+
+
+        searchAdapter = new GameListAdapter(filteredList);
+        filteredRecyclerView.setHasFixedSize(true);
+        filteredRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        filteredRecyclerView.setAdapter(searchAdapter);
+
+
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(lmanager);
 
+
+        AddOnScrollListenrerToRecyclerView();
         VolleyOperation();
         getNotificationCount();
 
-        recyclerView.addOnScrollListener(new EndlessRecyclerView(lmanager)
+        Log.e("Error", gamelisturl);
+        AppRater.app_launched(this);
+        MiAutoStart();
+    }
+
+    private void AddOnScrollListenrerToRecyclerView()
+    {
+        Log.d("Hello", "hello" + gamelist);
+        endlessRecyclerView = new EndlessRecyclerView(lmanager)
         {
             @Override
             public void onLoadMore(int page, int totalItemsCount)
@@ -106,10 +130,8 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 nexttexnupdate = true;
                 VolleyOperation();
             }
-        });
-        Log.e("Error", gamelisturl);
-        AppRater.app_launched(this);
-        MiAutoStart();
+        };
+        recyclerView.addOnScrollListener(endlessRecyclerView);
     }
 
     private void getNotificationCount()
@@ -210,7 +232,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
             }
         });
 
-      jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -221,9 +243,12 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     private void resetRecyclerViewData()
     {
         gamelist.clear();
+        gameListAdapter.notifyDataSetChanged();
+        endlessRecyclerView.resetState();
         nexttexnupdate = false;
         idArrayList.clear();
-        gameListAdapter.notifyDataSetChanged();
+
+
     }
 
     void handleresponse(JSONObject response)
@@ -261,9 +286,9 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 nexttexnupdate = false;
             } else
             {
+                filteredRecyclerView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                gameListAdapter = new GameListAdapter(gamelist);
-                recyclerView.setAdapter(gameListAdapter);
+                gameListAdapter.notifyDataSetChanged();
             }
             /*SharedPreferences.Editor editor = sharedPrefs.edit();
             Gson gson = new Gson();
@@ -301,11 +326,16 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     @Override
     public void onSearchTextChanged(String oldQuery, String newQuery)
     {
-        if (newQuery.equals(""))
+        if (newQuery.length() == 0)
         {
+            timer.cancel();
+            // recyclerView.setAdapter(gameListAdapter);
+            //resetRecyclerViewData();
+            //AddOnScrollListenrerToRecyclerView();
             VolleyOperation();
             return;
         }
+
         newQuery = newQuery.toString().toLowerCase();
         if (timer != null)
             timer.cancel();
@@ -350,6 +380,17 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
     void VolleySearchRequest(final String query)
     {
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                recyclerView.setVisibility(View.GONE);
+                progressView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("search");
         String searchurl = SEARCHURL + query;
@@ -368,6 +409,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
+                resetRecyclerViewData();
                 errorlayout.findViewById(R.id.RetryButton).setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -420,10 +462,10 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         {
             errorlayout.setVisibility(View.GONE);
             progressView.setVisibility(View.GONE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
-            gameListAdapter = new GameListAdapter(filteredList);
-            recyclerView.setAdapter(gameListAdapter);
-            gameListAdapter.notifyDataSetChanged();
+            searchAdapter.notifyDataSetChanged();
+            recyclerView.setVisibility(View.GONE);
+            filteredRecyclerView.setVisibility(View.VISIBLE);
+
         }
 
     }
