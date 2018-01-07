@@ -67,7 +67,7 @@
         app:BordersSize="1dp"
         app:RevealEmptyText="   CPU"
         app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="250dp"/>
+        app:SpinnerExpandHeight="0dp"/>
 
     <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
         android:id="@+id/myGpu"
@@ -83,7 +83,7 @@
         app:BordersSize="1dp"
         app:RevealEmptyText="   GPU"
         app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="250dp"/>
+        app:SpinnerExpandHeight="0dp"/>
 
     <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
         android:id="@+id/myRam"
@@ -99,7 +99,7 @@
         app:BordersSize="1dp"
         app:RevealEmptyText="   RAM"
         app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="250dp"/>
+        app:SpinnerExpandHeight="0dp"/>
 
     <Button
         android:id="@+id/SaveConfig"

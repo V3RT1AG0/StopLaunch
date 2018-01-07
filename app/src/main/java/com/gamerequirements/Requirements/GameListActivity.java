@@ -329,9 +329,6 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         if (newQuery.length() == 0)
         {
             timer.cancel();
-            // recyclerView.setAdapter(gameListAdapter);
-            //resetRecyclerViewData();
-            //AddOnScrollListenrerToRecyclerView();
             VolleyOperation();
             return;
         }
@@ -371,7 +368,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
                            }
                        },
-                200
+                300
         );
 
 

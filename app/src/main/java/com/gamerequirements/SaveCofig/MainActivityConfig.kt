@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Switch
 import com.gamerequirements.R
 import com.gamerequirements.Singelton
@@ -26,7 +27,8 @@ class MainActivityConfig : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_config)
-        findViewById(R.id.AddConf).setOnClickListener(View.OnClickListener {
+        val addConf:ImageView = findViewById(R.id.AddConf) as ImageView;
+        addConf.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, SelectConfig::class.java)) //TODO why not overide OnClick method
         })
 

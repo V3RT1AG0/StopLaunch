@@ -59,7 +59,6 @@ class SelectConfig : AppCompatActivity()
         var CPUid: Int? = null
         var GPUid: Int? = null
         var RAMid: Int? = null
-
         // toggle = findViewById(R.id.toggle) as Switch
         loadAllList()
         sharedPrefrence = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
@@ -225,7 +224,7 @@ class SelectConfig : AppCompatActivity()
         RAMlist.add(Information(32, "32GB"))
         RAMlist.add(Information(64, "64GB"))
         RAMlist.add(Information(128, "128GB"))
-        val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, RAMlist)
+        val adapter = ArrayAdapter<Information>(applicationContext, R.layout.drop_down_item_layout, RAMlist)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         RAMspinner!!.setAdapter(adapter)
     }
@@ -273,7 +272,7 @@ class SelectConfig : AppCompatActivity()
                 CPUlist.add(Information(pid, name))
             }
             Log.e("Kotlin", CPUlist.get(0).title)
-            val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, CPUlist)
+            val adapter = ArrayAdapter<Information>(applicationContext, R.layout.drop_down_item_layout, CPUlist)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             CPUspinner!!.setAdapter(adapter)
             count++
@@ -288,7 +287,7 @@ class SelectConfig : AppCompatActivity()
                 GPUlist.add(Information(pid, name))
             }
             Log.e("Kotlin", GPUlist.get(0).title)
-            val adapter = ArrayAdapter<Information>(applicationContext, android.R.layout.simple_spinner_dropdown_item, GPUlist)
+            val adapter = ArrayAdapter<Information>(applicationContext, R.layout.drop_down_item_layout, GPUlist)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             GPUspinner!!.setAdapter(adapter)
             count++
