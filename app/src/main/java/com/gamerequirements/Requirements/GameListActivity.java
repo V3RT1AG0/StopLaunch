@@ -150,9 +150,6 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                         return;
                     notificationCounttextview.setText(Integer.toString(count - storedCount));
                     notificationCounttextview.setVisibility(View.VISIBLE);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putInt("count", count);
-                    editor.commit();
                 } catch (JSONException e)
                 {
                     e.printStackTrace();

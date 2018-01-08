@@ -14,7 +14,12 @@ public class OuterCardInformation
 
     OuterCardInformation(String data, List<InnerCardInformation> innerCardList, String count)
     {
-        this.count = count + " Games added";
+        String countText;
+        if(count.equals("1"))
+            countText = " Game added";
+        else
+            countText = " Games added";
+        this.count = count + countText;
         this.data = data;
         this.innerCardList = innerCardList;
     }

@@ -75,7 +75,7 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
         {
             Bundle bundle = new Bundle();
             bundle.putInt("id", Integer.parseInt(info.get(getAdapterPosition()).gid));
-            context.startActivity(new Intent(v.getContext(), Requirement_content.class).putExtras(bundle));
+            v.getContext().startActivity(new Intent(v.getContext(), Requirement_content.class).putExtras(bundle));
         }
     }
 }

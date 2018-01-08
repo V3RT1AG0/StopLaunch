@@ -1,5 +1,7 @@
 package com.gamerequirements.Notification;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
+import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -32,12 +35,15 @@ public class NotificationActivity extends AppCompatActivity
     RecyclerView my_recycler_view;
     OuterAdapter adapter;
     CircularProgressView progressView;
+    SharedPreferences sharedPrefs;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
         progressView.startAnimation();
         my_recycler_view = (RecyclerView) findViewById(R.id.outerRecycler);
@@ -75,6 +81,7 @@ public class NotificationActivity extends AppCompatActivity
         {
             JSONArray result = response.getJSONArray("newgame");
             Log.d("TAG", response.toString());
+            count = result.length();
             for (int i = 0; i < result.length(); i++)
             {
                 List<InnerCardInformation> innerInfo = new ArrayList<>();
@@ -102,6 +109,9 @@ public class NotificationActivity extends AppCompatActivity
             progressView.setVisibility(View.GONE);
             adapter = new OuterAdapter(info);
             my_recycler_view.setAdapter(adapter);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putInt("count", count);
+            editor.commit();
             Log.d("TAG", "finally");
         }
     }
