@@ -85,9 +85,9 @@ Intent intent;
                 in = new BufferedReader(new InputStreamReader(url.openStream()));
             }
             ServerURL = in.readLine();
-            Singelton.setURL(ServerURL);
+            MyApplication.setURL(ServerURL);
             in.close();
-            Log.d("Server" + ServerURL, Singelton.getURL());
+            Log.d("Server" + ServerURL, MyApplication.getURL());
             startNextActivity();
 
         } catch (Exception e)
@@ -120,7 +120,7 @@ Intent intent;
                 Log.d("log", dataSnapshot.getKey());
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 String ServerURL = def.getserver_url();
-                Singelton.setURL(ServerURL);
+                MyApplication.setURL(ServerURL);
                 startNextActivity();
             }
 

@@ -17,7 +17,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.gamerequirements.JSONCustom.CustomVolleyRequest
 import com.gamerequirements.R
-import com.gamerequirements.Singelton
+import com.gamerequirements.MyApplication
 import com.github.rahatarmanahmed.cpv.CircularProgressView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -46,13 +46,13 @@ class SelectConfig : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_config)
-        CPUspinner = findViewById(R.id.myCpu) as SearchableSpinner
-        GPUspinner = findViewById(R.id.myGpu) as SearchableSpinner
-        RAMspinner = findViewById(R.id.myRam) as SearchableSpinner
-        val SaveButton: Button = findViewById(R.id.SaveConfig) as Button
-        progressView = findViewById(R.id.progress_view) as CircularProgressView
+        CPUspinner = findViewById<SearchableSpinner>(R.id.myCpu)
+        GPUspinner = findViewById<SearchableSpinner>(R.id.myGpu)
+        RAMspinner = findViewById<SearchableSpinner>(R.id.myRam)
+        val SaveButton: Button = findViewById<Button>(R.id.SaveConfig)
+        progressView = findViewById<CircularProgressView>(R.id.progress_view)
         progressView?.startAnimation()
-        ContentLL = findViewById(R.id.ContentLL) as LinearLayout
+        ContentLL = findViewById<LinearLayout>(R.id.ContentLL)
         var CPUname: String? = null
         var GPUname: String? = null
         var RAMname: String? = null
@@ -61,7 +61,7 @@ class SelectConfig : AppCompatActivity()
         var RAMid: Int? = null
         // toggle = findViewById(R.id.toggle) as Switch
         loadAllList()
-        sharedPrefrence = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        sharedPrefrence = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         val editor = sharedPrefrence!!.edit()
 
 

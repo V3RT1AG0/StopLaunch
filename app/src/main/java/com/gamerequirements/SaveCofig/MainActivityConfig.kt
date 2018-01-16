@@ -12,7 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Switch
 import com.gamerequirements.R
-import com.gamerequirements.Singelton
+import com.gamerequirements.MyApplication
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -27,15 +27,15 @@ class MainActivityConfig : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_config)
-        val addConf:ImageView = findViewById(R.id.AddConf) as ImageView;
+        val addConf:ImageView = findViewById<ImageView>(R.id.AddConf)
         addConf.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, SelectConfig::class.java)) //TODO why not overide OnClick method
         })
 
-        recyclerView = findViewById(R.id.configRecyclerView) as RecyclerView
+        recyclerView = findViewById<RecyclerView>(R.id.configRecyclerView)
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(this)
-        val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = pref.edit()
         var config: String? = pref.getString("Config", null)
         val gson = Gson()
@@ -53,7 +53,7 @@ class MainActivityConfig : AppCompatActivity()
 
         }
 
-        val myswitch = findViewById(R.id.notificationSwitch) as Switch
+        val myswitch = findViewById<Switch>(R.id.notificationSwitch)
         myswitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked)
@@ -76,7 +76,7 @@ class MainActivityConfig : AppCompatActivity()
     {
         super.onResume()
         Log.d("OnResume", "Executed")
-        val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         var config: String? = pref.getString("Config", null)
         val gson = Gson()
         if (config != null)
@@ -96,7 +96,7 @@ class MainActivityConfig : AppCompatActivity()
         super.onBackPressed()
         val gson = Gson()
         val json = gson.toJson(configList)
-        val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         val editor=pref.edit()
         editor.putString("Config", json)
         editor.commit()
@@ -109,7 +109,7 @@ class MainActivityConfig : AppCompatActivity()
     {
         val gson = Gson()
         val json = gson.toJson(configList)
-        val pref: SharedPreferences = this.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         val editor=pref.edit()
         editor.putString("Config", json)
         editor.commit()

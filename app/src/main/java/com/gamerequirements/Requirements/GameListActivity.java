@@ -27,9 +27,8 @@ import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
-import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
-import com.gamerequirements.Singelton;
+import com.gamerequirements.MyApplication;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.codechimp.apprater.AppRater;
@@ -48,12 +47,12 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     /**
      * code for python server
      **/
-    //private static final String gamelisturl = Singelton.getURL() + "loadlist";
+    //private static final String gamelisturl = MyApplication.getURL() + "loadlist";
     private static final String COUNT = "count";
-    //private static final String gamelisturl = Singelton.getURL() + "index.php";
-    private static final String gamelisturl = Singelton.getURL() + "gameslist";
-    private static final String notificationCountUrl = Singelton.getURL() + "newgamescount";
-    private static final String SEARCHURL = Singelton.getURL() + "gameslist/search/";
+    //private static final String gamelisturl = MyApplication.getURL() + "index.php";
+    private static final String gamelisturl = MyApplication.getURL() + "gameslist";
+    private static final String notificationCountUrl = MyApplication.getURL() + "newgamescount";
+    private static final String SEARCHURL = MyApplication.getURL() + "gameslist/search/";
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     GameListAdapter searchAdapter;
@@ -81,14 +80,14 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
         timer = new Timer();
-        progressView = (CircularProgressView) findViewById(R.id.progress_view);
+        progressView =  findViewById(R.id.progress_view);
         progressView.startAnimation();
         gamelist = new ArrayList<>();
-        recyclerView = (RecyclerView) findViewById(R.id.my_gamelist_recycler);
-        filteredRecyclerView = (RecyclerView) findViewById(R.id.my_filtered_recycler);
-        notificationCounttextview = (TextView) findViewById(R.id.badge);
+        recyclerView = findViewById(R.id.my_gamelist_recycler);
+        filteredRecyclerView = findViewById(R.id.my_filtered_recycler);
+        notificationCounttextview = findViewById(R.id.badge);
         lmanager = new LinearLayoutManager(this);
-        errorlayout = (LinearLayout) findViewById(R.id.errorlayout);
+        errorlayout = findViewById(R.id.errorlayout);
         findViewById(R.id.back_arrow).setVisibility(View.GONE);
 
         gameListAdapter = new GameListAdapter(gamelist);
@@ -103,7 +102,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         filteredRecyclerView.setAdapter(searchAdapter);
 
 
-        searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        searchView = findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);
 
@@ -114,7 +113,13 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
         Log.e("Error", gamelisturl);
         AppRater.app_launched(this);
-        MiAutoStart();
+        try
+        {
+            MiAutoStart();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void AddOnScrollListenrerToRecyclerView()
@@ -291,7 +296,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
             Gson gson = new Gson();
             String json = gson.toJson(gamelist);
             editor.putString("database", json);
-            editor.putInt("dbv",Singelton.getDatabaseversion());
+            editor.putInt("dbv",MyApplication.getDatabaseversion());
             editor.commit();*/
         }
     }

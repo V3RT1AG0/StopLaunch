@@ -65,9 +65,9 @@ public class OuterAdapter extends RecyclerView.Adapter<OuterAdapter.MyViewHolder
          MyViewHolder(View itemView)
         {
             super(itemView);
-            data = (TextView) itemView.findViewById(R.id.data);
-            gamesadded= (TextView) itemView.findViewById(R.id.games_added);
-            recyclerView = (RecyclerView) itemView.findViewById(R.id.innerRecycler);
+            data = itemView.findViewById(R.id.data);
+            gamesadded= itemView.findViewById(R.id.games_added);
+            recyclerView = itemView.findViewById(R.id.innerRecycler);
         }
     }
 }

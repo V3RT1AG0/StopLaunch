@@ -11,7 +11,6 @@ import android.widget.Switch
 import android.widget.TextView
 import com.gamerequirements.MyApplication
 import com.gamerequirements.R
-import com.gamerequirements.Singelton
 
 /**
  * Created by v3rt1ag0 on 12/23/17.
@@ -23,7 +22,7 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
 {
     //TODO
     var selectedposition: Int = -1
-    val pref: SharedPreferences = context.getSharedPreferences(Singelton.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+    val pref: SharedPreferences = context.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
     val editor: SharedPreferences.Editor = pref.edit()
 
     init
@@ -40,18 +39,18 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
     override fun onBindViewHolder(holder: myViewHolder, position: Int)
     {
         var configInfo: ConfigInfo = info.get(position)
-        holder.CPU.setText("CPU: ${configInfo.CPUname}")
-        holder.GPU.setText("GPU: ${configInfo.GPUname}")
-        holder.RAM.setText("RAM: ${configInfo.RAMname}")
+        holder.CPU.text = "CPU: ${configInfo.CPUname}"
+        holder.GPU.text = "GPU: ${configInfo.GPUname}"
+        holder.RAM.text = "RAM: ${configInfo.RAMname}"
         if (selectedposition == position && configInfo.Activated == false)
         {
             configInfo.Activated = true
-            holder.toggle.setChecked(true)
+            holder.toggle.isChecked = true
             storeOffline(configInfo)
         } else if (selectedposition == position && configInfo.Activated == true)
         {
             configInfo.Activated = false
-            holder.toggle.setChecked(false)
+            holder.toggle.isChecked = false
             editor.putBoolean("StoredConfigEnabled", false)
             editor.commit()
         }else if (selectedposition==-1)
@@ -61,7 +60,7 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
         else
         {
             configInfo.Activated = false
-            holder.toggle.setChecked(false)
+            holder.toggle.isChecked = false
         }
 
 
@@ -141,14 +140,14 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
         {
             //  toggle.setOnCheckedChangeListener(this)
             toggle.setOnClickListener { v: View ->
-                selectedposition = getAdapterPosition()
+                selectedposition = adapterPosition
                 notifyDataSetChanged()
             }
 
             bin.setOnClickListener{v:View ->
                 if(info.get(adapterPosition).Activated)
                 {
-                    info.get(adapterPosition).Activated = false;
+                    info.get(adapterPosition).Activated = false
                     editor.putBoolean("StoredConfigEnabled", false)
                     editor.commit()
                 }

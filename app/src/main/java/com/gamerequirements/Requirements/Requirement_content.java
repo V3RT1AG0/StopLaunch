@@ -18,7 +18,7 @@ import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.Canyourunit.CanYouRunIt;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.R;
-import com.gamerequirements.Singelton;
+import com.gamerequirements.MyApplication;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
@@ -40,63 +40,63 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement_content);
-        //requirementurl = Singelton.getURL() + "getreq/";   //for python server
-        requirementurl = Singelton.getURL() + "game/";
+        //requirementurl = MyApplication.getURL() + "getreq/";   //for python server
+        requirementurl = MyApplication.getURL() + "game/";
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("id");
-        mAdView = (AdView) findViewById(R.id.adViewContentBottom);
+        mAdView = findViewById(R.id.adViewContentBottom);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
                 // .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
                 .build();
         mAdView.loadAd(adRequest);
-        poster_image = (ImageView) findViewById(R.id.image);
+        poster_image = findViewById(R.id.image);
         Picasso.with(this)
-                .load(Singelton.getImageurl() + id)
+                .load(MyApplication.getImageurl() + id)
                 .into(poster_image);
         poster_image.setOnClickListener(this);
         Headingtextview = new TextView[]{
-                ((TextView) findViewById(R.id.HEADING_intelCPU)),
-                ((TextView) findViewById(R.id.HEADING_AMD_CPU)),
-                ((TextView) findViewById(R.id.HEADING_NvidiaGPU)),
-                ((TextView) findViewById(R.id.HEADING_AMDGpu)),
-                ((TextView) findViewById(R.id.HEADING_VRAM)),
-                ((TextView) findViewById(R.id.HEADING_RAM)),
-                ((TextView) findViewById(R.id.HEADING_OS)),
-                ((TextView) findViewById(R.id.HEADING_HDD)),
+                findViewById(R.id.HEADING_intelCPU),
+                findViewById(R.id.HEADING_AMD_CPU),
+                findViewById(R.id.HEADING_NvidiaGPU),
+                findViewById(R.id.HEADING_AMDGpu),
+                findViewById(R.id.HEADING_VRAM),
+                findViewById(R.id.HEADING_RAM),
+                findViewById(R.id.HEADING_OS),
+                findViewById(R.id.HEADING_HDD),
 
         };
         ContentTextview = new TextView[]{
-                ((TextView) findViewById(R.id.CONTENT_intelCPU)),
-                ((TextView) findViewById(R.id.CONTENT_AMD_CPU)),
-                ((TextView) findViewById(R.id.CONTENT_NvidiaGPU)),
-                ((TextView) findViewById(R.id.CONTENT_AMDGpu)),
-                ((TextView) findViewById(R.id.CONTENT_VRAM)),
-                ((TextView) findViewById(R.id.CONTENT_RAM)),
-                ((TextView) findViewById(R.id.CONTENT_OS)),
-                ((TextView) findViewById(R.id.CONTENT_HDD)),
+                findViewById(R.id.CONTENT_intelCPU),
+                findViewById(R.id.CONTENT_AMD_CPU),
+                findViewById(R.id.CONTENT_NvidiaGPU),
+                findViewById(R.id.CONTENT_AMDGpu),
+                findViewById(R.id.CONTENT_VRAM),
+                findViewById(R.id.CONTENT_RAM),
+                findViewById(R.id.CONTENT_OS),
+                findViewById(R.id.CONTENT_HDD),
 
         };
         RHeadingtextview = new TextView[]{
-                ((TextView) findViewById(R.id.RHEADING_intelCPU)),
-                ((TextView) findViewById(R.id.RHEADING_AMD_CPU)),
-                ((TextView) findViewById(R.id.RHEADING_NvidiaGPU)),
-                ((TextView) findViewById(R.id.RHEADING_AMDGpu)),
-                ((TextView) findViewById(R.id.RHEADING_VRAM)),
-                ((TextView) findViewById(R.id.RHEADING_RAM)),
-                ((TextView) findViewById(R.id.RHEADING_OS)),
-                ((TextView) findViewById(R.id.RHEADING_HDD)),
+                findViewById(R.id.RHEADING_intelCPU),
+                findViewById(R.id.RHEADING_AMD_CPU),
+                findViewById(R.id.RHEADING_NvidiaGPU),
+                findViewById(R.id.RHEADING_AMDGpu),
+                findViewById(R.id.RHEADING_VRAM),
+                findViewById(R.id.RHEADING_RAM),
+                findViewById(R.id.RHEADING_OS),
+                findViewById(R.id.RHEADING_HDD),
 
         };
         RContentTextview = new TextView[]{
-                ((TextView) findViewById(R.id.RCONTENT_intelCPU)),
-                ((TextView) findViewById(R.id.RCONTENT_AMD_CPU)),
-                ((TextView) findViewById(R.id.RCONTENT_NvidiaGPU)),
-                ((TextView) findViewById(R.id.RCONTENT_AMDGpu)),
-                ((TextView) findViewById(R.id.RCONTENT_VRAM)),
-                ((TextView) findViewById(R.id.RCONTENT_RAM)),
-                ((TextView) findViewById(R.id.RCONTENT_OS)),
-                ((TextView) findViewById(R.id.RCONTENT_HDD)),
+                findViewById(R.id.RCONTENT_intelCPU),
+                findViewById(R.id.RCONTENT_AMD_CPU),
+                findViewById(R.id.RCONTENT_NvidiaGPU),
+                findViewById(R.id.RCONTENT_AMDGpu),
+                findViewById(R.id.RCONTENT_VRAM),
+                findViewById(R.id.RCONTENT_RAM),
+                findViewById(R.id.RCONTENT_OS),
+                findViewById(R.id.RCONTENT_HDD),
 
         };
         //MYURL="http://www.game-debate.com/games/index.php?g_id=" + id;
@@ -132,7 +132,7 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         try
         {
             Log.d("TAG", response.toString());
-            TextView date_TV = ((TextView) findViewById(R.id.date));
+            TextView date_TV = findViewById(R.id.date);
             title = response.getString("title");
             genre = response.getString("genre");
             summary = response.getString("summary");
@@ -241,10 +241,10 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
                 settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.image_layout
                         , null));
-                ImageView imageView = (ImageView) settingsDialog.findViewById(R.id.imageview1);
+                ImageView imageView = settingsDialog.findViewById(R.id.imageview1);
                 settingsDialog.show();
                 Picasso.with(this)
-                        .load(Singelton.getImageurl() + id)
+                        .load(MyApplication.getImageurl() + id)
                         .into(imageView);
 
 

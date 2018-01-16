@@ -5,6 +5,4 @@ package com.gamerequirements.SaveCofig
  */
 
 
-public class ConfigInfo(var CPUname:String,var CPUid:Int,var GPUname:String,var GPUid:Int,var RAMname:String,var RAMid:Int,var Activated:Boolean){
-
-}
+class ConfigInfo(var CPUname:String,var CPUid:Int,var GPUname:String,var GPUid:Int,var RAMname:String,var RAMid:Int,var Activated:Boolean)

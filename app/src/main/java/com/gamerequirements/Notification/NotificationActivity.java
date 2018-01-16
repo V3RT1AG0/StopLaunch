@@ -17,7 +17,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
-import com.gamerequirements.Singelton;
+import com.gamerequirements.MyApplication;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
@@ -31,7 +31,7 @@ public class NotificationActivity extends AppCompatActivity
 {
     List<OuterCardInformation> info = new ArrayList<>();
 
-    private static final String notificationurl = Singelton.getURL() + "newgames";
+    private static final String notificationurl = MyApplication.getURL() + "newgames";
     RecyclerView my_recycler_view;
     OuterAdapter adapter;
     CircularProgressView progressView;
@@ -44,9 +44,9 @@ public class NotificationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
-        progressView = (CircularProgressView) findViewById(R.id.progress_view);
+        progressView = findViewById(R.id.progress_view);
         progressView.startAnimation();
-        my_recycler_view = (RecyclerView) findViewById(R.id.outerRecycler);
+        my_recycler_view = findViewById(R.id.outerRecycler);
         my_recycler_view.setHasFixedSize(true);
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         VolleyRequest();

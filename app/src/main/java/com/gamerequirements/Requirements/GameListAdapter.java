@@ -12,9 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
-import com.gamerequirements.Singelton;
+import com.gamerequirements.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
 
 
         holder.summart_TV.setText(in.summary);
-        String url= Singelton.getImageurl()+in.id;
+        String url= MyApplication.getImageurl()+in.id;
         Log.d("custom",url);
         Picasso.with(context)
                 .load(url)
@@ -89,12 +88,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
         public MyViewHolder(View itemView)
         {
             super(itemView);
-            linearLayout= (LinearLayout) itemView.findViewById(R.id.Game_list_LL);
-            title_TV= (TextView) itemView.findViewById(R.id.name_of_game);
-            genre_TV= (TextView) itemView.findViewById(R.id.genre);
-            date_TV= (TextView) itemView.findViewById(R.id.date);
-            imageView= (ImageView) itemView.findViewById(R.id.image);
-            summart_TV=(TextView) itemView.findViewById(R.id.summary);
+            linearLayout= itemView.findViewById(R.id.Game_list_LL);
+            title_TV= itemView.findViewById(R.id.name_of_game);
+            genre_TV= itemView.findViewById(R.id.genre);
+            date_TV= itemView.findViewById(R.id.date);
+            imageView= itemView.findViewById(R.id.image);
+            summart_TV= itemView.findViewById(R.id.summary);
             linearLayout.setOnClickListener(this);
         }
 

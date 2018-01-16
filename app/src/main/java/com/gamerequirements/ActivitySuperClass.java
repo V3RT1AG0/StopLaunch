@@ -18,7 +18,7 @@ public class ActivitySuperClass extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
        /* myToolbar.findViewById(R.id.Share).setOnClickListener(new View.OnClickListener() {

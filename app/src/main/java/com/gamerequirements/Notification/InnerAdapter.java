@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Requirements.Requirement_content;
-import com.gamerequirements.Singelton;
+import com.gamerequirements.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
     {
         InnerCardInformation innerInfo = info.get(position);
         holder.title.setText(innerInfo.name);
-        String url = Singelton.getImageurl() + innerInfo.gid;
+        String url = MyApplication.getImageurl() + innerInfo.gid;
         Picasso.with(context)
                 .load(url)
                 .into(holder.imageView);
@@ -66,8 +65,8 @@ public class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.MyViewHolder
         {
             super(itemView);
             itemView.setOnClickListener(this);
-            title = (TextView) itemView.findViewById(R.id.inner_title);
-            imageView = (ImageView) itemView.findViewById(R.id.inner_image);
+            title = itemView.findViewById(R.id.inner_title);
+            imageView = itemView.findViewById(R.id.inner_image);
         }
 
         @Override
