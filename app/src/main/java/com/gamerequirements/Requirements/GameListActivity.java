@@ -27,8 +27,8 @@ import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
-import com.gamerequirements.R;
 import com.gamerequirements.MyApplication;
+import com.gamerequirements.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.codechimp.apprater.AppRater;
@@ -80,7 +80,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
         timer = new Timer();
-        progressView =  findViewById(R.id.progress_view);
+        progressView = findViewById(R.id.progress_view);
         progressView.startAnimation();
         gamelist = new ArrayList<>();
         recyclerView = findViewById(R.id.my_gamelist_recycler);
@@ -115,7 +115,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         AppRater.app_launched(this);
         try
         {
-            MiAutoStart();
+            AutoStartforVariousManufacturers();
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -173,22 +173,44 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         requestqueue.add(jsonObjectRequest);
     }
 
-    void MiAutoStart()
+    void AutoStartforVariousManufacturers() throws Exception
     {
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String manufacturer = "xiaomi";
-        if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER) && !sharedpreferences.getBoolean("autostart", false))
-        {
-            //this will open auto start screen where user can enable permission for your app
-            Toast.makeText(this, "Allow autostart permission for GameRequirements", Toast.LENGTH_LONG).show();
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putBoolean("autostart", true);
-            editor.apply();
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-            startActivity(intent);
 
+        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Boolean permissionAlreadyAsked = sharedpreferences.getBoolean("autostart", false);
+        if (!permissionAlreadyAsked)
+        {
+            Intent intent = getManufacturerIntent();
+            if(intent!=null)
+            {
+                Toast.makeText(this, "Allow autostart permission for GameRequirements", Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putBoolean("autostart", true);
+                editor.apply();
+                startActivity(intent);
+            }
         }
+
+    }
+
+    Intent getManufacturerIntent(){
+        Intent intent = new Intent();
+        String thisManufacturer = android.os.Build.MANUFACTURER;
+        if ("xiaomi".equalsIgnoreCase(thisManufacturer))
+        {
+            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+        } else if ("oppo".equalsIgnoreCase(thisManufacturer))
+        {
+            intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
+        } else if ("vivo".equalsIgnoreCase(thisManufacturer))
+        {
+            intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.MainGuideActivity."));
+        }
+        else
+        {
+            intent = null;
+        }
+        return intent;
     }
 
     void VolleyOperation()

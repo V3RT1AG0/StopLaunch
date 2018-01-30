@@ -43,7 +43,14 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".SaveCofig.SelectConfig" />
         <activity android:name=".SaveCofig.MainActivityConfig" />
-        <activity android:name=".Notification.NotificationActivity" />
+        <activity
+            android:name=".Notification.NotificationActivity"
+            android:parentActivityName=".Requirements.GameListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Requirements.GameListActivity" />
+        </activity>
+
     </application>
 
 </manifest>

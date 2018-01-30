@@ -1,5 +1,6 @@
 package com.gamerequirements;
 
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -102,12 +103,16 @@ Intent intent;
 
         if (getIntent().hasExtra("update")){
             intent = new Intent(Splash.this, NotificationActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addNextIntentWithParentStack(intent);
+            stackBuilder.startActivities();
         }
         else
         {
             intent = new Intent(Splash.this, GameListActivity.class);
+            startActivity(intent);
         }
-        startActivity(intent);
+
     }
 
     void tryfromfirebasedatabase()

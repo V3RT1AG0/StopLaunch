@@ -3,6 +3,7 @@ package com.gamerequirements.Notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -16,10 +17,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 import java.util.Random;
-
-/**
- * Created by Belal on 5/27/2016.
- */
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService
 {
@@ -58,14 +55,23 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService
     private void sendNotification(String messageBody,int value,String key)
     {
         //Intent intent = new Intent(this, FloatingPost.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(key,value);
         /**this intent is only used when application is running and the given extras are provided.
          * ELSE if the application is closed the Splash screen will receive intent directly from Firebase and not frome here
          * Application ON:Firebase-This Service with extras from firebase-ACtivity specified by pendingintent with extras specified in this service
          * Application Closed:Firebase-Splash Screen with extras from firebase-Activity specified in Splash
          */
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(intent);
+        // Adds the back stack
+        //stackBuilder.addParentStack(NotificationActivity.class);
+       // stackBuilder.addNextIntent(intent);
+        // Adds the Intent to the top of the stack
+        ;
+// Gets a PendingIntent containing the entire back stack
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent( 0,
                 PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
