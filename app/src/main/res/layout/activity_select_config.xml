@@ -53,53 +53,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
-        android:id="@+id/myCpu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal"
-        app:ShowBorders="true"
-        app:BordersSize="1dp"
-        app:RevealEmptyText="   CPU"
-        app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="0dp"/>
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/myCpu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:gravity="center_horizontal"
+            />
 
-    <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
-        android:id="@+id/myGpu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal"
-        app:ShowBorders="true"
-        app:BordersSize="1dp"
-        app:RevealEmptyText="   GPU"
-        app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="0dp"/>
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/myGpu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:gravity="center_horizontal"/>
 
-    <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
-        android:id="@+id/myRam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal"
-        app:ShowBorders="true"
-        app:BordersSize="1dp"
-        app:RevealEmptyText="   RAM"
-        app:BoarderColor="@color/colorPrimary"
-        app:SpinnerExpandHeight="0dp"/>
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/myRam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:gravity="center_horizontal"/>
 
     <Button
         android:id="@+id/SaveConfig"

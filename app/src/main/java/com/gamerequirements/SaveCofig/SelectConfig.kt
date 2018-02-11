@@ -5,27 +5,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.gamerequirements.JSONCustom.CustomVolleyRequest
-import com.gamerequirements.R
 import com.gamerequirements.MyApplication
+import com.gamerequirements.R
 import com.github.rahatarmanahmed.cpv.CircularProgressView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.IStatusListener
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.OnItemSelectedListener
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import org.json.JSONArray
-
 
 class SelectConfig : AppCompatActivity()
 {
@@ -34,7 +27,7 @@ class SelectConfig : AppCompatActivity()
     var RAMlist = ArrayList<Information>()
     var CPUspinner: SearchableSpinner? = null
     var GPUspinner: SearchableSpinner? = null
-    var RAMspinner: SearchableSpinner? = null
+    var RAMspinner: com.toptoche.searchablespinnerlibrary.SearchableSpinner? = null
     var progressView: CircularProgressView? = null
     // var toggle: Switch? = null
     var sharedPrefrence: SharedPreferences? = null
@@ -46,13 +39,16 @@ class SelectConfig : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_config)
-        CPUspinner = findViewById<SearchableSpinner>(R.id.myCpu)
-        GPUspinner = findViewById<SearchableSpinner>(R.id.myGpu)
-        RAMspinner = findViewById<SearchableSpinner>(R.id.myRam)
-        val SaveButton: Button = findViewById<Button>(R.id.SaveConfig)
-        progressView = findViewById<CircularProgressView>(R.id.progress_view)
+        CPUspinner = findViewById(R.id.myCpu)
+        GPUspinner = findViewById(R.id.myGpu)
+        RAMspinner = findViewById(R.id.myRam)
+        CPUspinner!!.setTitle("Select CPU")
+        GPUspinner!!.setTitle("Select GPU")
+        RAMspinner!!.setTitle("Select RAM")
+        val SaveButton: Button = findViewById(R.id.SaveConfig)
+        progressView = findViewById(R.id.progress_view)
         progressView?.startAnimation()
-        ContentLL = findViewById<LinearLayout>(R.id.ContentLL)
+        ContentLL = findViewById(R.id.ContentLL)
         var CPUname: String? = null
         var GPUname: String? = null
         var RAMname: String? = null
@@ -101,102 +97,52 @@ class SelectConfig : AppCompatActivity()
 
 
 
-        CPUspinner!!.setStatusListener(
-                object : IStatusListener
-                {
-                    override fun spinnerIsOpening()
-                    {
-                        GPUspinner!!.hideEdit()
-                        RAMspinner!!.hideEdit()
-                    }
-
-                    override fun spinnerIsClosing()
-                    {
-
-                    }
-                })
-
-        GPUspinner!!.setStatusListener(
-                object : IStatusListener
-                {
-                    override fun spinnerIsOpening()
-                    {
-                        CPUspinner!!.hideEdit()
-                        RAMspinner!!.hideEdit()
-                    }
-
-                    override fun spinnerIsClosing()
-                    {
-
-                    }
-                })
-
-        RAMspinner!!.setStatusListener(
-                object : IStatusListener
-                {
-                    override fun spinnerIsOpening()
-                    {
-                        CPUspinner!!.hideEdit()
-                        GPUspinner!!.hideEdit()
-                    }
-
-                    override fun spinnerIsClosing()
-                    {
-
-                    }
-                })
 
 
-        CPUspinner!!.setOnItemSelectedListener(
-                object : OnItemSelectedListener
-                {
-                    override fun onNothingSelected()
-                    {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
+        CPUspinner!!.onItemSelectedListener = object :AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long)
+            {
+                CPUname = CPUlist.get(position).title
+                CPUid = CPUlist.get(position).id
+            }
 
-                    override fun onItemSelected(view: View?, position: Int, id: Long)
-                    {
-                        Log.d("pos", position.toString())
-                        CPUname = CPUlist.get(position).title
-                        CPUid = CPUlist.get(position).id
+            override fun onNothingSelected(p0: AdapterView<*>?)
+            {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
+        }
 
-                    }
+        GPUspinner!!.onItemSelectedListener = object :AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long)
+            {
+                GPUname = GPUlist.get(position).title
+                GPUid = GPUlist.get(position).id
+            }
 
-                })
+            override fun onNothingSelected(p0: AdapterView<*>?)
+            {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
-        GPUspinner!!.setOnItemSelectedListener(
-                object : OnItemSelectedListener
-                {
-                    override fun onNothingSelected()
-                    {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
+        }
 
-                    override fun onItemSelected(view: View?, position: Int, id: Long)
-                    {
-                        GPUname = GPUlist.get(position).title
-                        GPUid = GPUlist.get(position).id
-                    }
-                })
+        RAMspinner!!.onItemSelectedListener = object :AdapterView.OnItemSelectedListener
+        {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long)
+            {
+                RAMname = RAMlist.get(position).title
+                RAMid = RAMlist.get(position).id
+            }
 
-        RAMspinner!!.setOnItemSelectedListener(
-                object : OnItemSelectedListener
-                {
-                    override fun onNothingSelected()
-                    {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
+            override fun onNothingSelected(p0: AdapterView<*>?)
+            {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
-                    override fun onItemSelected(view: View?, position: Int, id: Long)
-                    {
-                        RAMname = RAMlist.get(position).title
-                        RAMid = RAMlist.get(position).id
-
-                    }
-
-                })
+        }
 
     }
 
@@ -230,22 +176,7 @@ class SelectConfig : AppCompatActivity()
     }
 
 
-    override fun onTouchEvent(event: MotionEvent): Boolean
-    {
-        if (!CPUspinner!!.isInsideSearchEditText(event))
-        {
-            CPUspinner!!.hideEdit()
-        }
-        if (!GPUspinner!!.isInsideSearchEditText(event))
-        {
-            GPUspinner!!.hideEdit()
-        }
-        if (!RAMspinner!!.isInsideSearchEditText(event))
-        {
-            RAMspinner!!.hideEdit()
-        }
-        return super.onTouchEvent(event)
-    }
+
 
 
     fun getData(type: String): Unit
