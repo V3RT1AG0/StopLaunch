@@ -50,9 +50,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     //private static final String gamelisturl = MyApplication.getURL() + "loadlist";
     private static final String COUNT = "count";
     //private static final String gamelisturl = MyApplication.getURL() + "index.php";
-    private static final String gamelisturl = MyApplication.getURL() + "gameslist";
-    private static final String notificationCountUrl = MyApplication.getURL() + "newgamescount";
-    private static final String SEARCHURL = MyApplication.getURL() + "gameslist/search/";
+    String gamelisturl, notificationCountUrl, SEARCHURL;
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     GameListAdapter searchAdapter;
@@ -78,6 +76,11 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
+
+        gamelisturl = MyApplication.getURL() + "gameslist";
+        notificationCountUrl = MyApplication.getURL() + "newgamescount";
+        SEARCHURL = MyApplication.getURL() + "gameslist/search/";
+
 
         timer = new Timer();
         progressView = findViewById(R.id.progress_view);
@@ -181,7 +184,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         if (!permissionAlreadyAsked)
         {
             Intent intent = getManufacturerIntent();
-            if(intent!=null)
+            if (intent != null)
             {
                 Toast.makeText(this, "Allow autostart permission for GameRequirements", Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -193,7 +196,8 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
     }
 
-    Intent getManufacturerIntent(){
+    Intent getManufacturerIntent()
+    {
         Intent intent = new Intent();
         String thisManufacturer = android.os.Build.MANUFACTURER;
         if ("xiaomi".equalsIgnoreCase(thisManufacturer))
@@ -205,8 +209,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         } else if ("vivo".equalsIgnoreCase(thisManufacturer))
         {
             intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.MainGuideActivity."));
-        }
-        else
+        } else
         {
             intent = null;
         }
@@ -490,6 +493,4 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         }
 
     }
-
-
 }

@@ -32,8 +32,6 @@ public class MyApplication extends Application
     {
         super.onCreate();
         sinstance = this;  //or this also works
-
-
     }
 
     public static String getURL()

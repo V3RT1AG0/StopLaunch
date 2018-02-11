@@ -1,6 +1,9 @@
 package com.gamerequirements;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,6 +17,17 @@ import com.gamerequirements.SaveCofig.MainActivityConfig;
 
 public class ActivitySuperClass extends AppCompatActivity
 {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        if (MyApplication.getURL() == null)
+            MyApplication.setURL(MyApplication.getContext().getSharedPreferences(
+                    "com.gamerequirements", Context.MODE_PRIVATE).getString("url", null));
+    }
+
     @Override
     protected void onStart()
     {
@@ -21,6 +35,7 @@ public class ActivitySuperClass extends AppCompatActivity
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
        /* myToolbar.findViewById(R.id.Share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -41,7 +56,8 @@ public class ActivitySuperClass extends AppCompatActivity
             }
         }); */
 
-        myToolbar.findViewById(R.id.back_arrow).setOnClickListener(new View.OnClickListener() {
+        myToolbar.findViewById(R.id.back_arrow).setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -49,7 +65,9 @@ public class ActivitySuperClass extends AppCompatActivity
             }
         });
 
-        myToolbar.findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener() {
+
+        myToolbar.findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -57,7 +75,8 @@ public class ActivitySuperClass extends AppCompatActivity
             }
         });
 
-        myToolbar.findViewById(R.id.Notify).setOnClickListener(new View.OnClickListener() {
+        myToolbar.findViewById(R.id.Notify).setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -66,5 +85,11 @@ public class ActivitySuperClass extends AppCompatActivity
 
             }
         });
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 }

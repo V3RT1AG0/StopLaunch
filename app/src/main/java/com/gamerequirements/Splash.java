@@ -27,7 +27,8 @@ import java.net.URL;
 public class Splash extends AppCompatActivity
 {
     DatabaseReference databaseref;
-    int stored_db_version;
+    SharedPreferences.Editor editor;
+
 Intent intent;
 
     @Override
@@ -37,8 +38,8 @@ Intent intent;
         setContentView(R.layout.activity_splash);
         SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(
                 "com.gamerequirements", Context.MODE_PRIVATE);
+        editor= sharedPref.edit();
         databaseref = FirebaseDatabase.getInstance().getReference();
-        stored_db_version = sharedPref.getInt("dbv", 0);
         Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
 
         new Thread(new Runnable()
@@ -87,6 +88,8 @@ Intent intent;
             }
             ServerURL = in.readLine();
             MyApplication.setURL(ServerURL);
+            editor.putString("url",ServerURL);
+            editor.commit();
             in.close();
             Log.d("Server" + ServerURL, MyApplication.getURL());
             startNextActivity();
@@ -126,6 +129,8 @@ Intent intent;
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 String ServerURL = def.getserver_url();
                 MyApplication.setURL(ServerURL);
+                editor.putString("url",ServerURL);
+                editor.commit();
                 startNextActivity();
             }
 
