@@ -109,6 +109,7 @@ class SelectConfig : AppCompatActivity()
 
             override fun onNothingSelected(p0: AdapterView<*>?)
             {
+                return
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
@@ -124,6 +125,7 @@ class SelectConfig : AppCompatActivity()
 
             override fun onNothingSelected(p0: AdapterView<*>?)
             {
+               return
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
@@ -139,6 +141,7 @@ class SelectConfig : AppCompatActivity()
 
             override fun onNothingSelected(p0: AdapterView<*>?)
             {
+                return
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 

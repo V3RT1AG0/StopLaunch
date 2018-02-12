@@ -11,8 +11,8 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Switch
-import com.gamerequirements.R
 import com.gamerequirements.MyApplication
+import com.gamerequirements.R
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -29,6 +29,7 @@ class MainActivityConfig : AppCompatActivity()
         setContentView(R.layout.activity_main_config)
         val addConf:ImageView = findViewById<ImageView>(R.id.AddConf)
         addConf.setOnClickListener(View.OnClickListener {
+            saveChangeMadeInConfig()
             startActivity(Intent(this, SelectConfig::class.java)) //TODO why not overide OnClick method
         })
 
@@ -94,28 +95,26 @@ class MainActivityConfig : AppCompatActivity()
     override fun onBackPressed()
     {
         super.onBackPressed()
-        val gson = Gson()
-        val json = gson.toJson(configList)
-        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
-        val editor=pref.edit()
-        editor.putString("Config", json)
-        editor.commit()
-        Log.d("Hello", json)
+        saveChangeMadeInConfig()
     }
 
 
 
     fun back(view: View)
     {
-        val gson = Gson()
-        val json = gson.toJson(configList)
-        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
-        val editor=pref.edit()
-        editor.putString("Config", json)
-        editor.commit()
-        Log.d("Hello", json)
+        saveChangeMadeInConfig()
         finish()
     }
+
+   fun saveChangeMadeInConfig(){
+       val gson = Gson()
+       val json = gson.toJson(configList)
+       val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+       val editor=pref.edit()
+       editor.putString("Config", json)
+       editor.commit()
+       Log.d("Hello", json)
+   }
 
 }
 
