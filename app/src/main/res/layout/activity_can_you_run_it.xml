@@ -84,17 +84,18 @@
 
         </LinearLayout>
 
-     <com.google.android.gms.ads.NativeExpressAdView
+
+
+        <com.google.android.gms.ads.AdView
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:id="@+id/adViewBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            ads:adSize="350x200"
-            ads:adUnitId="@string/native_bottom_ad">
-        </com.google.android.gms.ads.NativeExpressAdView>
-
+            ads:adSize="MEDIUM_RECTANGLE"
+            ads:adUnitId="@string/native_bottom_ad_new">
+        </com.google.android.gms.ads.AdView>
 
     </RelativeLayout>
 

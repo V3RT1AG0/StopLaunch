@@ -13,7 +13,7 @@ import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.AdView;
 
 public class CanYouRunIt extends AppCompatActivity
 {
@@ -45,7 +45,7 @@ public class CanYouRunIt extends AppCompatActivity
         }
 
 
-        NativeExpressAdView adView2 = findViewById(R.id.adViewBottom);
+        AdView adView2 = findViewById(R.id.adViewBottom);
         AdRequest request = new AdRequest.Builder()
                 .build();
         adView2.loadAd(request);
