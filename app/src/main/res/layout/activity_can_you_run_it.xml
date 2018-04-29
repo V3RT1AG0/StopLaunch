@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             ads:adSize="MEDIUM_RECTANGLE"
-            ads:adUnitId="@string/native_bottom_ad_new">
+            ads:adUnitId="@string/can_u_run_it_ad">
         </com.google.android.gms.ads.AdView>
 
     </RelativeLayout>
