@@ -9,10 +9,12 @@ public class StopLaunch
 {
     String server_url;
     int db_version;
-    StopLaunch(String server_url, int db_version)
+    int forcemaintenance;
+    StopLaunch(String server_url, int db_version,int forcemaintenance)
     {
         this.server_url=server_url;
         this.db_version=db_version;
+        this.forcemaintenance=forcemaintenance;
     }
 
     StopLaunch()
@@ -28,5 +30,10 @@ public class StopLaunch
     public String getserver_url()
     {
         return server_url;
+    }
+
+    public int getForcemaintenance()
+    {
+        return forcemaintenance;
     }
 }

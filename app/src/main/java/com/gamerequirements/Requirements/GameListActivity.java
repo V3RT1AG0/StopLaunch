@@ -1,20 +1,19 @@
 package com.gamerequirements.Requirements;
 
-import android.content.ComponentName;
+import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
@@ -23,7 +22,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
@@ -31,7 +29,6 @@ import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
-import org.codechimp.apprater.AppRater;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +39,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameListActivity extends ActivitySuperClass implements FloatingSearchView.OnQueryChangeListener
+public class GameListActivity extends Fragment implements FloatingSearchView.OnQueryChangeListener
 {
     /**
      * code for python server
@@ -70,11 +67,21 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     LinearLayoutManager lmanager;
     EndlessRecyclerView endlessRecyclerView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public static GameListActivity newInstance()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+        GameListActivity fragment = new GameListActivity();
+        return fragment;
+    }
+
+    public GameListActivity(){
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+
+        super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
         gamelisturl = MyApplication.getURL() + "gameslist";
@@ -83,15 +90,15 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
 
         timer = new Timer();
-        progressView = findViewById(R.id.progress_view);
+        progressView = getActivity().findViewById(R.id.progress_view);
         progressView.startAnimation();
         gamelist = new ArrayList<>();
-        recyclerView = findViewById(R.id.my_gamelist_recycler);
-        filteredRecyclerView = findViewById(R.id.my_filtered_recycler);
-        notificationCounttextview = findViewById(R.id.badge);
-        lmanager = new LinearLayoutManager(this);
-        errorlayout = findViewById(R.id.errorlayout);
-        findViewById(R.id.back_arrow).setVisibility(View.GONE);
+        recyclerView = getActivity().findViewById(R.id.my_gamelist_recycler);
+        filteredRecyclerView = getActivity().findViewById(R.id.my_filtered_recycler);
+        notificationCounttextview = getActivity().findViewById(R.id.badge);
+        lmanager = new LinearLayoutManager(getActivity());
+        errorlayout = getActivity().findViewById(R.id.errorlayout);
+        getActivity().findViewById(R.id.back_arrow).setVisibility(View.GONE);
 
         gameListAdapter = new GameListAdapter(gamelist);
         recyclerView.setHasFixedSize(true);
@@ -101,11 +108,11 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
         searchAdapter = new GameListAdapter(filteredList);
         filteredRecyclerView.setHasFixedSize(true);
-        filteredRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        filteredRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         filteredRecyclerView.setAdapter(searchAdapter);
 
 
-        searchView = findViewById(R.id.floating_search_view);
+        searchView = getActivity().findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
         searchView.setSearchFocused(true);
 
@@ -115,14 +122,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         getNotificationCount();
 
         Log.e("Error", gamelisturl);
-        AppRater.app_launched(this);
-        try
-        {
-            AutoStartforVariousManufacturers();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     private void AddOnScrollListenrerToRecyclerView()
@@ -172,49 +172,28 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
             }
         });
 
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
     }
 
-    void AutoStartforVariousManufacturers() throws Exception
+    @Override
+    public void onCreate(Bundle savedInstanceState)
     {
-
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Boolean permissionAlreadyAsked = sharedpreferences.getBoolean("autostart", false);
-        if (!permissionAlreadyAsked)
-        {
-            Intent intent = getManufacturerIntent();
-            if (intent != null)
-            {
-                Toast.makeText(this, "Allow autostart permission for GameRequirements", Toast.LENGTH_LONG).show();
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putBoolean("autostart", true);
-                editor.apply();
-                startActivity(intent);
-            }
-        }
+        super.onCreate(savedInstanceState);
 
     }
 
-    Intent getManufacturerIntent()
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
     {
-        Intent intent = new Intent();
-        String thisManufacturer = android.os.Build.MANUFACTURER;
-        if ("xiaomi".equalsIgnoreCase(thisManufacturer))
-        {
-            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-        } else if ("oppo".equalsIgnoreCase(thisManufacturer))
-        {
-            intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
-        } else if ("vivo".equalsIgnoreCase(thisManufacturer))
-        {
-            intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.MainGuideActivity."));
-        } else
-        {
-            intent = null;
-        }
-        return intent;
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.activity_game_list, container, false);
+        return (v);
     }
+
+
+
 
     void VolleyOperation()
     {
@@ -254,7 +233,9 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 Log.d("Error", error.toString());
                 if (error instanceof NoConnectionError)
                 {
-                    Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+                    TextView textView =errorlayout.findViewById(R.id.errorMessage);
+                    textView.setText("Check your connection and try again");
+                  //  Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -263,7 +244,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 10000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
     }
 
@@ -327,7 +308,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
     }
 
 
-    @Override
+  /*  @Override
     public void onBackPressed()
     {
         if (doubleBackToExitPressedOnce)
@@ -348,7 +329,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
+    }*/
 
     @Override
     public void onSearchTextChanged(String oldQuery, String newQuery)
@@ -404,7 +385,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
 
     void VolleySearchRequest(final String query)
     {
-        runOnUiThread(new Runnable()
+        getActivity().runOnUiThread(new Runnable()
         {
             @Override
             public void run()
@@ -415,7 +396,7 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
         });
 
 
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(this.getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("search");
         String searchurl = SEARCHURL + query;
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, searchurl, null, new Response.Listener<JSONObject>()
@@ -449,7 +430,9 @@ public class GameListActivity extends ActivitySuperClass implements FloatingSear
                 Log.d("Error", error.toString());
                 if (error instanceof NoConnectionError)
                 {
-                    Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+                    TextView textView =errorlayout.findViewById(R.id.errorMessage);
+                    textView.setText("Check your connection and try again");
+                    //Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }
         });

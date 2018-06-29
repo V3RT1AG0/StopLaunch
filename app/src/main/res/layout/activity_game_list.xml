@@ -9,7 +9,6 @@
     tools:context="com.gamerequirements.Requirements.GameListActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/custom_toolbar"/>
 
     <RelativeLayout
     android:layout_width="match_parent"
@@ -41,10 +40,12 @@
             >
 
             <TextView
+                android:layout_margin="10dp"
+                android:id="@+id/errorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Check your connection and try again"/>
+                android:text="Something went wrong. Please try again after some time."/>
 
             <Button
                 android:id="@+id/RetryButton"

@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
-import com.gamerequirements.Requirements.GameListActivity;
+import com.gamerequirements.Requirements.TabbedActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +29,7 @@ public class Splash extends AppCompatActivity
     DatabaseReference databaseref;
     SharedPreferences.Editor editor;
 
-Intent intent;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,9 +38,9 @@ Intent intent;
         setContentView(R.layout.activity_splash);
         SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(
                 "com.gamerequirements", Context.MODE_PRIVATE);
-        editor= sharedPref.edit();
+        editor = sharedPref.edit();
         databaseref = FirebaseDatabase.getInstance().getReference();
-        Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
+        Log.d("Firebase", "token " + FirebaseInstanceId.getInstance().getToken());
 
         new Thread(new Runnable()
         {
@@ -88,8 +88,15 @@ Intent intent;
             }
             ServerURL = in.readLine();
             MyApplication.setURL(ServerURL);
-            editor.putString("url",ServerURL);
+            editor.putString("url", ServerURL);
             editor.commit();
+
+            int Forcemaintenance = Integer.parseInt(in.readLine());
+            if (Forcemaintenance == 1)
+            {
+                in.close();
+                return;
+            }
             in.close();
             Log.d("Server" + ServerURL, MyApplication.getURL());
             startNextActivity();
@@ -104,15 +111,15 @@ Intent intent;
     private void startNextActivity()
     {
 
-        if (getIntent().hasExtra("update")){
+        if (getIntent().hasExtra("update"))
+        {
             intent = new Intent(Splash.this, NotificationActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addNextIntentWithParentStack(intent);
             stackBuilder.startActivities();
-        }
-        else
+        } else
         {
-            intent = new Intent(Splash.this, GameListActivity.class);
+            intent = new Intent(Splash.this, TabbedActivity.class);
             startActivity(intent);
         }
 
@@ -120,7 +127,7 @@ Intent intent;
 
     void tryfromfirebasedatabase()
     {
-        databaseref.child("StopLaunch").addListenerForSingleValueEvent(new ValueEventListener()
+        databaseref.child("StopLaunchV3").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -128,8 +135,11 @@ Intent intent;
                 Log.d("log", dataSnapshot.getKey());
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 String ServerURL = def.getserver_url();
+                int Forcemaintenance = def.getForcemaintenance();
+                if (Forcemaintenance == 1)
+                    return;
                 MyApplication.setURL(ServerURL);
-                editor.putString("url",ServerURL);
+                editor.putString("url", ServerURL);
                 editor.commit();
                 startNextActivity();
             }
@@ -137,7 +147,7 @@ Intent intent;
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-                Toast.makeText(Splash.this,"Bad network connection. Please try again later",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Splash.this, "Bad network connection. Please try again later", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

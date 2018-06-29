@@ -32,9 +32,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Requirements.GameListActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Requirements.Requirement_content"
             android:screenOrientation="portrait" />
         <activity
@@ -45,12 +42,12 @@
         <activity android:name=".SaveCofig.MainActivityConfig" />
         <activity
             android:name=".Notification.NotificationActivity"
-            android:parentActivityName=".Requirements.GameListActivity">
+            android:parentActivityName=".Requirements.TabbedActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Requirements.GameListActivity" />
+                android:value=".Requirements.TabbedActivity" />
         </activity>
-
+        <activity android:name=".Requirements.TabbedActivity"></activity>
     </application>
 
 </manifest>

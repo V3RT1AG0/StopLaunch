@@ -6,4 +6,6 @@
     <dimen name="ContentFont">15sp</dimen>
     <dimen name="padding_start">3sp</dimen>
     <dimen name="padding_end">3sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
