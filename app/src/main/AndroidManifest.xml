@@ -47,7 +47,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Requirements.TabbedActivity" />
         </activity>
-        <activity android:name=".Requirements.TabbedActivity"></activity>
+        <activity android:name=".Requirements.TabbedActivity" />
+        <activity android:name=".SaveCofig.SaveFirstConfig"></activity>
     </application>
 
 </manifest>

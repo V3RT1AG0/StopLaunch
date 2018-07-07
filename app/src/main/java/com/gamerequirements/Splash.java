@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.Requirements.TabbedActivity;
+import com.gamerequirements.SaveCofig.SaveFirstConfig;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +29,7 @@ public class Splash extends AppCompatActivity
 {
     DatabaseReference databaseref;
     SharedPreferences.Editor editor;
+    SharedPreferences sharedPref;
 
     Intent intent;
 
@@ -36,7 +38,7 @@ public class Splash extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        SharedPreferences sharedPref = MyApplication.getContext().getSharedPreferences(
+        sharedPref = MyApplication.getContext().getSharedPreferences(
                 "com.gamerequirements", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
         databaseref = FirebaseDatabase.getInstance().getReference();
@@ -97,6 +99,21 @@ public class Splash extends AppCompatActivity
                 in.close();
                 return;
             }
+
+
+            if (Integer.parseInt(in.readLine()) != BuildConfig.VERSION_CODE)
+            {
+                // return "forceupdate";
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
             in.close();
             Log.d("Server" + ServerURL, MyApplication.getURL());
             startNextActivity();
@@ -111,6 +128,7 @@ public class Splash extends AppCompatActivity
     private void startNextActivity()
     {
 
+        if(appAlreadyOpened())
         if (getIntent().hasExtra("update"))
         {
             intent = new Intent(Splash.this, NotificationActivity.class);
@@ -125,6 +143,16 @@ public class Splash extends AppCompatActivity
 
     }
 
+    private boolean appAlreadyOpened(){
+        if(!sharedPref.getBoolean("alreadyLaunched",false))  // if app is not already opened start save first config
+        {
+            editor.putBoolean("alreadyLaunched", true);
+            editor.commit();
+            startActivity(new Intent(this, SaveFirstConfig.class));
+            return false;
+        }
+        return true;
+    }
     void tryfromfirebasedatabase()
     {
         databaseref.child("StopLaunchV3").addListenerForSingleValueEvent(new ValueEventListener()
@@ -134,10 +162,20 @@ public class Splash extends AppCompatActivity
             {
                 Log.d("log", dataSnapshot.getKey());
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
-                String ServerURL = def.getserver_url();
-                int Forcemaintenance = def.getForcemaintenance();
-                if (Forcemaintenance == 1)
+                if (def.getForcemaintenance() == 1)
                     return;
+                if(def.getNewVersion()== BuildConfig.VERSION_CODE){
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                String ServerURL = def.getserver_url();
                 MyApplication.setURL(ServerURL);
                 editor.putString("url", ServerURL);
                 editor.commit();
