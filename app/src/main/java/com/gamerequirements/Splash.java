@@ -12,7 +12,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
-import com.gamerequirements.Requirements.TabbedActivity;
 import com.gamerequirements.SaveCofig.SaveFirstConfig;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -82,6 +81,7 @@ public class Splash extends AppCompatActivity
         {
             URL url;
             String ServerURL;
+            String blogURL;
             //int current_dp_version;
             url = new URL("http://pastebin.com/raw/CEnw1cxr");
             while (in == null)
@@ -89,8 +89,11 @@ public class Splash extends AppCompatActivity
                 in = new BufferedReader(new InputStreamReader(url.openStream()));
             }
             ServerURL = in.readLine();
+            blogURL = in.readLine();
+            MyApplication.setBlogUrl(blogURL);
             MyApplication.setURL(ServerURL);
             editor.putString("url", ServerURL);
+            editor.putString("blogurl", blogURL);
             editor.commit();
 
             int Forcemaintenance = Integer.parseInt(in.readLine());
@@ -176,8 +179,10 @@ public class Splash extends AppCompatActivity
                 }
 
                 String ServerURL = def.getserver_url();
+                String blogURL = def.getBlog_url();
                 MyApplication.setURL(ServerURL);
                 editor.putString("url", ServerURL);
+                editor.putString("blogurl", blogURL);
                 editor.commit();
                 startNextActivity();
             }

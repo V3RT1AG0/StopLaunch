@@ -1,36 +1,23 @@
-package com.gamerequirements.Requirements;
+package com.gamerequirements;
 
 import android.content.ComponentName;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-
-import com.gamerequirements.ActivitySuperClass;
-import com.gamerequirements.R;
-
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.gamerequirements.Blog.BlogActivityMain;
+import com.gamerequirements.Home.HomeMain;
+import com.gamerequirements.Requirements.GameListActivity;
 
 import org.codechimp.apprater.AppRater;
 
@@ -69,8 +56,9 @@ public class TabbedActivity extends ActivitySuperClass
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager =  findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -151,11 +139,6 @@ public class TabbedActivity extends ActivitySuperClass
     }
 
 
-
-
-
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -177,9 +160,12 @@ public class TabbedActivity extends ActivitySuperClass
             switch (position)
             {
                 case 0:
-                    fragment = GameListActivity.newInstance();
+                    fragment = HomeMain.newInstance();
                     break;
                 case 1:
+                    fragment = BlogActivityMain.newInstance();
+                    break;
+                case 2:
                     fragment = GameListActivity.newInstance();
                     break;
 
@@ -192,7 +178,7 @@ public class TabbedActivity extends ActivitySuperClass
         public int getCount()
         {
             // Show 2 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -201,9 +187,11 @@ public class TabbedActivity extends ActivitySuperClass
             switch (position)
             {
                 case 0:
-                    return "GAMES ";
+                    return "HOME ";
                 case 1:
                     return "NEWS";
+                case 2:
+                    return "GAMES";
             }
             return null;
         }

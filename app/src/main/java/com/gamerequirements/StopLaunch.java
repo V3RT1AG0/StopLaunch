@@ -8,21 +8,33 @@ package com.gamerequirements;
 public class StopLaunch
 {
     String server_url;
+    String blog_url;
     int db_version;
     int forcemaintenance;
     int newVersion;
 
-    StopLaunch(String server_url, int db_version,int forcemaintenance,int newVersion)
+    StopLaunch(String server_url, int db_version,int forcemaintenance,int newVersion,String blog_url)
     {
         this.server_url=server_url;
         this.db_version=db_version;
         this.forcemaintenance=forcemaintenance;
         this.newVersion=newVersion;
+        this.blog_url = blog_url;
     }
 
     StopLaunch()
     {
 
+    }
+
+    public void setBlog_url(String blog_url)
+    {
+        this.blog_url = blog_url;
+    }
+
+    public String getBlog_url()
+    {
+        return blog_url;
     }
 
     public int getdb_version()

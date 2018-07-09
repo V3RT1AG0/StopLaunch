@@ -176,12 +176,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         requestqueue.add(jsonObjectRequest);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -195,7 +189,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
 
 
-    void VolleyOperation()
+    private void VolleyOperation()
     {
 
         HashMap<String, String> params = new HashMap<>();

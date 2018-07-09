@@ -13,6 +13,7 @@ public class MyApplication extends Application
     private static String URL;
     private static final String imageurl="http://www.game-debate.com/pic.php?g_id=";
     private static final String SharedPrefrenceKey="gameRequirementsShared";
+    private static String blogUrl;
 
 
     public static MyApplication getInstance()
@@ -53,4 +54,13 @@ public class MyApplication extends Application
         MyApplication.URL = URL;
     }
 
+    public static void setBlogUrl(String blogUrl)
+    {
+        MyApplication.blogUrl = blogUrl;
+    }
+
+    public static String getBlogUrl()
+    {
+        return blogUrl;
+    }
 }

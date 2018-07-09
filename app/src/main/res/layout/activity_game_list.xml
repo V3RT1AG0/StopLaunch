@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/activity_game_list"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_game_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.gamerequirements.Requirements.GameListActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context="com.gamerequirements.Requirements.GameListActivity">
 
 
     <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/listbackground"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/listbackground"
+        android:orientation="vertical">
 
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.github.rahatarmanahmed.cpv.CircularProgressView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/progress_view"
-            android:layout_marginTop="70sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="70sp"
             app:cpv_animAutostart="true"
             app:cpv_indeterminate="true" />
 
@@ -33,44 +30,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical"
             android:layout_marginTop="70sp"
+            android:orientation="vertical"
             android:visibility="gone"
 
             >
 
             <TextView
-                android:layout_margin="10dp"
                 android:id="@+id/errorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="center"
-                android:text="Something went wrong. Please try again after some time."/>
+                android:text="Something went wrong. Please try again after some time." />
 
             <Button
                 android:id="@+id/RetryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="RETRY"
-                />
+                android:text="RETRY" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="60sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/my_gamelist_recycler"
-            />
+        <include layout="@layout/horizontal_scroll_view" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="60sp"
+            android:id="@+id/my_gamelist_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="60sp" />
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/my_filtered_recycler"
-            android:visibility="gone"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/search_LL"
@@ -89,16 +85,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layerType="none"
-                app:floatingSearch_searchHint="Enter game title..."
-                app:floatingSearch_suggestionsListAnimDuration="250"
-                app:floatingSearch_showSearchKey="false"
-                app:floatingSearch_leftActionMode="showSearch"
+                app:floatingSearch_close_search_on_keyboard_dismiss="true"
                 app:floatingSearch_dimBackground="false"
-                app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+                app:floatingSearch_leftActionMode="showSearch"
+                app:floatingSearch_searchHint="Enter game title..."
+                app:floatingSearch_showSearchKey="false"
+                app:floatingSearch_suggestionsListAnimDuration="250" />
 
         </LinearLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>
