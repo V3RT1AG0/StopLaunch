@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,9 +67,12 @@ public class HomeMain extends Fragment
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
         lmanager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         blogAdapter = new BlogAdapter(bloglist, this.getLifecycle());
+        SnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+
         VolleyOperation();
     }
 
@@ -111,7 +116,7 @@ public class HomeMain extends Fragment
                 if (category == 5)
                 {
                     Log.d("videoimageurl", content.indexOf("[") + "");
-                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]") - 1);
+                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
                 } else
                 {
                     Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());

@@ -54,7 +54,6 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case 5:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.blog_card_video, parent, false);
                 YouTubePlayerView youTubePlayerView = v.findViewById(R.id.youtube_player_view);
-                        youTubePlayerView.getPlayerUIController().showFullscreenButton(false);
                 lifecycle.addObserver(youTubePlayerView);
                 return new MyVideoViewHolder(v,youTubePlayerView);
         }
@@ -90,7 +89,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.subtitle, Html.FROM_HTML_MODE_COMPACT));
                 else
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.subtitle));
-
+                Log.d("triggered2",bloginfo.imgvideurl);
                 holder1.cueVideo(bloginfo.imgvideurl);
                 break;
         }

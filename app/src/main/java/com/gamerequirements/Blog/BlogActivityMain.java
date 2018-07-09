@@ -61,7 +61,7 @@ public class BlogActivityMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true";
+        blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true&orderby=id&page=";
         progressView = getActivity().findViewById(R.id.progress_view2);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
@@ -73,7 +73,7 @@ public class BlogActivityMain extends Fragment
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
         AddOnScrollListenrerToRecyclerView();
-        VolleyOperation();
+        VolleyOperation(1);
     }
 
     private void AddOnScrollListenrerToRecyclerView()
@@ -86,7 +86,7 @@ public class BlogActivityMain extends Fragment
                 Log.d("Tag1", page + " " + totalItemsCount + " ");
                 curSize = blogAdapter.getItemCount();
                 nexttexnupdate = true;
-                VolleyOperation();
+                VolleyOperation(page+1);
             }
         };
         recyclerView.addOnScrollListener(endlessRecyclerView);
@@ -110,9 +110,10 @@ public class BlogActivityMain extends Fragment
     }
 
 
-    private void VolleyOperation()
+    private void VolleyOperation(int offset)
     {
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, blogUrl, null, new Response.Listener<JSONArray>()
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, blogUrl+offset, null, new Response.Listener<JSONArray>()
         {
             @Override
             public void onResponse(JSONArray response)
@@ -124,6 +125,9 @@ public class BlogActivityMain extends Fragment
             @Override
             public void onErrorResponse(VolleyError error)
             {
+                // if request is made for a page which does not have a data do not do anything. So simply return on status code 400
+                if(error.networkResponse.statusCode==400)
+                    return;
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -136,7 +140,7 @@ public class BlogActivityMain extends Fragment
                         Log.d("custom", "volley2");
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
-                        VolleyOperation();
+                        VolleyOperation(1);
                     }
                 });
                 Log.d("Error", error.toString());
@@ -184,7 +188,7 @@ public class BlogActivityMain extends Fragment
                 {
                     String  content = jsonObject.getJSONObject("content").getString("rendered");
                     Log.d("videoimageurl", content.indexOf("[")+"");
-                    videoimgurl = content.substring(content.indexOf("[")+1,content.indexOf("]")-1);
+                    videoimgurl = content.substring(content.indexOf("[")+1,content.indexOf("]"));
                 }
                 else
                 {

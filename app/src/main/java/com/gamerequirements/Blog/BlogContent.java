@@ -91,7 +91,7 @@ public class BlogContent extends ActivitySuperClass
             webView.setWebChromeClient(new WebChromeClient());
             webView.setWebViewClient(new WebViewClient());
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadData( "<style>img{display: inline;height: auto;max-width: 100%;}</style>"+content, "text/html", "UTF-8");
+            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}</style>"+content, "text/html", "UTF-8");
             /*webView.setWebViewClient(new WebViewClient()
             {
                 public void onPageFinished(WebView view, String url)

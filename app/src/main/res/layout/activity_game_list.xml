@@ -53,19 +53,27 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="60sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
         <include layout="@layout/horizontal_scroll_view" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/my_gamelist_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="60sp" />
+            android:layout_marginTop="110sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/my_filtered_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="60sp"
+            android:layout_marginTop="110sp"
             android:visibility="gone" />
 
         <LinearLayout

@@ -26,14 +26,7 @@
 
 
 
-            <TextView
-                android:id="@+id/blogTitleTView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:textSize="25sp"
-                />
+
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -56,6 +49,14 @@
                         app:cpv_color="@color/colorPrimary"
                         app:cpv_indeterminate="true"/>-->
 
+                    <TextView
+                        android:id="@+id/blogTitleTView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:textSize="25sp"
+                        />
 
                     <WebView
                         android:id="@+id/webview1"

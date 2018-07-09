@@ -8,5 +8,5 @@
     <dimen name="padding_end">3sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
-    <dimen name="home_card_size">250dp</dimen>
+    <dimen name="home_card_size">270dp</dimen>
 </resources>
