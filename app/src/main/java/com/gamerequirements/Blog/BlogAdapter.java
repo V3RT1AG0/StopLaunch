@@ -117,6 +117,7 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
     {
         TextView catsButton = new TextView(context);
         catsButton.setText((String) cats.get(bloginfo.category));
+        catsButton.setTextColor(context.getResources().getColor(R.color.colorAccent));
         catsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         holder.cats.addView(catsButton);
         catsButton.setOnClickListener(new View.OnClickListener()
@@ -136,8 +137,8 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
                 final int tagId = bloginfo.tags.getInt(i);
                 TextView tagsButton = new TextView(context);
                 Log.d("taggggs", "" + tags.get(tagId));
-                tagsButton.setText((String) tags.get(tagId));
-
+                tagsButton.setText("#" + (String) tags.get(tagId));
+                tagsButton.setTextColor(context.getResources().getColor(R.color.colorAccent));
                 tagsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 holder.tags.addView(tagsButton);
                 tagsButton.setOnClickListener(new View.OnClickListener()

@@ -11,7 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyTheme">
         <service android:name=".Notification.MyFireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -47,12 +47,11 @@
                 android:value=".TabbedActivity" />
         </activity>
         <activity
+            android:theme="@style/MyTheme"
             android:name=".TabbedActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".SaveCofig.SaveFirstConfig" />
-        <activity android:name=".Blog.BlogActivityMain" />
         <activity android:name=".Blog.BlogContent" />
-        <activity android:name=".Home.HomeMain" />
         <activity android:name=".Blog.BlogListActivity"></activity>
     </application>
 

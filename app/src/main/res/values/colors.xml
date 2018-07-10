@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#040A18</color>
+    <!--<color name="colorPrimary">#040A18</color>
     <color name="colorPrimaryDark">#02060F</color>
-    <color name="colorAccent">#455A64</color>
+    <color name="colorAccent">#455A64</color>-->
+    <color name="colorPrimary">#1C1D1C</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#44D62C</color>
+    <color name="BackGroundColor">#FFFFFF</color>
+    <color name="Bgcolor">#34373e</color>
+    <color name="backgroundColor">#000000</color>
+
+
     <color name="Heading">#607D8B</color>
     <color name="Content">#ECEFF1</color>
     <color name="HeadingFont">#ECEFF1</color>
@@ -10,8 +18,8 @@
     <color name="HeaderTitle">#FFFFFF</color>
     <color name="plainWhite">#FFFFFF</color>
     <color name="secondHeader">#212121</color>
-    <color name="BackGroundColor">#FFFFFF</color>
-    <color name="Bgcolor">#34373e</color>
+    <!--<color name="BackGroundColor">#FFFFFF</color>
+    <color name="Bgcolor">#34373e</color>-->
     <color name="whitedark1">#7F7F7F</color>#323232
     <color name="blacklight1">#666666</color>
     <color name="listbackground">#f2f2f2</color>

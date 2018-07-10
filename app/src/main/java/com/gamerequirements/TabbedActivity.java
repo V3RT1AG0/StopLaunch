@@ -3,6 +3,7 @@ package com.gamerequirements;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -10,7 +11,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +24,7 @@ import com.gamerequirements.Requirements.GameListActivity;
 
 import org.codechimp.apprater.AppRater;
 
-public class TabbedActivity extends ActivitySuperClass
+public class TabbedActivity extends AppCompatActivity
 {
 
     Toolbar toolbar;
@@ -62,6 +65,34 @@ public class TabbedActivity extends ActivitySuperClass
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_document);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_console);
+
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        int tabIconColor = ContextCompat.getColor(TabbedActivity.this, R.color.colorAccent);
+                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        super.onTabUnselected(tab);
+                        int tabIconColor = ContextCompat.getColor(TabbedActivity.this, R.color.plainWhite);
+                        tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                        super.onTabReselected(tab);
+                    }
+                }
+        );
+
 
         AppRater.app_launched(this);
         try
@@ -183,20 +214,9 @@ public class TabbedActivity extends ActivitySuperClass
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position)
-        {
-            switch (position)
-            {
-                case 0:
-                    return "HOME ";
-                case 1:
-                    return "NEWS";
-                case 2:
-                    return "GAMES";
-            }
-            return null;
-        }
+
+
+
     }
 }
 

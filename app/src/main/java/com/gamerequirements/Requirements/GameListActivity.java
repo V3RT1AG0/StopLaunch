@@ -103,7 +103,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         notificationCounttextview = getActivity().findViewById(R.id.badge);
         lmanager = new LinearLayoutManager(getActivity());
         errorlayout = getActivity().findViewById(R.id.errorlayout);
-        getActivity().findViewById(R.id.back_arrow).setVisibility(View.GONE);
+
 
         gameListAdapter = new GameListAdapter(gamelist);
         recyclerView.setHasFixedSize(true);
@@ -139,6 +139,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         {
             Button button = (Button) inflater.inflate(R.layout.genre_capsule_button, null);
             button.setText(genre);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,5,20);
+            button.setLayoutParams(params);
             button.setOnClickListener(new View.OnClickListener()
             {
                 @Override

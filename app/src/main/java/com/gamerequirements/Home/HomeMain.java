@@ -1,6 +1,8 @@
 package com.gamerequirements.Home;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +65,21 @@ public class HomeMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+
+        final int duration = 2000;
+        final int pixelsToMove = 1300;
+        final Handler mHandler = new Handler(Looper.getMainLooper());
+        final Runnable SCROLLING_RUNNABLE = new Runnable() {
+
+            @Override
+            public void run() {
+                recyclerView.smoothScrollBy(pixelsToMove, 0);
+                mHandler.postDelayed(this, duration);
+            }
+        };
+
+
+
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
         lmanager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -72,6 +89,28 @@ public class HomeMain extends Fragment
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = lmanager.findLastCompletelyVisibleItemPosition();
+                if(lastItem ==  lmanager.getItemCount()-1){
+                    mHandler.removeCallbacks(SCROLLING_RUNNABLE);
+                    Handler postHandler = new Handler();
+                    postHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.setAdapter(null);
+                            recyclerView.setAdapter(blogAdapter);
+                            mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
+                        }
+                    }, 5000);
+                }
+            }
+        });
+        mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
 
         VolleyOperation();
     }

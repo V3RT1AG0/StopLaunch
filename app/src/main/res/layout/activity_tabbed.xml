@@ -24,14 +24,14 @@
             >
             <!-- android:animateLayoutChanges="true" removed from AppBarLayout-->
 
-            <include layout="@layout/custom_toolbar"
-                />
+            <!--<include layout="@layout/custom_toolbar"
+                />-->
             <!--  app:layout_scrollFlags="scroll|enterAlways" is added to toolbar to make hide on scroll -->
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimaryDark"/>
 
         </android.support.design.widget.AppBarLayout>
 
