@@ -11,8 +11,8 @@ public class MyApplication extends Application
 {
     public static MyApplication sinstance;
     private static String URL;
-    private static final String imageurl="http://www.game-debate.com/pic.php?g_id=";
-    private static final String SharedPrefrenceKey="gameRequirementsShared";
+    private static final String imageurl = "http://www.game-debate.com/pic.php?g_id=";
+    private static final String SharedPrefrenceKey = "gameRequirementsShared";
     private static String blogUrl;
 
 
@@ -37,10 +37,14 @@ public class MyApplication extends Application
 
     public static String getURL()
     {
+        if (URL == null)
+            setURL(MyApplication.getContext().getSharedPreferences(
+                    "com.gamerequirements", Context.MODE_PRIVATE).getString("url", null));
         return URL;
     }
 
-    public static String getSharedPrefrenceKey() {
+    public static String getSharedPrefrenceKey()
+    {
         return SharedPrefrenceKey;
     }
 
@@ -61,6 +65,9 @@ public class MyApplication extends Application
 
     public static String getBlogUrl()
     {
+        if (blogUrl == null)
+            setBlogUrl(MyApplication.getContext().getSharedPreferences(
+                    "com.gamerequirements", Context.MODE_PRIVATE).getString("blogurl", null));
         return blogUrl;
     }
 }

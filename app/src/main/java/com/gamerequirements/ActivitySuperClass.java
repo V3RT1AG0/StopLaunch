@@ -1,6 +1,5 @@
 package com.gamerequirements;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,9 +22,13 @@ public class ActivitySuperClass extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        if (MyApplication.getURL() == null)
+        /*if (MyApplication.getURL() == null)
             MyApplication.setURL(MyApplication.getContext().getSharedPreferences(
                     "com.gamerequirements", Context.MODE_PRIVATE).getString("url", null));
+
+        if(MyApplication.getBlogUrl()==null)
+            MyApplication.setBlogUrl(MyApplication.getContext().getSharedPreferences(
+                    "com.gamerequirements", Context.MODE_PRIVATE).getString("blogurl", null));*/
     }
 
     @Override

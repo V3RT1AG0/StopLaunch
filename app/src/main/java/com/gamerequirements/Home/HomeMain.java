@@ -37,7 +37,7 @@ public class HomeMain extends Fragment
     BlogAdapter blogAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager lmanager;
-    private final String blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true";
+    private final String blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&per_page=4";
 
     public HomeMain()
     {

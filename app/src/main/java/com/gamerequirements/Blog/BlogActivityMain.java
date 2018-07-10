@@ -61,14 +61,14 @@ public class BlogActivityMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true&orderby=id&page=";
+        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         progressView = getActivity().findViewById(R.id.progress_view2);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.blog_recycler);
         lmanager = new LinearLayoutManager(getActivity());
         errorlayout = getActivity().findViewById(R.id.errorlayout2);
-        blogAdapter = new BlogAdapter(bloglist,this.getLifecycle());
+        blogAdapter = new BlogAdapter(bloglist, this.getLifecycle());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
@@ -86,7 +86,7 @@ public class BlogActivityMain extends Fragment
                 Log.d("Tag1", page + " " + totalItemsCount + " ");
                 curSize = blogAdapter.getItemCount();
                 nexttexnupdate = true;
-                VolleyOperation(page+1);
+                VolleyOperation(page + 1);
             }
         };
         recyclerView.addOnScrollListener(endlessRecyclerView);
@@ -113,7 +113,7 @@ public class BlogActivityMain extends Fragment
     private void VolleyOperation(int offset)
     {
 
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, blogUrl+offset, null, new Response.Listener<JSONArray>()
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, blogUrl + offset, null, new Response.Listener<JSONArray>()
         {
             @Override
             public void onResponse(JSONArray response)
@@ -125,9 +125,17 @@ public class BlogActivityMain extends Fragment
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                // if request is made for a page which does not have a data do not do anything. So simply return on status code 400
-                if(error.networkResponse.statusCode==400)
-                    return;
+
+                try
+                {
+                    // if request is made for a page which does not have a data do not do anything. So simply return on status code 400
+                    if (error.networkResponse.statusCode == 400)
+                        return;
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -181,21 +189,20 @@ public class BlogActivityMain extends Fragment
                 int id = jsonObject.getInt("id");
                 int category = jsonObject.getJSONArray("categories").getInt(0);
                 String title = jsonObject.getJSONObject("title").getString("rendered");
-                String  subtitle= jsonObject.getJSONObject("excerpt").getString("rendered");
+                String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                 String videoimgurl;
-                Log.d("videoimageurl", title+category);
-                if(category==5)
+                Log.d("videoimageurl", title + category);
+                if (category == 5)
                 {
-                    String  content = jsonObject.getJSONObject("content").getString("rendered");
-                    Log.d("videoimageurl", content.indexOf("[")+"");
-                    videoimgurl = content.substring(content.indexOf("[")+1,content.indexOf("]"));
-                }
-                else
+                    String content = jsonObject.getJSONObject("content").getString("rendered");
+                    Log.d("videoimageurl", content.indexOf("[") + "");
+                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                } else
                 {
-                    Log.d("videoimageurl",jsonObject.getJSONObject("_embedded").toString());
+                    Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
                     videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
                 }
-                bloglist.add(new Information(id,title,subtitle,videoimgurl,category));
+                bloglist.add(new Information(id, title, subtitle, videoimgurl, category));
             }
         } catch (JSONException e)
         {
