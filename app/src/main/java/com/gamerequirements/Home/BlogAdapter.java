@@ -136,8 +136,8 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             super(itemView);
             youtubePlayerView = player;
-            title = itemView.findViewById(R.id.title_blog_video);
-            subtitle = itemView.findViewById(R.id.subTitle_blog_video);
+            title = itemView.findViewById(R.id.title_post);
+            subtitle = itemView.findViewById(R.id.subTitle_post);
             youtubePlayerView.initialize(new YouTubePlayerInitListener()
                                          {
                                              @Override

@@ -32,7 +32,7 @@ import java.util.List;
  * Created by v3rt1ag0 on 7/7/18.
  */
 
-class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
 {
     List<Information> info;
     Context context;
@@ -58,7 +58,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public MyCommonViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
 
         switch (viewType)
@@ -76,7 +76,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public void onBindViewHolder(MyCommonViewHolder holder, int position)
     {
         final Information bloginfo = info.get(position);
         switch (holder.getItemViewType())
@@ -95,46 +95,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Picasso.with(context)
                         .load(url)
                         .into(holder0.imageView);
-
-
-                TextView catsButton = new TextView(context);
-                catsButton.setText((String) cats.get(bloginfo.category));
-                catsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                holder0.cats.addView(catsButton);
-                catsButton.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View view)
-                    {
-                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category));
-                    }
-                });
-
-                for (int i = 0; i < bloginfo.tags.length(); i++)
-                {
-                    try
-                    {
-                        Log.d("taggggs", tags.toString() + cats.toString());
-                        final int tagId = bloginfo.tags.getInt(i);
-                        TextView tagsButton = new TextView(context);
-                        Log.d("taggggs", "" + tags.get(tagId));
-                        tagsButton.setText((String) tags.get(tagId));
-
-                        tagsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        holder0.tags.addView(tagsButton);
-                        tagsButton.setOnClickListener(new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View view)
-                            {
-                                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId));
-                            }
-                        });
-                    } catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
+                createCategoryandTagButtons(bloginfo,holder0);
                 break;
 
             case 5:
@@ -146,9 +107,52 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.subtitle));
                 Log.d("triggered2", bloginfo.imgvideurl);
                 holder1.cueVideo(bloginfo.imgvideurl);
+                createCategoryandTagButtons(bloginfo,holder1);
                 break;
         }
 
+    }
+
+    private void createCategoryandTagButtons(final Information bloginfo, MyCommonViewHolder holder)
+    {
+        TextView catsButton = new TextView(context);
+        catsButton.setText((String) cats.get(bloginfo.category));
+        catsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        holder.cats.addView(catsButton);
+        catsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category));
+            }
+        });
+
+        for (int i = 0; i < bloginfo.tags.length(); i++)
+        {
+            try
+            {
+                Log.d("taggggs", tags.toString() + cats.toString());
+                final int tagId = bloginfo.tags.getInt(i);
+                TextView tagsButton = new TextView(context);
+                Log.d("taggggs", "" + tags.get(tagId));
+                tagsButton.setText((String) tags.get(tagId));
+
+                tagsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                holder.tags.addView(tagsButton);
+                tagsButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId));
+                    }
+                });
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -165,10 +169,25 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return info.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyCommonViewHolder extends RecyclerView.ViewHolder{
+
+        // Super class for both video and post view holder. Components common to both the cards will go here
         TextView title, subtitle;
         LinearLayout cats, tags;
+
+        public MyCommonViewHolder(View itemView)
+        {
+            super(itemView);
+            tags = itemView.findViewById(R.id.tags);
+            cats = itemView.findViewById(R.id.cats);
+            title = itemView.findViewById(R.id.title_post);
+            subtitle = itemView.findViewById(R.id.subTitle_post);
+        }
+    }
+
+    class MyViewHolder extends MyCommonViewHolder
+    {
+
         ImageView imageView;
 
         public MyViewHolder(View itemView)
@@ -182,18 +201,13 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     view.getContext().startActivity(new Intent(context, BlogContent.class).putExtra("id", info.get(getAdapterPosition()).getId()));
                 }
             });
-            tags = itemView.findViewById(R.id.tags);
-            cats = itemView.findViewById(R.id.cats);
-            title = itemView.findViewById(R.id.title_post);
-            subtitle = itemView.findViewById(R.id.subTitle_post);
             imageView = itemView.findViewById(R.id.image_post);
         }
     }
 
-    class MyVideoViewHolder extends RecyclerView.ViewHolder
+    class MyVideoViewHolder extends MyCommonViewHolder
     {
-        TextView title, subtitle;
-        LinearLayout cats, tags;
+
         YouTubePlayerView youtubePlayerView;
         YouTubePlayer youtubePlayer;
         private String currentVideoId;
@@ -202,10 +216,6 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             super(itemView);
             youtubePlayerView = player;
-            title = itemView.findViewById(R.id.title_blog_video);
-            subtitle = itemView.findViewById(R.id.subTitle_blog_video);
-            tags = itemView.findViewById(R.id.tags);
-            cats = itemView.findViewById(R.id.cats);
             youtubePlayerView.initialize(new YouTubePlayerInitListener()
                                          {
                                              @Override
