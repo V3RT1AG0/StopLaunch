@@ -73,6 +73,8 @@ public class TabbedActivity extends ActivitySuperClass
         }
     }
 
+
+
     Intent getManufacturerIntent()
     {
         Intent intent = new Intent();

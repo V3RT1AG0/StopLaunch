@@ -7,10 +7,10 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
         <service android:name=".Notification.MyFireBaseMessagingService">
             <intent-filter>
@@ -32,9 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Requirements.Requirement_content"
-             />
+        <activity android:name=".Requirements.Requirement_content" />
         <activity
             android:name=".Canyourunit.CanYouRunIt"
             android:screenOrientation="portrait"
@@ -48,12 +46,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TabbedActivity" />
         </activity>
-        <activity android:name=".TabbedActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".TabbedActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".SaveCofig.SaveFirstConfig" />
         <activity android:name=".Blog.BlogActivityMain" />
         <activity android:name=".Blog.BlogContent" />
         <activity android:name=".Home.HomeMain" />
+        <activity android:name=".Blog.BlogListActivity"></activity>
     </application>
 
 </manifest>

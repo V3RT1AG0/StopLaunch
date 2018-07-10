@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class BlogActivityMain extends Fragment
     LinearLayoutManager lmanager;
     int curSize;
     Boolean nexttexnupdate = false;
+    SparseArray cats, tags;
 
     public static BlogActivityMain newInstance()
     {
@@ -62,18 +64,31 @@ public class BlogActivityMain extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
         blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+
+        cats = new SparseArray();
+        tags = new SparseArray();
+
         progressView = getActivity().findViewById(R.id.progress_view2);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.blog_recycler);
         lmanager = new LinearLayoutManager(getActivity());
         errorlayout = getActivity().findViewById(R.id.errorlayout2);
-        blogAdapter = new BlogAdapter(bloglist, this.getLifecycle());
+        blogAdapter = new BlogAdapter(bloglist, this.getLifecycle(),cats,tags);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
         AddOnScrollListenrerToRecyclerView();
-        VolleyOperation(1);
+        getTagsAndCategories();
+    }
+
+    private void getTagsAndCategories()
+    {
+        String categoryUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/categories?fields=id,name";
+
+        VolleyOperation(categoryUrl, "cats");
+
+
     }
 
     private void AddOnScrollListenrerToRecyclerView()
@@ -109,6 +124,54 @@ public class BlogActivityMain extends Fragment
         return (v);
     }
 
+    private void VolleyOperation(String url, final String type)
+    {
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>()
+        {
+            @Override
+            public void onResponse(JSONArray response)
+            {
+                handleresponse(response,type);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                progressView.setVisibility(View.GONE);
+                errorlayout.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                resetRecyclerViewData();
+                errorlayout.findViewById(R.id.RetryButton2).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Log.d("custom", "volley2");
+                        errorlayout.setVisibility(View.GONE);
+                        progressView.setVisibility(View.VISIBLE);
+                        VolleyOperation(1);
+                    }
+                });
+                Log.d("Error", error.toString());
+                if (error instanceof NoConnectionError)
+                {
+                    TextView textView = errorlayout.findViewById(R.id.errorMessage2);
+                    textView.setText("Check your connection and try again");
+                    //  Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                2,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        requestqueue.add(arrayRequest);
+    }
+
 
     private void VolleyOperation(int offset)
     {
@@ -118,7 +181,7 @@ public class BlogActivityMain extends Fragment
             @Override
             public void onResponse(JSONArray response)
             {
-                handleresponse(response);
+                handleresponse(response,"blog");
             }
         }, new Response.ErrorListener()
         {
@@ -177,51 +240,74 @@ public class BlogActivityMain extends Fragment
         nexttexnupdate = false;
     }
 
-    void handleresponse(JSONArray response)
+    void handleresponse(JSONArray response, String type)
     {
         try
         {
             //JSONArray result = response.getJSONArray("result");
             Log.d("TAG", response.toString());
-            for (int i = 0; i < response.length(); i++)
+            Log.d("catsTags", cats+""+tags);
+            switch (type)
             {
-                JSONObject jsonObject = response.getJSONObject(i);
-                int id = jsonObject.getInt("id");
-                int category = jsonObject.getJSONArray("categories").getInt(0);
-                String title = jsonObject.getJSONObject("title").getString("rendered");
-                String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
-                String videoimgurl;
-                Log.d("videoimageurl", title + category);
-                if (category == 5)
-                {
-                    String content = jsonObject.getJSONObject("content").getString("rendered");
-                    Log.d("videoimageurl", content.indexOf("[") + "");
-                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
-                } else
-                {
-                    Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
-                    videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
-                }
-                bloglist.add(new Information(id, title, subtitle, videoimgurl, category));
+                case "blog":
+                    for (int i = 0; i < response.length(); i++)
+                    {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        int category = jsonObject.getJSONArray("categories").getInt(0);
+                        JSONArray tags = jsonObject.getJSONArray("tags");
+                        String title = jsonObject.getJSONObject("title").getString("rendered");
+                        String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
+                        String videoimgurl;
+                        Log.d("videoimageurl", title + category);
+                        if (category == 5)
+                        {
+                            String content = jsonObject.getJSONObject("content").getString("rendered");
+                            Log.d("videoimageurl", content.indexOf("[") + "");
+                            videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                        } else
+                        {
+                            Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
+                            videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
+                        }
+                        bloglist.add(new Information(id, title, subtitle, videoimgurl, category,tags));
+                        errorlayout.setVisibility(View.GONE);
+                        progressView.setVisibility(View.GONE);
+
+                        if (nexttexnupdate)
+                        {
+                            blogAdapter.notifyItemRangeInserted(curSize, bloglist.size() - 1);
+                            nexttexnupdate = false;
+                        } else
+                        {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            blogAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
+                case "cats":
+                    for (int i = 0; i < response.length(); i++)
+                    {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        cats.put(jsonObject.getInt("id"),jsonObject.getString("name"));
+                    }
+                    String tagsUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/tags?fields=id,name";
+                    VolleyOperation(tagsUrl, "tags");
+                    break;
+                case "tags":
+
+                    for (int i = 0; i < response.length(); i++)
+                    {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        tags.put(jsonObject.getInt("id"),jsonObject.getString("name"));
+                    }
+                    Log.d("catsTags2", tags.toString());
+                    VolleyOperation(1);
+                    break;
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
-        } finally
-        {
-            errorlayout.setVisibility(View.GONE);
-            progressView.setVisibility(View.GONE);
-
-            if (nexttexnupdate)   //add 10 more data
-            {
-                blogAdapter.notifyItemRangeInserted(curSize, bloglist.size() - 1);
-                nexttexnupdate = false;
-            } else
-            {
-                recyclerView.setVisibility(View.VISIBLE);
-                blogAdapter.notifyDataSetChanged();
-            }
-
         }
     }
 
