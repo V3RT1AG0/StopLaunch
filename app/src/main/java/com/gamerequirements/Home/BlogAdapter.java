@@ -122,6 +122,8 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             title = itemView.findViewById(R.id.title_post);
             subtitle = itemView.findViewById(R.id.subTitle_post);
             imageView = itemView.findViewById(R.id.image_post);
+            itemView.findViewById(R.id.tags).setVisibility(View.GONE);
+            itemView.findViewById(R.id.cats).setVisibility(View.GONE);
         }
     }
 
@@ -136,6 +138,8 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             super(itemView);
             youtubePlayerView = player;
+            itemView.findViewById(R.id.tags).setVisibility(View.GONE);
+            itemView.findViewById(R.id.cats).setVisibility(View.GONE);
             title = itemView.findViewById(R.id.title_post);
             subtitle = itemView.findViewById(R.id.subTitle_post);
             youtubePlayerView.initialize(new YouTubePlayerInitListener()

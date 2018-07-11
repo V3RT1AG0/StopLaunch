@@ -119,7 +119,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
         searchView = getActivity().findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
-        searchView.setSearchFocused(true);
+        //searchView.setSearchFocused(true);
 
         AddGenresToLayoutDynamically();
         AddOnScrollListenrerToRecyclerView();
