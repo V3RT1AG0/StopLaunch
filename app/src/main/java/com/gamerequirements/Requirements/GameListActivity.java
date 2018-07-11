@@ -100,7 +100,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         gamelist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.my_gamelist_recycler);
         filteredRecyclerView = getActivity().findViewById(R.id.my_filtered_recycler);
-        notificationCounttextview = getActivity().findViewById(R.id.badge);
+        //notificationCounttextview = getActivity().findViewById(R.id.badge);
         lmanager = new LinearLayoutManager(getActivity());
         errorlayout = getActivity().findViewById(R.id.errorlayout);
 
@@ -124,7 +124,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         AddGenresToLayoutDynamically();
         AddOnScrollListenrerToRecyclerView();
         VolleyOperation();
-        getNotificationCount();
+       // getNotificationCount();
 
         Log.e("Error", gamelisturl);
 
@@ -141,9 +141,9 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             button.setText(genre);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    100
             );
-            params.setMargins(20,0,5,20);
+            params.setMargins(20,0,0,0);
             button.setLayoutParams(params);
             button.setOnClickListener(new View.OnClickListener()
             {

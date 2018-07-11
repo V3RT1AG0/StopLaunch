@@ -5,7 +5,7 @@
     android:id="@+id/my_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
+    android:background="?attr/colorPrimaryDark"
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:layout_scrollFlags="scroll|enterAlways"
@@ -25,12 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="GameRequirements"
+        android:text="@string/app_name"
         android:textColor="@color/BackGroundColor"
         android:textSize="18sp"
         android:paddingBottom="2sp"/>
 
-    <ImageView
+   <ImageView
         android:id="@+id/Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,46 +43,46 @@
         android:tint="@color/plainWhite" />
 
 
-    <LinearLayout
-        android:id="@+id/notify"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|end"
-        >
+    <!--<LinearLayout
+       android:id="@+id/notify"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center_vertical|end"
+       >
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+       <FrameLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/Notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
-                android:gravity="center_vertical"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
-                android:src="@drawable/ic_notifications"
-                android:tint="@color/plainWhite"
-                />
+           <ImageView
+               android:id="@+id/Notify"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="3dp"
+               android:layout_marginBottom="3dp"
+               android:gravity="center_vertical"
+               android:paddingEnd="10dp"
+               android:paddingStart="10dp"
+               android:src="@drawable/ic_notifications"
+               android:tint="@color/plainWhite"
+               />
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/badge"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="end|top"
-                android:gravity="center"
-                android:textSize="9sp"
-                android:background="@drawable/circle"
-                android:backgroundTint="#b71c1c"
-                android:layout_marginEnd="7dp"
-                android:textColor="@color/plainWhite"
-                android:layout_marginRight="5dp"/>
+           <TextView
+               android:visibility="gone"
+               android:id="@+id/badge"
+               android:layout_width="15dp"
+               android:layout_height="15dp"
+               android:layout_gravity="end|top"
+               android:gravity="center"
+               android:textSize="9sp"
+               android:background="@drawable/circle"
+               android:backgroundTint="#b71c1c"
+               android:layout_marginEnd="7dp"
+               android:textColor="@color/plainWhite"
+               android:layout_marginRight="5dp"/>
 
-        </FrameLayout>
-    </LinearLayout>
+       </FrameLayout>
+   </LinearLayout>-->
 <!--
     <ImageView
         android:id="@+id/Share"
@@ -97,5 +97,7 @@
         android:tint="@color/plainWhite"
         android:visibility="gone" />
 -->
+
+
 
 </android.support.v7.widget.Toolbar>

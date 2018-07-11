@@ -45,7 +45,6 @@
                         android:layout_width="110sp"
                         android:layout_height="154sp"
                         android:adjustViewBounds="true"
-                        android:background="@color/black"
                         android:scaleType="centerInside"
                         />
                 </LinearLayout>
@@ -152,7 +151,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#2c3e50"
+                    android:background="@color/colorPrimary"
                     android:paddingBottom="3sp"
                     android:paddingEnd="3sp"
                     android:paddingStart="3sp"
@@ -308,7 +307,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10sp"
-                    android:background="#2c3e50"
+                    android:background="@color/colorPrimary"
                     android:paddingBottom="3sp"
                     android:paddingEnd="3sp"
                     android:paddingStart="3sp"

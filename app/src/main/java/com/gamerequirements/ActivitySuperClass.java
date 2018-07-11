@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.SaveCofig.MainActivityConfig;
 
 /**
@@ -77,7 +76,7 @@ public class ActivitySuperClass extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
         });
-
+/*
         myToolbar.findViewById(R.id.Notify).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -87,7 +86,7 @@ public class ActivitySuperClass extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
 
             }
-        });
+        });*/
     }
 
     @Override
