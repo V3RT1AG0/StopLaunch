@@ -37,7 +37,8 @@
             android:name=".Canyourunit.CanYouRunIt"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".SaveCofig.SelectConfig" />
+        <activity android:name=".SaveCofig.SelectConfig"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".SaveCofig.MainActivityConfig" />
         <activity
             android:name=".Notification.NotificationActivity"
@@ -50,7 +51,8 @@
             android:theme="@style/MyTheme"
             android:name=".TabbedActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SaveCofig.SaveFirstConfig" />
+        <activity android:name=".SaveCofig.SaveFirstConfig"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".Blog.BlogContent" />
         <activity android:name=".Blog.BlogListActivity"></activity>
     </application>

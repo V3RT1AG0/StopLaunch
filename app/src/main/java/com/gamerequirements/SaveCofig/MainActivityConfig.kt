@@ -10,10 +10,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.Switch
 import com.gamerequirements.MyApplication
 import com.gamerequirements.R
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -54,7 +52,7 @@ class MainActivityConfig : AppCompatActivity()
 
         }
 
-        val myswitch = findViewById<Switch>(R.id.notificationSwitch)
+        /*val myswitch = findViewById<Switch>(R.id.notificationSwitch)
         myswitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked)
@@ -70,7 +68,7 @@ class MainActivityConfig : AppCompatActivity()
             }
         }
 
-        myswitch.isChecked = pref.getBoolean("notification_toggle", true)
+        myswitch.isChecked = pref.getBoolean("notification_toggle", true)*/
     }
 
     override fun onResume()

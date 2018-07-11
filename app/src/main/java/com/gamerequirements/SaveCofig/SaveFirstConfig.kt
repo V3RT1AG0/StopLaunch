@@ -2,6 +2,7 @@ package com.gamerequirements.SaveCofig
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -27,8 +28,9 @@ class SaveFirstConfig : AppCompatActivity()
     var RAMlist = ArrayList<Information>()
     var CPUspinner: SearchableSpinner? = null
     var GPUspinner: SearchableSpinner? = null
-    var RAMspinner: com.toptoche.searchablespinnerlibrary.SearchableSpinner? = null
+    var RAMspinner: SearchableSpinner? = null
     var progressView: CircularProgressView? = null
+
     // var toggle: Switch? = null
     var sharedPrefrence: SharedPreferences? = null
     var ContentLL: LinearLayout? = null
@@ -49,6 +51,9 @@ class SaveFirstConfig : AppCompatActivity()
         progressView = findViewById(R.id.progress_view)
         progressView?.startAnimation()
         ContentLL = findViewById(R.id.ContentLL)
+        CPUspinner!!.getBackground().setColorFilter(getResources().getColor(R.color.plainWhite), PorterDuff.Mode.SRC_ATOP)
+        GPUspinner!!.getBackground().setColorFilter(getResources().getColor(R.color.plainWhite), PorterDuff.Mode.SRC_ATOP)
+        RAMspinner!!.getBackground().setColorFilter(getResources().getColor(R.color.plainWhite), PorterDuff.Mode.SRC_ATOP)
         var CPUname: String? = null
         var GPUname: String? = null
         var RAMname: String? = null

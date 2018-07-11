@@ -71,6 +71,9 @@ class ConfigAdapter(val info: MutableList<ConfigInfo>, var context: Context = My
         editor.putString("CPUkey", configInfo.CPUid.toString())
         editor.putString("GPUkey", configInfo.GPUid.toString())
         editor.putString("RAMkey", configInfo.RAMid.toString())
+        editor.putString("CPUname", configInfo.CPUname)
+        editor.putString("GPUname", configInfo.GPUname)
+        editor.putString("RAMname", configInfo.RAMname)
         editor.putBoolean("StoredConfigEnabled", true)
         editor.commit()
     }

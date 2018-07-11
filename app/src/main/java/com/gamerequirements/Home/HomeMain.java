@@ -1,5 +1,8 @@
 package com.gamerequirements.Home;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,6 +27,7 @@ import com.gamerequirements.Blog.Information;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.SaveCofig.MainActivityConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +96,15 @@ public class HomeMain extends Fragment
         recyclerView.setAdapter(blogAdapter);
 
 
+        getActivity().findViewById(R.id.View_all_config).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(getActivity(), MainActivityConfig.class));
+            }
+        });
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
@@ -112,7 +126,39 @@ public class HomeMain extends Fragment
         });
         mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
 
+
         VolleyOperation();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Log.d("onresume","refreshed");
+        displayEnabledConfig();
+    }
+
+    void displayEnabledConfig(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
+
+        if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
+        {
+            String CPUname = sharedPreferences.getString("CPUname", null),
+                    GPUname= sharedPreferences.getString("GPUname", null),
+                    RAMname= sharedPreferences.getString("RAMname", null);
+            TextView cpu = getActivity().findViewById(R.id.CPU_text);
+            cpu.setText("CPU: "+CPUname);
+            TextView gpu = getActivity().findViewById(R.id.GPU_text);
+            gpu.setText("GPU: "+GPUname);
+            TextView ram  = getActivity().findViewById(R.id.RAM_text);
+            ram.setText("RAM: "+RAMname);
+            getActivity().findViewById(R.id.noConfig).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.configLL).setVisibility(View.VISIBLE);
+        }
+        else{
+            getActivity().findViewById(R.id.noConfig).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.configLL).setVisibility(View.GONE);
+        }
     }
 
     void VolleyOperation()
