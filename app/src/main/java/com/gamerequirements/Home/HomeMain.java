@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,8 +25,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.gamerequirements.Blog.Information;
+import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
+import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.R;
 import com.gamerequirements.SaveCofig.MainActivityConfig;
 
@@ -40,11 +43,15 @@ public class HomeMain extends Fragment
 {
 
     private final String latestBlogPostsUrl = MyApplication.getBlogUrl() + "/wp-json/wp/v2/posts";
-    List<Information> bloglist;  /**This Information class is taken from Blog package**/
+    List<Information> bloglist;
+    /**
+     * This Information class is taken from Blog package
+     **/
     BlogAdapter blogAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager lmanager;
-    private final String blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&per_page=4";
+    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&per_page=4";
+    private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
 
     public HomeMain()
     {
@@ -74,16 +81,18 @@ public class HomeMain extends Fragment
         final int duration = 2000;
         final int pixelsToMove = 1300;
         final Handler mHandler = new Handler(Looper.getMainLooper());
-        final Runnable SCROLLING_RUNNABLE = new Runnable() {
+        final Runnable SCROLLING_RUNNABLE = new Runnable()
+        {
 
             @Override
-            public void run() {
+            public void run()
+            {
                 recyclerView.smoothScrollBy(pixelsToMove, 0);
                 mHandler.postDelayed(this, duration);
             }
         };
 
-
+        getActivity().findViewById(R.id.new_games_added);
 
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
@@ -105,17 +114,22 @@ public class HomeMain extends Fragment
             }
         });
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
             @Override
-            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(final RecyclerView recyclerView, int dx, int dy)
+            {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastItem = lmanager.findLastCompletelyVisibleItemPosition();
-                if(lastItem ==  lmanager.getItemCount()-1){
+                if (lastItem == lmanager.getItemCount() - 1)
+                {
                     mHandler.removeCallbacks(SCROLLING_RUNNABLE);
                     Handler postHandler = new Handler();
-                    postHandler.postDelayed(new Runnable() {
+                    postHandler.postDelayed(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             recyclerView.setAdapter(null);
                             recyclerView.setAdapter(blogAdapter);
                             mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
@@ -128,34 +142,100 @@ public class HomeMain extends Fragment
 
 
         VolleyOperation();
+        volleyRequestForGamesCount();
+    }
+
+    private void volleyRequestForGamesCount()
+    {
+        CustomRequest customRequest = new CustomRequest(Request.Method.GET, gamesStatusURL, null, new Response.Listener<JSONObject>()
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                handleGamesStatusResponse(response);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+            }
+        });
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity()).getRequestQueue();
+        requestqueue.add(customRequest);
+    }
+
+    private void handleGamesStatusResponse(JSONObject response)
+    {
+
+        try
+        {
+            final SharedPreferences sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
+            JSONObject obj = response.getJSONObject("result");
+            int last_added_game_count = obj.getInt("last_added_game_count");
+            final String last_updated = obj.getString("last_inserted_date");
+            String totol_game_count = obj.getString("total_game_count");
+            TextView count = getActivity().findViewById(R.id.games_count);
+            TextView last_updated_TV = getActivity().findViewById(R.id.last_updated);
+            TextView last_added_games_count = getActivity().findViewById(R.id.new_games_added);
+            final LinearLayout newgamesAddedLL = getActivity().findViewById(R.id.new_games_added_LL);
+            count.setText(totol_game_count);
+            last_updated_TV.setText("Last updated: " + last_updated);
+            last_added_games_count.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    sharedPrefs.edit().putString("lastUpdated", last_updated).commit();
+                    newgamesAddedLL.setVisibility(View.GONE);
+                    startActivity(new Intent(getActivity(), NotificationActivity.class));
+                }
+            });
+
+            String storedlasUpdated = sharedPrefs.getString("lastUpdated", "0");
+            if (storedlasUpdated.equals(last_updated))
+                return;
+
+            if (last_added_game_count == 0)
+                last_added_games_count.setText(last_added_game_count + " game added");
+            else
+                last_added_games_count.setText(last_added_game_count + " games added");
+            newgamesAddedLL.setVisibility(View.VISIBLE);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        Log.d("onresume","refreshed");
+        Log.d("onresume", "refreshed");
         displayEnabledConfig();
     }
 
-    void displayEnabledConfig(){
+    void displayEnabledConfig()
+    {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
         {
             String CPUname = sharedPreferences.getString("CPUname", null),
-                    GPUname= sharedPreferences.getString("GPUname", null),
-                    RAMname= sharedPreferences.getString("RAMname", null);
+                    GPUname = sharedPreferences.getString("GPUname", null),
+                    RAMname = sharedPreferences.getString("RAMname", null);
             TextView cpu = getActivity().findViewById(R.id.CPU_text);
-            cpu.setText("CPU: "+CPUname);
+            cpu.setText("CPU: " + CPUname);
             TextView gpu = getActivity().findViewById(R.id.GPU_text);
-            gpu.setText("GPU: "+GPUname);
-            TextView ram  = getActivity().findViewById(R.id.RAM_text);
-            ram.setText("RAM: "+RAMname);
+            gpu.setText("GPU: " + GPUname);
+            TextView ram = getActivity().findViewById(R.id.RAM_text);
+            ram.setText("RAM: " + RAMname);
             getActivity().findViewById(R.id.noConfig).setVisibility(View.GONE);
             getActivity().findViewById(R.id.configLL).setVisibility(View.VISIBLE);
-        }
-        else{
+        } else
+        {
             getActivity().findViewById(R.id.noConfig).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.configLL).setVisibility(View.GONE);
         }

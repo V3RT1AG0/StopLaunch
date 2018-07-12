@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gamerequirements.Blog.BlogActivityMain;
@@ -28,7 +27,6 @@ public class TabbedActivity extends AppCompatActivity
 {
 
     Toolbar toolbar;
-    TextView notification_badge;
     boolean doubleBackToExitPressedOnce = false;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -93,7 +91,7 @@ public class TabbedActivity extends AppCompatActivity
                 }
         );
 
-
+        AppRater.setDarkTheme();
         AppRater.app_launched(this);
         try
         {

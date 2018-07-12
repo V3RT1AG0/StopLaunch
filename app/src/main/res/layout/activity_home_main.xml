@@ -45,6 +45,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/games_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
@@ -61,10 +62,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/new_games_added_LL"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-
                 android:background="@color/colorAccent"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -74,12 +76,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right"
-                    android:text="10 new games added"
                     android:textSize="15sp" />
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/last_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
