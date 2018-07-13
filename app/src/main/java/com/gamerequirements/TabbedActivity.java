@@ -100,9 +100,13 @@ public class TabbedActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
+
     }
 
-
+    public ViewPager getmViewPager()
+    {
+        return mViewPager;
+    }
 
     Intent getManufacturerIntent()
     {

@@ -24,6 +24,7 @@ import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
@@ -311,5 +312,12 @@ public class BlogActivityMain extends Fragment
         }
     }
 
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        Log.d("visibility", String.valueOf(visible)+Singelton.getYouTubePlayer());
+        if (!visible && Singelton.getYouTubePlayer() != null)
+            Singelton.getYouTubePlayer().pause();
+    }
 }
 

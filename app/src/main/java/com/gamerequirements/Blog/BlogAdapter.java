@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
@@ -106,6 +108,7 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
                 else
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.subtitle));
                 Log.d("triggered2", bloginfo.imgvideurl);
+                //Singelton.setYouTubePlayer(holder1.youtubePlayer);
                 holder1.cueVideo(bloginfo.imgvideurl);
                 createCategoryandTagButtons(bloginfo,holder1);
                 break;
@@ -229,12 +232,25 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
                                                      {
                                                          youtubePlayer = initializedYouTubePlayer;
                                                          youtubePlayer.cueVideo(currentVideoId, 0);
+
+                                                     }
+
+                                                     @Override
+                                                     public void onStateChange(@NonNull PlayerConstants.PlayerState state)
+                                                     {
+                                                         super.onStateChange(state);
+                                                         Log.d("visibility",state.toString());
+                                                         if(state== PlayerConstants.PlayerState.PLAYING)
+                                                             Singelton.setYouTubePlayer(youtubePlayer);
+
+
                                                      }
                                                  });
                                              }
                                          }
                     , true
             );
+
         }
 
         void cueVideo(String videoId)

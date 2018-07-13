@@ -53,7 +53,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     GameListAdapter gameListAdapter;
     GameListAdapter searchAdapter;
     RecyclerView recyclerView, filteredRecyclerView;
-    FloatingSearchView searchView;
+    public static FloatingSearchView searchView;
     boolean doubleBackToExitPressedOnce = false;
     CircularProgressView progressView;
     TextView notificationCounttextview;
@@ -119,6 +119,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
         searchView = getActivity().findViewById(R.id.floating_search_view);
         searchView.setOnQueryChangeListener(this);
+
         //searchView.setSearchFocused(true);
 
         AddGenresToLayoutDynamically();

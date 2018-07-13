@@ -20,13 +20,15 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/home_blog_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="320dp"
+            android:layout_marginTop="10dp" />
 
 
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gameInfoCard"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorPrimary"
             card_view:cardCornerRadius="4sp">
 
@@ -49,7 +51,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
-                    android:text="6000"
                     android:textSize="40sp" />
 
                 <TextView
@@ -63,13 +64,13 @@
 
             <LinearLayout
                 android:id="@+id/new_games_added_LL"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorAccent"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/new_games_added"
@@ -100,9 +101,11 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/View_all_config"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:backgroundTint="@color/colorPrimary"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
@@ -111,14 +114,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
                 android:orientation="vertical">
 
                 <TextView
+                    android:drawableRight="@drawable/ic_keyboard_arrow_right"
+                    android:textColor="@color/Content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Current Config" />
+                    android:layout_margin="10dp"
+                    android:text="CURRENT CONFIG" />
 
                 <LinearLayout
                     android:id="@+id/configLL"
@@ -126,40 +132,86 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/CPU_text"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp" />
+                        android:layout_margin="10sp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/GPU_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp" />
+                        <ImageView
+                            android:layout_width="25sp"
+                            android:layout_height="25sp"
+                            android:src="@drawable/cpu_processor"
+                            android:tint="@color/colorAccent" />
 
-                    <TextView
-                        android:id="@+id/RAM_text"
+                        <TextView
+                            android:id="@+id/CPU_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:paddingStart="45dp"
+                            android:textSize="14sp"
+
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp" />
+                        android:layout_margin="10sp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:src="@drawable/graphics_card"
+                            android:tint="@color/colorAccent" />
+
+                        <TextView
+                            android:id="@+id/GPU_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:paddingStart="45dp"
+                            android:textSize="14sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:src="@drawable/ram"
+                            android:tint="@color/colorAccent" />
+
+                        <TextView
+                            android:id="@+id/RAM_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:paddingStart="45dp"
+                            android:textSize="14sp" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
-                <TextView
-                    android:gravity="center"
-                    android:id="@+id/noConfig"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="No Config Enabled"/>
 
                 <TextView
-                    android:id="@+id/View_all_config"
+                    android:id="@+id/noConfig"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="View all" />
+                    android:layout_margin="5dp"
+                    android:text="No Config Enabled"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

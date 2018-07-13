@@ -96,9 +96,10 @@
                 app:floatingSearch_close_search_on_keyboard_dismiss="true"
                 app:floatingSearch_dimBackground="false"
                 app:floatingSearch_leftActionMode="showSearch"
-                app:floatingSearch_searchHint="Enter game title..."
                 app:floatingSearch_showSearchKey="false"
                 app:floatingSearch_suggestionsListAnimDuration="250" />
+
+
 
         </LinearLayout>
 

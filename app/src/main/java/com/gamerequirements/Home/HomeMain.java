@@ -30,7 +30,10 @@ import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.R;
+import com.gamerequirements.Requirements.GameListActivity;
 import com.gamerequirements.SaveCofig.MainActivityConfig;
+import com.gamerequirements.Singelton;
+import com.gamerequirements.TabbedActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +47,15 @@ public class HomeMain extends Fragment
 
     private final String latestBlogPostsUrl = MyApplication.getBlogUrl() + "/wp-json/wp/v2/posts";
     List<Information> bloglist;
+    static RecyclerView.OnScrollListener onScrollListener;
     /**
      * This Information class is taken from Blog package
      **/
-    BlogAdapter blogAdapter;
-    RecyclerView recyclerView;
-    LinearLayoutManager lmanager;
+    static Handler mHandler;
+    static Runnable SCROLLING_RUNNABLE;
+    static BlogAdapter blogAdapter;
+    static RecyclerView recyclerView;
+    static LinearLayoutManager lmanager;
     private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&per_page=4";
     private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
 
@@ -78,21 +84,8 @@ public class HomeMain extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
-        final int duration = 2000;
-        final int pixelsToMove = 1300;
-        final Handler mHandler = new Handler(Looper.getMainLooper());
-        final Runnable SCROLLING_RUNNABLE = new Runnable()
-        {
 
-            @Override
-            public void run()
-            {
-                recyclerView.smoothScrollBy(pixelsToMove, 0);
-                mHandler.postDelayed(this, duration);
-            }
-        };
 
-        getActivity().findViewById(R.id.new_games_added);
 
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
@@ -100,9 +93,19 @@ public class HomeMain extends Fragment
         blogAdapter = new BlogAdapter(bloglist, this.getLifecycle());
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(recyclerView);
+        recyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+
+        getActivity().findViewById(R.id.gameInfoCard).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                ((TabbedActivity)getActivity()).getmViewPager().setCurrentItem(2);
+            }
+        });
 
 
         getActivity().findViewById(R.id.View_all_config).setOnClickListener(new View.OnClickListener()
@@ -114,7 +117,28 @@ public class HomeMain extends Fragment
             }
         });
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+
+setUpSlider();
+        VolleyOperation();
+        volleyRequestForGamesCount();
+    }
+
+    static void setUpSlider()
+    {
+        final int duration = 2000;
+        final int pixelsToMove = 1300;
+        mHandler = new Handler(Looper.getMainLooper());
+        SCROLLING_RUNNABLE = new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                recyclerView.smoothScrollBy(pixelsToMove, 0);
+                mHandler.postDelayed(this, duration);
+            }
+        };
+        onScrollListener = new RecyclerView.OnScrollListener()
         {
             @Override
             public void onScrolled(final RecyclerView recyclerView, int dx, int dy)
@@ -137,12 +161,9 @@ public class HomeMain extends Fragment
                     }, 5000);
                 }
             }
-        });
+        };
+        recyclerView.addOnScrollListener(onScrollListener);
         mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
-
-
-        VolleyOperation();
-        volleyRequestForGamesCount();
     }
 
     private void volleyRequestForGamesCount()
@@ -176,6 +197,7 @@ public class HomeMain extends Fragment
             int last_added_game_count = obj.getInt("last_added_game_count");
             final String last_updated = obj.getString("last_inserted_date");
             String totol_game_count = obj.getString("total_game_count");
+            GameListActivity.searchView.setSearchHint("Search from "+totol_game_count+" titles");
             TextView count = getActivity().findViewById(R.id.games_count);
             TextView last_updated_TV = getActivity().findViewById(R.id.last_updated);
             TextView last_added_games_count = getActivity().findViewById(R.id.new_games_added);
@@ -214,7 +236,13 @@ public class HomeMain extends Fragment
     {
         super.onResume();
         Log.d("onresume", "refreshed");
+
         displayEnabledConfig();
+    }
+
+    public static void cancelSlider(){
+            mHandler.removeCallbacks(SCROLLING_RUNNABLE);
+            recyclerView.removeOnScrollListener(onScrollListener);
     }
 
     void displayEnabledConfig()
@@ -227,11 +255,11 @@ public class HomeMain extends Fragment
                     GPUname = sharedPreferences.getString("GPUname", null),
                     RAMname = sharedPreferences.getString("RAMname", null);
             TextView cpu = getActivity().findViewById(R.id.CPU_text);
-            cpu.setText("CPU: " + CPUname);
+            cpu.setText(CPUname);
             TextView gpu = getActivity().findViewById(R.id.GPU_text);
-            gpu.setText("GPU: " + GPUname);
+            gpu.setText(GPUname);
             TextView ram = getActivity().findViewById(R.id.RAM_text);
-            ram.setText("RAM: " + RAMname);
+            ram.setText(RAMname);
             getActivity().findViewById(R.id.noConfig).setVisibility(View.GONE);
             getActivity().findViewById(R.id.configLL).setVisibility(View.VISIBLE);
         } else
@@ -299,6 +327,14 @@ public class HomeMain extends Fragment
             blogAdapter.notifyDataSetChanged();
 
         }
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        Log.d("visibility2", String.valueOf(visible)+ Singelton.getYouTubePlayer());
+        if (!visible && Singelton.getYouTubePlayer() != null)
+            Singelton.getYouTubePlayer().pause();
     }
 
 

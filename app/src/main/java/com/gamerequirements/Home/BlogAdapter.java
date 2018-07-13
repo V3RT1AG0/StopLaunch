@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.gamerequirements.Blog.Information;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Singelton;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
@@ -154,6 +156,22 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                                      {
                                                          youtubePlayer = initializedYouTubePlayer;
                                                          youtubePlayer.cueVideo(currentVideoId, 0);
+
+                                                     }
+
+                                                     @Override
+                                                     public void onStateChange(@NonNull PlayerConstants.PlayerState state)
+                                                     {
+                                                         super.onStateChange(state);
+                                                         Log.d("visibility2",state.toString());
+                                                         if(state== PlayerConstants.PlayerState.BUFFERING)
+                                                             HomeMain.cancelSlider();
+                                                         else if(state== PlayerConstants.PlayerState.PAUSED)
+                                                             HomeMain.setUpSlider();
+
+                                                         if(state== PlayerConstants.PlayerState.PLAYING)
+                                                             Singelton.setYouTubePlayer(youtubePlayer);
+
                                                      }
                                                  });
                                              }
