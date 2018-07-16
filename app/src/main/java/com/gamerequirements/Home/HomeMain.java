@@ -56,7 +56,7 @@ public class HomeMain extends Fragment
     static BlogAdapter blogAdapter;
     static RecyclerView recyclerView;
     static LinearLayoutManager lmanager;
-    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&per_page=4";
+    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
     private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
 
     public HomeMain()
@@ -302,14 +302,15 @@ setUpSlider();
                 int id = jsonObject.getInt("id");
                 int category = jsonObject.getJSONArray("categories").getInt(0);
                 String title = jsonObject.getJSONObject("title").getString("rendered");
-                String content = jsonObject.getJSONObject("content").getString("rendered");
+               // String content = jsonObject.getJSONObject("content").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                 String videoimgurl;
                 Log.d("videoimageurl", title + category);
                 if (category == 5)
                 {
-                    Log.d("videoimageurl", content.indexOf("[") + "");
-                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                   // Log.d("videoimageurl", content.indexOf("[") + "");
+                   // videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                   videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
                 } else
                 {
                     Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());

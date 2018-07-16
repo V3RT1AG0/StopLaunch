@@ -64,7 +64,7 @@ public class BlogActivityMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
 
         cats = new SparseArray();
         tags = new SparseArray();
@@ -263,9 +263,10 @@ public class BlogActivityMain extends Fragment
                         Log.d("videoimageurl", title + category);
                         if (category == 5)
                         {
-                            String content = jsonObject.getJSONObject("content").getString("rendered");
-                            Log.d("videoimageurl", content.indexOf("[") + "");
-                            videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                            //String content = jsonObject.getJSONObject("content").getString("rendered");
+                            //Log.d("videoimageurl", content.indexOf("[") + "");
+                            //videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                            videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
                         } else
                         {
                             Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());

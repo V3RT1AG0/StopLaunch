@@ -1,6 +1,7 @@
 package com.gamerequirements.SaveCofig
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -15,9 +16,9 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.gamerequirements.JSONCustom.CustomVolleyRequest
 import com.gamerequirements.MyApplication
 import com.gamerequirements.R
+import com.gamerequirements.TabbedActivity
 import com.github.rahatarmanahmed.cpv.CircularProgressView
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import org.json.JSONArray
 
@@ -77,22 +78,19 @@ class SaveFirstConfig : AppCompatActivity()
                 }
                 val gson = Gson()
                 var ConfigList = ArrayList<ConfigInfo>()
-                val config: String? = sharedPrefrence!!.getString("Config", null)
-                val type = object : TypeToken<ArrayList<ConfigInfo>>()
-                {
-
-                }.type
-                if (config != null)
-                {
-                    ConfigList = gson.fromJson(config, type)
-                }
-
-                //val ConfigList = ArrayList<ConfigInfo>()
-                ConfigList.add(ConfigInfo(CPUname!!, CPUid!!, GPUname!!, GPUid!!, RAMname!!, RAMid!!, false))
+                ConfigList.add(ConfigInfo(CPUname!!, CPUid!!, GPUname!!, GPUid!!, RAMname!!, RAMid!!, true))
                 val json = gson.toJson(ConfigList)
                 Log.d("OKButton Pressed", json.toString())
                 editor.putString("Config", json)
+                editor.putString("CPUkey", CPUid.toString())
+                editor.putString("GPUkey", GPUid.toString())
+                editor.putString("RAMkey", RAMid.toString())
+                editor.putString("CPUname", CPUname)
+                editor.putString("GPUname", GPUname)
+                editor.putString("RAMname", RAMname)
+                editor.putBoolean("StoredConfigEnabled", true)
                 editor.commit()
+                startActivity( Intent(v!!.context, TabbedActivity::class.java))
                 finish()
             }
 

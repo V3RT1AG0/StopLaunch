@@ -6,29 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop= "100dp"
     android:background="@color/colorPrimaryDark"
     tools:context="com.gamerequirements.SaveCofig.SelectConfig">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        >
 
-    <TextView android:layout_height="match_parent"
-        android:layout_width="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/BackGroundColor"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        />
-    </android.support.v7.widget.Toolbar>
     <!--<Spinner
         android:id="@+id/myCpu"
         android:layout_width="match_parent"
@@ -46,12 +28,24 @@
         app:cpv_animAutostart="true"
         app:cpv_indeterminate="true" />
 
+
+
+
     <LinearLayout
         android:id="@+id/ContentLL"
         android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/plainWhite"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Your System Hardware Configuration"/>
 
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
@@ -80,7 +74,7 @@
             android:gravity="center_horizontal"
             app:hintText="GPU"
             />
-<!--TODO add spinner as a module and change layout-->
+        <!--TODO add spinner as a module and change layout-->
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/myRam"
             android:layout_width="match_parent"
@@ -93,16 +87,27 @@
             android:gravity="center_horizontal"
             app:hintText="RAM"/>
 
-    <Button
-        android:id="@+id/SaveConfig"
-        android:text="@string/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/plainWhite"
-        android:backgroundTint="@color/colorAccent"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"/>
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/SaveConfig"
+            android:text="@string/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/plainWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="@color/plainWhite"
+            android:textAlignment="center"
+            android:text="Skip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+
 
 </LinearLayout>
