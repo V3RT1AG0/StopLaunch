@@ -61,8 +61,9 @@
             <include layout="@layout/horizontal_scroll_view" />
 
             <LinearLayout
+                android:gravity="end|center_vertical"
                 android:id="@+id/filterLL"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -73,6 +74,10 @@
                     android:tint="@color/colorAccent" />
 
                 <TextView
+                    android:text="Random"
+                    android:paddingStart="10sp"
+                    android:paddingEnd="15sp"
+                    android:id="@+id/selectedSort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 

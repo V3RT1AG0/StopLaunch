@@ -267,11 +267,13 @@ public class BlogActivityMain extends Fragment
                             //Log.d("videoimageurl", content.indexOf("[") + "");
                             //videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
                             videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
-                        } else
+                        } else if (category == 2)
                         {
                             Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
                             videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
                         }
+                        else
+                            continue;
                         bloglist.add(new Information(id, title, subtitle, videoimgurl, category,tags));
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.GONE);

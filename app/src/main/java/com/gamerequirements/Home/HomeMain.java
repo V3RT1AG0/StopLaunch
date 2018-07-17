@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class HomeMain extends Fragment
     /**
      * This Information class is taken from Blog package
      **/
+    private static int width;
     static Handler mHandler;
     static Runnable SCROLLING_RUNNABLE;
     static BlogAdapter blogAdapter;
@@ -85,8 +87,6 @@ public class HomeMain extends Fragment
         super.onActivityCreated(savedInstanceState);
 
 
-
-
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
         lmanager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -103,7 +103,7 @@ public class HomeMain extends Fragment
             @Override
             public void onClick(View view)
             {
-                ((TabbedActivity)getActivity()).getmViewPager().setCurrentItem(2);
+                ((TabbedActivity) getActivity()).getmViewPager().setCurrentItem(2);
             }
         });
 
@@ -116,17 +116,22 @@ public class HomeMain extends Fragment
                 startActivity(new Intent(getActivity(), MainActivityConfig.class));
             }
         });
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        width = displayMetrics.widthPixels;
 
-
-setUpSlider();
+        setUpSlider();
         VolleyOperation();
         volleyRequestForGamesCount();
     }
 
     static void setUpSlider()
     {
+
+
         final int duration = 2000;
-        final int pixelsToMove = 1300;
+        final int pixelsToMove = width-8; //1300;
+        //Log.d("width",recyclerView.getMeasuredWidth()+""+recyclerView.getWidth()+" "+width);
         mHandler = new Handler(Looper.getMainLooper());
         SCROLLING_RUNNABLE = new Runnable()
         {
@@ -156,14 +161,14 @@ setUpSlider();
                         {
                             recyclerView.setAdapter(null);
                             recyclerView.setAdapter(blogAdapter);
-                            mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
+                            mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
                         }
-                    }, 5000);
+                    }, 7000);
                 }
             }
         };
         recyclerView.addOnScrollListener(onScrollListener);
-        mHandler.postDelayed(SCROLLING_RUNNABLE, 5000);
+        mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
     }
 
     private void volleyRequestForGamesCount()
@@ -197,7 +202,7 @@ setUpSlider();
             int last_added_game_count = obj.getInt("last_added_game_count");
             final String last_updated = obj.getString("last_inserted_date");
             String totol_game_count = obj.getString("total_game_count");
-            GameListActivity.searchView.setSearchHint("Search from "+totol_game_count+" titles");
+            GameListActivity.searchView.setSearchHint("Search from " + totol_game_count + " titles");
             TextView count = getActivity().findViewById(R.id.games_count);
             TextView last_updated_TV = getActivity().findViewById(R.id.last_updated);
             TextView last_added_games_count = getActivity().findViewById(R.id.new_games_added);
@@ -240,9 +245,10 @@ setUpSlider();
         displayEnabledConfig();
     }
 
-    public static void cancelSlider(){
-            mHandler.removeCallbacks(SCROLLING_RUNNABLE);
-            recyclerView.removeOnScrollListener(onScrollListener);
+    public static void cancelSlider()
+    {
+        mHandler.removeCallbacks(SCROLLING_RUNNABLE);
+        recyclerView.removeOnScrollListener(onScrollListener);
     }
 
     void displayEnabledConfig()
@@ -302,20 +308,21 @@ setUpSlider();
                 int id = jsonObject.getInt("id");
                 int category = jsonObject.getJSONArray("categories").getInt(0);
                 String title = jsonObject.getJSONObject("title").getString("rendered");
-               // String content = jsonObject.getJSONObject("content").getString("rendered");
+                // String content = jsonObject.getJSONObject("content").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                 String videoimgurl;
                 Log.d("videoimageurl", title + category);
                 if (category == 5)
                 {
-                   // Log.d("videoimageurl", content.indexOf("[") + "");
-                   // videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
-                   videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
-                } else
+                    // Log.d("videoimageurl", content.indexOf("[") + "");
+                    // videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                    videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
+                } else if (category == 2)
                 {
                     Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
                     videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
-                }
+                } else
+                    continue;
                 bloglist.add(new Information(id, title, subtitle, videoimgurl, category));
             }
         } catch (JSONException e)
@@ -331,9 +338,10 @@ setUpSlider();
     }
 
     @Override
-    public void setMenuVisibility(final boolean visible) {
+    public void setMenuVisibility(final boolean visible)
+    {
         super.setMenuVisibility(visible);
-        Log.d("visibility2", String.valueOf(visible)+ Singelton.getYouTubePlayer());
+        Log.d("visibility2", String.valueOf(visible) + Singelton.getYouTubePlayer());
         if (!visible && Singelton.getYouTubePlayer() != null)
             Singelton.getYouTubePlayer().pause();
     }

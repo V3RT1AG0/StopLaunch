@@ -70,7 +70,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     final List<Information> filteredList = new ArrayList<>();
     LinearLayoutManager lmanager;
     EndlessRecyclerView endlessRecyclerView;
-    Button selectedbutton;
+    View selectedview;
     String genre = "any", sortBy = null, orderBy = "rand";
 
     public static GameListActivity newInstance()
@@ -126,16 +126,20 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         searchView.setOnQueryChangeListener(this);
 
         //searchView.setSearchFocused(true);
-        getActivity().findViewById(R.id.random).setOnClickListener(new View.OnClickListener()
+       /* ImageView random = getActivity().findViewById(R.id.random);
+        selectedview = random;
+        random.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
+        random.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 genre = "any";
+                setEnabledCapsuleBackgound(view);
                 resetRecyclerViewData();
                 VolleyOperation();
             }
-        });
+        });*/
 
         getActivity().findViewById(R.id.filterLL).setOnClickListener(new View.OnClickListener()
         {
@@ -155,6 +159,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     }
 
+    void setEnabledCapsuleBackgound(View v){
+        selectedview.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_start));
+        selectedview = v;
+        v.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -163,6 +173,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
                 orderBy=data.getStringExtra("order");
                 sortBy=data.getStringExtra("sort");
+                TextView selectedSort = getActivity().findViewById(R.id.selectedSort);
+                selectedSort.setText(data.getStringExtra("label"));
                 Log.d("activityresult",sortBy+","+orderBy);
                 resetRecyclerViewData();
                 VolleyOperation();
@@ -175,7 +187,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     private void AddGenresToLayoutDynamically()
     {
-        String[] genres = {"Action", "Adventure", "Arcade", "Casual", "Fighting", "Management", "Tabletop", "MOBA", "Online", "Platformer", "Puzzler", "Racing", "RPG", "Sandbox", "Shooter", "Sim", "Stealth", "Sport", "Strategy"};
+        String[] genres = {"All","Action", "Adventure", "Arcade", "Casual", "Fighting", "Management", "Tabletop", "MOBA", "Online", "Platformer", "Puzzler", "Racing", "RPG", "Sandbox", "Shooter", "Sim", "Stealth", "Sport", "Strategy"};
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         for (String genre : genres)
@@ -196,6 +208,11 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                     genreButtonPressed((Button) view);
                 }
             });
+            if(genre.equals("All"))
+            {
+                selectedview = button;
+                button.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
+            }
             genreLL.addView(button);
         }
     }
@@ -227,13 +244,13 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     void genreButtonPressed(Button button)
     {
 
-        if (button == selectedbutton)
+        if (button == selectedview)
         {
             return;
         } else
         {
-            selectedbutton = button;
-            genre = selectedbutton.getText().toString();
+            genre = button.getText().toString();
+            setEnabledCapsuleBackgound(button);
             resetRecyclerViewData();
             VolleyOperation();
         }
@@ -307,12 +324,18 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("games");
         HashMap<String, String> params = new HashMap<>();
-        JSONArray jsonArray = new JSONArray(idArrayList);
+       JSONArray jsonArray = new JSONArray(idArrayList);
         if (sortBy != null)
             params.put("sortby", sortBy);
         params.put("orderby", orderBy);
         params.put("genre", genre);
         params.put("list", jsonArray.toString());
+       /*String finalurl = null;
+        if (sortBy != null)
+            finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy+"&sortby="+sortBy;
+        else
+            finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy;
+       */
         Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
         Log.d("array", params.toString());
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.POST, gamelisturl, params, new Response.Listener<JSONObject>()

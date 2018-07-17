@@ -62,6 +62,18 @@ class SaveFirstConfig : AppCompatActivity()
         var GPUid: Int? = null
         var RAMid: Int? = null
         // toggle = findViewById(R.id.toggle) as Switch
+
+        val skip:TextView = findViewById(R.id.skip)
+        skip.visibility = View.VISIBLE
+        skip.setOnClickListener(object : View.OnClickListener
+        {
+            override fun onClick(v: View?)
+            {
+                startActivity( Intent(v!!.context, TabbedActivity::class.java))
+            }}
+        )
+
+
         loadAllList()
         sharedPrefrence = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         val editor = sharedPrefrence!!.edit()

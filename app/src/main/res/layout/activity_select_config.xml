@@ -99,6 +99,8 @@
             android:layout_gravity="center_horizontal"/>
 
         <TextView
+            android:visibility="gone"
+            android:id="@+id/skip"
             android:layout_marginTop="5dp"
             android:textColor="@color/plainWhite"
             android:textAlignment="center"

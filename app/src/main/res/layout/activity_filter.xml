@@ -9,6 +9,9 @@
     tools:context="com.gamerequirements.Requirements.FilterActivity">
 
     <TextView
+        android:layout_marginTop="20dp"
+        android:textSize="15sp"
+        android:paddingStart="20sp"
         android:text="Sort by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -17,79 +20,73 @@
         android:id="@+id/orderBy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@color/colorPrimary">
 
         <RadioButton
+            android:layout_marginStart="-50sp"
             android:id="@+id/random"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
             android:checked="false"
             android:paddingStart="16dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
             android:text="Random"
             android:textSize="20sp" />
 
         <RadioButton
-            android:id="@+id/title"
+            android:layout_marginStart="-50sp"
+            android:id="@+id/titleAsc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
             android:paddingStart="16dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:text="Title"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:text="Title - Asc"
             android:textSize="20sp" />
 
         <RadioButton
-            android:id="@+id/release_date"
+            android:layout_marginStart="-50sp"
+            android:id="@+id/titleDsc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
             android:paddingStart="16dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:text="Release Date"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:text="Title - desc"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:layout_marginStart="-50sp"
+            android:id="@+id/newest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:text="Newest"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:layout_marginStart="-50sp"
+            android:id="@+id/oldest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:text="Oldest"
             android:textSize="20sp" />
 
     </RadioGroup>
 
-    <TextView
-        android:layout_marginTop="20dp"
-        android:text="Order by"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <RadioGroup
 
-        android:id="@+id/sortBy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-        <RadioButton
-            android:id="@+id/ascending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:paddingStart="16dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:text="Ascending"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/descending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:paddingStart="16dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:text="Descending"
-            android:textSize="20sp" />
-
-    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,19 +95,22 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textStyle="bold"
             android:textSize="17sp"
-            android:id="@+id/Done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done" />
-
-        <TextView
-            android:textSize="17sp"
-            android:layout_marginStart="10sp"
             android:id="@+id/Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:text="CANCEL" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_marginEnd="10sp"
+            android:textSize="17sp"
+            android:layout_marginStart="10sp"
+            android:id="@+id/Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DONE" />
     </LinearLayout>
 
 </LinearLayout>
