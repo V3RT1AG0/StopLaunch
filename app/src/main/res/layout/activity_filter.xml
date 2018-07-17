@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="350dp"
+    android:padding="10dp"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="com.gamerequirements.Requirements.FilterActivity">
+
+    <TextView
+        android:text="Sort by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/orderBy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <RadioButton
+            android:id="@+id/random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Random"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Title"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/release_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Release Date"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="Order by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <RadioGroup
+
+        android:id="@+id/sortBy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <RadioButton
+            android:id="@+id/ascending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Ascending"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/descending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Descending"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end|bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textSize="17sp"
+            android:id="@+id/Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done" />
+
+        <TextView
+            android:textSize="17sp"
+            android:layout_marginStart="10sp"
+            android:id="@+id/Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+    </LinearLayout>
+
+</LinearLayout>

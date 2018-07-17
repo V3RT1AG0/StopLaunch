@@ -1,6 +1,8 @@
 package com.gamerequirements.Requirements;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
@@ -48,7 +51,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     //private static final String gamelisturl = MyApplication.getURL() + "loadlist";
     private static final String COUNT = "count";
     //private static final String gamelisturl = MyApplication.getURL() + "index.php";
-    String gamelisturl, notificationCountUrl, SEARCHURL, GENREURL;
+    String gamelisturl, notificationCountUrl, SEARCHURL;
     List<Information> gamelist;
     GameListAdapter gameListAdapter;
     GameListAdapter searchAdapter;
@@ -68,6 +71,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     LinearLayoutManager lmanager;
     EndlessRecyclerView endlessRecyclerView;
     Button selectedbutton;
+    String genre = "any", sortBy = null, orderBy = "rand";
 
     public static GameListActivity newInstance()
     {
@@ -87,10 +91,11 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
-        gamelisturl = MyApplication.getURL() + "gameslist";
+        //gamelisturl = MyApplication.getURL() + "api/v1/games";
+        gamelisturl = "http://192.168.31.59:5000/" + "api/v1/games";
         notificationCountUrl = MyApplication.getURL() + "newgamescount";
         SEARCHURL = MyApplication.getURL() + "gameslist/search/";
-        GENREURL = MyApplication.getURL() + "gameslistgenre/";
+       // GENREURL = MyApplication.getURL() + "gameslistgenre/";
 
 
         genreLL = getActivity().findViewById(R.id.genre_LL);
@@ -121,14 +126,51 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         searchView.setOnQueryChangeListener(this);
 
         //searchView.setSearchFocused(true);
+        getActivity().findViewById(R.id.random).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                genre = "any";
+                resetRecyclerViewData();
+                VolleyOperation();
+            }
+        });
+
+        getActivity().findViewById(R.id.filterLL).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                startActivityForResult(new Intent(getActivity(),FilterActivity.class).putExtra("Order",orderBy).putExtra("Sort",sortBy),9418);
+            }
+        });
 
         AddGenresToLayoutDynamically();
         AddOnScrollListenrerToRecyclerView();
         VolleyOperation();
-       // getNotificationCount();
+        // getNotificationCount();
 
         Log.e("Error", gamelisturl);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 9418) {
+            if(resultCode == Activity.RESULT_OK){
+
+                orderBy=data.getStringExtra("order");
+                sortBy=data.getStringExtra("sort");
+                Log.d("activityresult",sortBy+","+orderBy);
+                resetRecyclerViewData();
+                VolleyOperation();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                return;
+            }
+        }
     }
 
     private void AddGenresToLayoutDynamically()
@@ -144,7 +186,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     100
             );
-            params.setMargins(20,0,0,0);
+            params.setMargins(20, 0, 0, 0);
             button.setLayoutParams(params);
             button.setOnClickListener(new View.OnClickListener()
             {
@@ -158,7 +200,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         }
     }
 
-    void genreButtonPressed(Button button)
+   /* void genreButtonPressed(Button button)
     {
         if (selectedbutton != null)
         {
@@ -180,6 +222,22 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             VolleySearchRequest(GENREURL + genre);
         } else
             VolleyOperation();
+    }*/
+
+    void genreButtonPressed(Button button)
+    {
+
+        if (button == selectedbutton)
+        {
+            return;
+        } else
+        {
+            selectedbutton = button;
+            genre = selectedbutton.getText().toString();
+            resetRecyclerViewData();
+            VolleyOperation();
+        }
+// String url = "http://192.168.31.59:5000/gameslistgenre/"+genre;
     }
 
     private void AddOnScrollListenrerToRecyclerView()
@@ -246,17 +304,23 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     private void VolleyOperation()
     {
-
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        requestqueue.cancelAll("games");
         HashMap<String, String> params = new HashMap<>();
         JSONArray jsonArray = new JSONArray(idArrayList);
-
+        if (sortBy != null)
+            params.put("sortby", sortBy);
+        params.put("orderby", orderBy);
+        params.put("genre", genre);
         params.put("list", jsonArray.toString());
+        Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
         Log.d("array", params.toString());
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.POST, gamelisturl, params, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
             {
+                Log.d("responseMAin",response.toString());
                 handleresponse(response);
             }
         }, new Response.ErrorListener()
@@ -289,11 +353,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             }
         });
 
+        jsonObjectRequest.setTag("games");
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+
         requestqueue.add(jsonObjectRequest);
     }
 
@@ -343,6 +408,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 nexttexnupdate = false;
             } else
             {
+                Log.d("notifyItemSetChanged","triggered");
                 filteredRecyclerView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 gameListAdapter.notifyDataSetChanged();
