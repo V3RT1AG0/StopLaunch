@@ -19,12 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomRequest;
@@ -40,6 +42,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -71,7 +74,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     LinearLayoutManager lmanager;
     EndlessRecyclerView endlessRecyclerView;
     View selectedview;
-    String genre = "any", sortBy = null, orderBy = "rand";
+    String genre = "All", sortBy = null, orderBy = "rand";
 
     public static GameListActivity newInstance()
     {
@@ -91,8 +94,9 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
-        //gamelisturl = MyApplication.getURL() + "api/v1/games";
-        gamelisturl = "http://192.168.31.59:5000/" + "api/v1/games";
+        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
+         //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
+        //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
         notificationCountUrl = MyApplication.getURL() + "newgamescount";
         SEARCHURL = MyApplication.getURL() + "gameslist/search/";
        // GENREURL = MyApplication.getURL() + "gameslistgenre/";
@@ -327,9 +331,19 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
        JSONArray jsonArray = new JSONArray(idArrayList);
         if (sortBy != null)
             params.put("sortby", sortBy);
+        else
+            params.put("sortby","");
         params.put("orderby", orderBy);
         params.put("genre", genre);
-        params.put("list", jsonArray.toString());
+      //  params.put("list", jsonArray.toString());
+        JSONObject jsonObject = new JSONObject(params);
+        try
+        {
+            jsonObject.put("list",jsonArray);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
        /*String finalurl = null;
         if (sortBy != null)
             finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy+"&sortby="+sortBy;
@@ -338,7 +352,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
        */
         Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
         Log.d("array", params.toString());
-        CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.POST, gamelisturl, params, new Response.Listener<JSONObject>()
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, gamelisturl, jsonObject, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
@@ -374,7 +388,22 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                     //  Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }
-        });
+        }){
+
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+
+
+
+        };
 
         jsonObjectRequest.setTag("games");
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(

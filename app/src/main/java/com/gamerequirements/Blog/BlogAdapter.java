@@ -26,7 +26,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerInitListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.player.playerUtils.FullScreenHelper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -193,15 +192,14 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
         }
     }
 
-    private void addFullScreenOption(final YouTubePlayerView youtubePlayerView,String url)
+    private void addFullScreenOption(final YouTubePlayerView youtubePlayerView, final String url)
     {
-        final FullScreenHelper fullScreenHelper = new FullScreenHelper();
         youtubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener()
         {
             @Override
             public void onYouTubePlayerEnterFullScreen()
             {
-                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class));
+                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id",url));
                 youtubePlayerView.exitFullScreen();
             }
 
@@ -244,12 +242,12 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
         {
             super(itemView);
             youtubePlayerView = player;
-           // addFullScreenOption(youtubePlayerView);
             youtubePlayerView.initialize(new YouTubePlayerInitListener()
                                          {
                                              @Override
                                              public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer)
                                              {
+                                                 addFullScreenOption(youtubePlayerView,info.get(getAdapterPosition()).getImgvideurl());
                                                  initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener()
                                                  {
                                                      @Override

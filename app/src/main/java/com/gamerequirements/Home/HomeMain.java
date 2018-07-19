@@ -159,8 +159,9 @@ public class HomeMain extends Fragment
                         @Override
                         public void run()
                         {
-                            recyclerView.setAdapter(null);
-                            recyclerView.setAdapter(blogAdapter);
+                            recyclerView.scrollToPosition(0);
+                          //  recyclerView.setAdapter(null);
+                            //recyclerView.setAdapter(blogAdapter);
                             mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
                         }
                     }, 7000);

@@ -25,8 +25,8 @@ public class FilterActivity extends Activity
         selectedSort = getIntent().getStringExtra("Sort");
         titlasc = findViewById(R.id.titleAsc);
         titledsc = findViewById(R.id.titleDsc);
-        oldest = findViewById(R.id.oldest);
         newest = findViewById(R.id.newest);
+        oldest = findViewById(R.id.oldest);
         rand = findViewById(R.id.random);
 
         final RadioGroup radioGroup = findViewById(R.id.orderBy);
@@ -49,15 +49,15 @@ public class FilterActivity extends Activity
                 } else if (checkedId == R.id.titleDsc)
                 {
                     selectedOrder = "title";
-                    selectedSort = "dsc";
+                    selectedSort = "desc";
                 } else if (checkedId == R.id.newest)
                 {
-                    selectedOrder = "release_date";
+                    selectedOrder = "date";
                     selectedSort = "asc";
                 } else
                 {
-                    selectedOrder = "release_date";
-                    selectedSort = "dsc";
+                    selectedOrder = "date";
+                    selectedSort = "desc";
                 }
             }
 
@@ -74,11 +74,11 @@ public class FilterActivity extends Activity
             case "rand":
                 rand.setChecked(true);
                 break;
-            case "release_date":
+            case "date":
                 if (selectedSort.equals("asc"))
-                    newest.setChecked(true);
-                else
                     oldest.setChecked(true);
+                else
+                    newest.setChecked(true);
                 break;
         }
 
