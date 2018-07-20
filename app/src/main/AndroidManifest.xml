@@ -38,6 +38,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".SaveCofig.SelectConfig"
             android:theme="@style/AppTheme" />
         <activity android:name=".SaveCofig.MainActivityConfig" />
@@ -53,11 +54,15 @@
             android:name=".TabbedActivity"
             android:theme="@style/MyTheme" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".SaveCofig.SaveFirstConfig"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Blog.BlogContent" />
-        <activity android:name=".Blog.BlogListActivity" />
+        <activity android:name=".Blog.BlogContent"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Blog.BlogListActivity"
+            android:screenOrientation="portrait"/>
         <activity
+            android:screenOrientation="portrait"
             android:name=".Requirements.FilterActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Utils.YoutubeFullScreenActivity"

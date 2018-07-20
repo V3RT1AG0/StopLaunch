@@ -5,6 +5,7 @@
     android:layout_marginBottom="10dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
+    android:backgroundTint="@color/colorPrimary"
     card_view:cardCornerRadius="3dp"
     card_view:cardElevation="0dp">
 

@@ -80,7 +80,7 @@ public class Splash extends AppCompatActivity
         try
         {
             URL url;
-            String ServerURL;
+            final String ServerURL;
             String blogURL;
             //int current_dp_version;
             url = new URL("http://pastebin.com/raw/CEnw1cxr");
@@ -112,12 +112,14 @@ public class Splash extends AppCompatActivity
                     @Override
                     public void run()
                     {
+                        Toast.makeText(getBaseContext(),"Debug:"+ServerURL,Toast.LENGTH_LONG).show();
                         Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
                     }
                 });
             }
 
             in.close();
+
             Log.d("Server" + ServerURL, MyApplication.getURL());
             startNextActivity();
 

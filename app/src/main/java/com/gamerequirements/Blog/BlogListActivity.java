@@ -57,11 +57,11 @@ public class BlogListActivity extends ActivitySuperClass
         if (i.hasExtra("cats"))
         {
             catsId = getIntent().getIntExtra("cats", 0);
-            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?categories=" + catsId + "&_embed=true&orderby=id&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?categories=" + catsId + "&_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         } else
         {
             tagsId = getIntent().getIntExtra("tags", 0);
-            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?tags=" + tagsId + "&_embed=true&orderby=id&fields=id,title,content,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?tags=" + tagsId + "&_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         }
 
         progressView = findViewById(R.id.progress_view2);
@@ -177,16 +177,15 @@ public class BlogListActivity extends ActivitySuperClass
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                 String videoimgurl;
                 Log.d("videoimageurl", title + category);
-                if (category == 5) //video
+                if (category == 5)
                 {
-                    String content = jsonObject.getJSONObject("content").getString("rendered");
-                    Log.d("videoimageurl", content.indexOf("[") + "");
-                    videoimgurl = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
-                } else if (category == 2) //article
+                    videoimgurl = jsonObject.getJSONObject("acf").getString("YTembed");
+                } else if (category == 2)
                 {
                     Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
                     videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
-                } else
+                }
+                else
                     continue;
                 bloglist.add(new Information(id, title, subtitle, videoimgurl, category, tags));
 

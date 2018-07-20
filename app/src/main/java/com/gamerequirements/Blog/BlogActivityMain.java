@@ -125,7 +125,7 @@ public class BlogActivityMain extends Fragment
         return (v);
     }
 
-    private void VolleyOperation(String url, final String type)
+    private void VolleyOperation(final String url, final String type)
     {
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>()
@@ -152,7 +152,7 @@ public class BlogActivityMain extends Fragment
                         Log.d("custom", "volley2");
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
-                        VolleyOperation(1);
+                        VolleyOperation(url,type);
                     }
                 });
                 Log.d("Error", error.toString());

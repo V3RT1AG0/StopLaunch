@@ -94,7 +94,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
 
-        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
+       gamelisturl = MyApplication.getURL() + "api/v1/getgames";
          //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
         //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
         notificationCountUrl = MyApplication.getURL() + "newgamescount";
@@ -357,6 +357,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onResponse(JSONObject response)
             {
+                Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
                 Log.d("responseMAin",response.toString());
                 handleresponse(response);
             }
@@ -365,6 +366,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onErrorResponse(VolleyError error)
             {
+
+                Toast.makeText(getActivity(),"Debug:"+error,Toast.LENGTH_LONG).show();
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
