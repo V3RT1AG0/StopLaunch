@@ -64,8 +64,7 @@ public class BlogActivityMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
-
+        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,date_gmt,categories,tags,_embedded.wp:featuredmedia&page=";
         cats = new SparseArray();
         tags = new SparseArray();
 
@@ -190,6 +189,7 @@ public class BlogActivityMain extends Fragment
             public void onErrorResponse(VolleyError error)
             {
 
+
                 try
                 {
                     // if request is made for a page which does not have a data do not do anything. So simply return on status code 400
@@ -258,6 +258,7 @@ public class BlogActivityMain extends Fragment
                         int category = jsonObject.getJSONArray("categories").getInt(0);
                         JSONArray tags = jsonObject.getJSONArray("tags");
                         String title = jsonObject.getJSONObject("title").getString("rendered");
+                        String date = jsonObject.getString("date_gmt");
                         String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                         String videoimgurl;
                         Log.d("videoimageurl", title + category);
@@ -274,7 +275,7 @@ public class BlogActivityMain extends Fragment
                         }
                         else
                             continue;
-                        bloglist.add(new Information(id, title, subtitle, videoimgurl, category,tags));
+                        bloglist.add(new Information(id, title, subtitle, videoimgurl, category,tags,date));
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.GONE);
 

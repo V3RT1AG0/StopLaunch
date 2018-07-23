@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -34,6 +33,7 @@ import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +75,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     EndlessRecyclerView endlessRecyclerView;
     View selectedview;
     String genre = "All", sortBy = null, orderBy = "rand";
+    FirebaseAnalytics firebaseAnalytics;
 
     public static GameListActivity newInstance()
     {
@@ -93,7 +94,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
         super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
          //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
         //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
@@ -325,6 +326,9 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     private void VolleyOperation()
     {
+        searchView.clearQuery();
+        recyclerView.setVisibility(View.GONE);
+        progressView.setVisibility(View.VISIBLE);
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("games");
         HashMap<String, String> params = new HashMap<>();
@@ -350,15 +354,19 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         else
             finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy;
        */
-        Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
+       // Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
         Log.d("array", params.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, gamelisturl, jsonObject, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
             {
-                Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
-                Log.d("responseMAin",response.toString());
+               // Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
+                Log.d ("responseMAin",response.toString());
+                Bundle bundle = new Bundle();
+                bundle.putString("response",response.toString().substring(0,10));
+                bundle.putString("serverurl", MyApplication.getURL());
+                firebaseAnalytics.logEvent("ListReceived",bundle);
                 handleresponse(response);
             }
         }, new Response.ErrorListener()
@@ -366,8 +374,10 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
-                Toast.makeText(getActivity(),"Debug:"+error,Toast.LENGTH_LONG).show();
+                Bundle bundle = new Bundle();
+                bundle.putString("response",error.toString());
+                bundle.putString("serverurl", MyApplication.getURL());
+                firebaseAnalytics.logEvent("ListError",bundle);
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);

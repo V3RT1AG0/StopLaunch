@@ -40,6 +40,7 @@
                     android:textSize="17sp" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:gravity="center"
                     android:id="@+id/cats"
                     android:layout_width="wrap_content"
@@ -51,6 +52,16 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
+                android:id="@+id/post_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:paddingTop="2dp"
+                android:textSize="13sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
                 android:id="@+id/subTitle_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,6 +71,7 @@
 
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -57,11 +57,11 @@ public class BlogListActivity extends ActivitySuperClass
         if (i.hasExtra("cats"))
         {
             catsId = getIntent().getIntExtra("cats", 0);
-            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?categories=" + catsId + "&_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?categories=" + catsId + "&_embed=true&orderby=id&fields=id,title,date_gmt,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         } else
         {
             tagsId = getIntent().getIntExtra("tags", 0);
-            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?tags=" + tagsId + "&_embed=true&orderby=id&fields=id,title,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
+            blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?tags=" + tagsId + "&_embed=true&orderby=id&fields=id,title,date_gmt,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         }
 
         progressView = findViewById(R.id.progress_view2);
@@ -175,6 +175,7 @@ public class BlogListActivity extends ActivitySuperClass
                 JSONArray tags = jsonObject.getJSONArray("tags");
                 String title = jsonObject.getJSONObject("title").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
+                String date = jsonObject.getString("date_gmt");
                 String videoimgurl;
                 Log.d("videoimageurl", title + category);
                 if (category == 5)
@@ -187,7 +188,7 @@ public class BlogListActivity extends ActivitySuperClass
                 }
                 else
                     continue;
-                bloglist.add(new Information(id, title, subtitle, videoimgurl, category, tags));
+                bloglist.add(new Information(id, title, subtitle, videoimgurl, category, tags,date));
 
             }
 

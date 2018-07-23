@@ -35,6 +35,8 @@ import com.gamerequirements.Requirements.GameListActivity;
 import com.gamerequirements.SaveCofig.MainActivityConfig;
 import com.gamerequirements.Singelton;
 import com.gamerequirements.TabbedActivity;
+import com.gamerequirements.Utils.DateTimeUtil;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,13 +55,15 @@ public class HomeMain extends Fragment
      * This Information class is taken from Blog package
      **/
     private static int width;
+    String date = null;
     static Handler mHandler;
     static Runnable SCROLLING_RUNNABLE;
     static BlogAdapter blogAdapter;
     static RecyclerView recyclerView;
     static LinearLayoutManager lmanager;
-    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
+    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,date_gmt,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
     private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
+    CircularProgressView progressView;
 
     public HomeMain()
     {
@@ -86,7 +90,8 @@ public class HomeMain extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
-
+        progressView = getActivity().findViewById(R.id.progress_view_blog);
+        progressView.startAnimation();
         bloglist = new ArrayList<>();
         recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
         lmanager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -116,6 +121,15 @@ public class HomeMain extends Fragment
                 startActivity(new Intent(getActivity(), MainActivityConfig.class));
             }
         });
+
+        getActivity().findViewById(R.id.view_all_articles).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                ((TabbedActivity) getActivity()).getmViewPager().setCurrentItem(1);
+            }
+        });
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         width = displayMetrics.widthPixels;
@@ -130,7 +144,7 @@ public class HomeMain extends Fragment
 
 
         final int duration = 2000;
-        final int pixelsToMove = width-8; //1300;
+        final int pixelsToMove = width - 8; //1300;
         //Log.d("width",recyclerView.getMeasuredWidth()+""+recyclerView.getWidth()+" "+width);
         mHandler = new Handler(Looper.getMainLooper());
         SCROLLING_RUNNABLE = new Runnable()
@@ -160,7 +174,7 @@ public class HomeMain extends Fragment
                         public void run()
                         {
                             recyclerView.scrollToPosition(0);
-                          //  recyclerView.setAdapter(null);
+                            //  recyclerView.setAdapter(null);
                             //recyclerView.setAdapter(blogAdapter);
                             mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
                         }
@@ -290,7 +304,7 @@ public class HomeMain extends Fragment
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
+                progressView.setVisibility(View.GONE);
             }
         });
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity()).getRequestQueue();
@@ -309,6 +323,12 @@ public class HomeMain extends Fragment
                 int id = jsonObject.getInt("id");
                 int category = jsonObject.getJSONArray("categories").getInt(0);
                 String title = jsonObject.getJSONObject("title").getString("rendered");
+                if (date == null)
+                {
+                    date = jsonObject.getString("date_gmt");
+                    TextView textView = getActivity().findViewById(R.id.date);
+                    textView.setText(DateTimeUtil.formatToYesterdayOrToday(date));
+                }
                 // String content = jsonObject.getJSONObject("content").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                 String videoimgurl;
@@ -331,7 +351,7 @@ public class HomeMain extends Fragment
             e.printStackTrace();
         } finally
         {
-
+            progressView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             blogAdapter.notifyDataSetChanged();
 

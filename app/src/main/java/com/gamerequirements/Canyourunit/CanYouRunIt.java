@@ -53,6 +53,7 @@ public class CanYouRunIt extends AppCompatActivity
         final CircularProgressView circularProgressView = findViewById(R.id.progress_circle);
         final WebView webView = findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         webView.setWebChromeClient(new WebChromeClient()
         {
             public void onProgressChanged(WebView view, int progress)

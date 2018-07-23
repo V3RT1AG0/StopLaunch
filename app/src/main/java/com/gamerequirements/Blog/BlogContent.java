@@ -1,11 +1,16 @@
 package com.gamerequirements.Blog;
 
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -88,10 +93,13 @@ public class BlogContent extends ActivitySuperClass
 
             String title = jsonObject.getJSONObject("title").getString("rendered");
             String  content = jsonObject.getJSONObject("content").getString("rendered");
-            webView.setWebChromeClient(new WebChromeClient());
-            webView.setWebViewClient(new WebViewClient());
+            //webView.setWebChromeClient(new WebChromeClient());
+            //webView.setWebViewClient(new WebViewClient());
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}</style>"+content, "text/html", "UTF-8");
+            webView.setWebViewClient(new Browser());
+            webView.setWebChromeClient(new MyWebClient());
+            webView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}p{color:#FFFFFF;}</style>"+content, "text/html", "UTF-8");
             /*webView.setWebViewClient(new WebViewClient()
             {
                 public void onPageFinished(WebView view, String url)
@@ -106,5 +114,63 @@ public class BlogContent extends ActivitySuperClass
         }
 
 
+    }
+
+    class Browser
+            extends WebViewClient
+    {
+        Browser() {}
+
+        public boolean shouldOverrideUrlLoading(WebView paramWebView, String paramString)
+        {
+            paramWebView.loadUrl(paramString);
+            return true;
+        }
+    }
+
+    public class MyWebClient
+            extends WebChromeClient
+    {
+        private View mCustomView;
+        private WebChromeClient.CustomViewCallback mCustomViewCallback;
+        protected FrameLayout mFullscreenContainer;
+        private int mOriginalOrientation;
+        private int mOriginalSystemUiVisibility;
+
+        public MyWebClient() {}
+
+        public Bitmap getDefaultVideoPoster()
+        {
+            if (BlogContent.this == null) {
+                return null;
+            }
+            return BitmapFactory.decodeResource(BlogContent.this.getApplicationContext().getResources(), 2130837573);
+        }
+
+        public void onHideCustomView()
+        {
+            ((FrameLayout)BlogContent.this.getWindow().getDecorView()).removeView(this.mCustomView);
+            this.mCustomView = null;
+            BlogContent.this.getWindow().getDecorView().setSystemUiVisibility(this.mOriginalSystemUiVisibility);
+            BlogContent.this.setRequestedOrientation(this.mOriginalOrientation);
+            this.mCustomViewCallback.onCustomViewHidden();
+            this.mCustomViewCallback = null;
+        }
+
+        public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback)
+        {
+            if (this.mCustomView != null)
+            {
+                onHideCustomView();
+                return;
+            }
+            this.mCustomView = paramView;
+            this.mOriginalSystemUiVisibility = BlogContent.this.getWindow().getDecorView().getSystemUiVisibility();
+            this.mOriginalOrientation = BlogContent.this.getRequestedOrientation();
+            this.mCustomViewCallback = paramCustomViewCallback;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+             ((FrameLayout)BlogContent.this.getWindow().getDecorView()).addView(this.mCustomView, new FrameLayout.LayoutParams(-1, -1));
+            BlogContent.this.getWindow().getDecorView().setSystemUiVisibility(3846);
+        }
     }
 }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.gamerequirements.Utils.DateTimeUtil;
 import com.gamerequirements.Utils.YoutubeFullScreenActivity;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
@@ -84,12 +85,15 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
     public void onBindViewHolder(MyCommonViewHolder holder, int position)
     {
         final Information bloginfo = info.get(position);
+        holder.title.setText(bloginfo.title);
+        holder.date.setText(DateTimeUtil.formatToYesterdayOrToday(bloginfo.date));
         switch (holder.getItemViewType())
         {
-
             case 2:
+
                 MyViewHolder holder0 = (MyViewHolder) holder;
-                holder0.title.setText(bloginfo.title);
+             /* holder0.title.setText(bloginfo.title);
+                holder0.date.setText(DateTimeUtil.formatToYesterdayOrToday(bloginfo.date));*/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     holder0.subtitle.setText(Html.fromHtml(bloginfo.subtitle, Html.FROM_HTML_MODE_COMPACT));
                 else
@@ -105,7 +109,8 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
 
             case 5:
                 MyVideoViewHolder holder1 = (MyVideoViewHolder) holder;
-                holder1.title.setText(bloginfo.title);
+               /* holder1.title.setText(bloginfo.title);
+                holder1.date.setText(DateTimeUtil.formatToYesterdayOrToday(bloginfo.date));*/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.subtitle, Html.FROM_HTML_MODE_COMPACT));
                 else
@@ -179,7 +184,7 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
     class MyCommonViewHolder extends RecyclerView.ViewHolder{
 
         // Super class for both video and post view holder. Components common to both the cards will go here
-        TextView title, subtitle;
+        TextView title, subtitle,date;
         LinearLayout cats, tags;
 
         public MyCommonViewHolder(View itemView)
@@ -189,6 +194,10 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
             cats = itemView.findViewById(R.id.cats);
             title = itemView.findViewById(R.id.title_post);
             subtitle = itemView.findViewById(R.id.subTitle_post);
+            date = itemView.findViewById(R.id.post_date);
+            tags.setVisibility(View.VISIBLE);
+            cats.findViewById(R.id.cats).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.post_date).setVisibility(View.VISIBLE);
         }
     }
 

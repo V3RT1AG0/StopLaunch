@@ -3,6 +3,8 @@ package com.gamerequirements;
 import android.app.Application;
 import android.content.Context;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 /**
  * Created by v3rt1ag0 on 10/11/16.
  */
@@ -33,6 +35,7 @@ public class MyApplication extends Application
     {
         super.onCreate();
         sinstance = this;  //or this also works
+        JodaTimeAndroid.init(this);
     }
 
     public static String getURL()

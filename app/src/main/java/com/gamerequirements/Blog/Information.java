@@ -8,23 +8,29 @@ import org.json.JSONArray;
 
 public class Information
 {
-    String title,subtitle,imgvideurl;
+    String title,subtitle,imgvideurl,date;
     int id,category;
     JSONArray tags;
-    public Information(int id,String title,String subtitle,String imgvideurl,int category,JSONArray tags){
+
+    //For BlogAdapter in Blog package
+    public Information(int id,String title,String subtitle,String imgvideurl,int category,JSONArray tags,String date){
         this.title= title;
         this.id = id;
         this.category= category;
         this.subtitle= subtitle;
         this.imgvideurl = imgvideurl;
         this.tags = tags;
+        this.date = date;
     }
 
-    public Information(int id,String title,String subtitle,String imgvideurl,int category){
-        this.title= title;
+
+    // For BlogAdapter In Home package
+    public Information(int id,String title,String subtitle,String imgvideurl,int category)
+    {
+        this.title = title;
         this.id = id;
-        this.category= category;
-        this.subtitle= subtitle;
+        this.category = category;
+        this.subtitle = subtitle;
         this.imgvideurl = imgvideurl;
     }
 
