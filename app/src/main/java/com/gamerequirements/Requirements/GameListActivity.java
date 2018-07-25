@@ -181,6 +181,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 TextView selectedSort = getActivity().findViewById(R.id.selectedSort);
                 selectedSort.setText(data.getStringExtra("label"));
                 Log.d("activityresult",sortBy+","+orderBy);
+                recyclerView.setVisibility(View.GONE);
+                progressView.setVisibility(View.VISIBLE);
                 resetRecyclerViewData();
                 VolleyOperation();
             }
@@ -256,6 +258,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         {
             genre = button.getText().toString();
             setEnabledCapsuleBackgound(button);
+            recyclerView.setVisibility(View.GONE);
+            progressView.setVisibility(View.VISIBLE);
             resetRecyclerViewData();
             VolleyOperation();
         }
@@ -326,11 +330,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     private void VolleyOperation()
     {
+        searchView.setOnQueryChangeListener(null);
         searchView.clearQuery();
-        recyclerView.setVisibility(View.GONE);
-        progressView.setVisibility(View.VISIBLE);
+        searchView.setOnQueryChangeListener(this);
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("games");
+        requestqueue.cancelAll("search");
         HashMap<String, String> params = new HashMap<>();
        JSONArray jsonArray = new JSONArray(idArrayList);
         if (sortBy != null)
@@ -464,8 +469,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         } finally
         {
 
-            errorlayout.setVisibility(View.GONE);
-            progressView.setVisibility(View.GONE);
+
+            makeMainRecyclerViewVisible();
 
             if (nexttexnupdate)   //add 10 more data
             {
@@ -473,43 +478,13 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 nexttexnupdate = false;
             } else
             {
-                Log.d("notifyItemSetChanged","triggered");
-                filteredRecyclerView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
                 gameListAdapter.notifyDataSetChanged();
             }
-            /*SharedPreferences.Editor editor = sharedPrefs.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(gamelist);
-            editor.putString("database", json);
-            editor.putInt("dbv",MyApplication.getDatabaseversion());
-            editor.commit();*/
         }
     }
 
 
-  /*  @Override
-    public void onBackPressed()
-    {
-        if (doubleBackToExitPressedOnce)
-        {
-            super.onBackPressed();
-            return;
-        }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-    }*/
 
     @Override
     public void onSearchTextChanged(String oldQuery, String newQuery)
@@ -570,6 +545,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void run()
             {
+                filteredRecyclerView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
                 progressView.setVisibility(View.VISIBLE);
             }
@@ -578,6 +554,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
         RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("search");
+        requestqueue.cancelAll("games");
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>()
         {
             @Override
@@ -590,6 +567,10 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onErrorResponse(VolleyError error)
             {
+                Bundle bundle = new Bundle();
+                bundle.putString("response",error.toString());
+                bundle.putString("serverurl", MyApplication.getURL());
+                firebaseAnalytics.logEvent("SearchError",bundle);
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -646,13 +627,27 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             e.printStackTrace();
         } finally
         {
-            errorlayout.setVisibility(View.GONE);
-            progressView.setVisibility(View.GONE);
+
             searchAdapter.notifyDataSetChanged();
-            recyclerView.setVisibility(View.GONE);
-            filteredRecyclerView.setVisibility(View.VISIBLE);
+            makeSearchRecyclerViewVisible();
 
         }
 
+    }
+
+    private void makeSearchRecyclerViewVisible()
+    {
+        errorlayout.setVisibility(View.GONE);
+        progressView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        filteredRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void makeMainRecyclerViewVisible()
+    {
+        errorlayout.setVisibility(View.GONE);
+        progressView.setVisibility(View.GONE);
+        filteredRecyclerView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }

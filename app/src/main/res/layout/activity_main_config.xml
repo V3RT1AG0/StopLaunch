@@ -14,15 +14,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-       <!--
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="Settings"
-            android:textColor="@color/BackGroundColor"
-            android:textSize="18sp" />-->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,6 +82,17 @@
              android:layout_height="wrap_content" />
 
      </LinearLayout>-->
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:id="@+id/noConfigToDisplay"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="No currently saved configs.\nAdd one from above"
+        android:textColor="@color/plainWhite"
+        android:textSize="15sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/configRecyclerView"

@@ -30,7 +30,7 @@
         android:textSize="18sp"
         android:paddingBottom="2sp"/>
 
-   <ImageView
+  <!-- <ImageView
         android:id="@+id/Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_settings"
-        android:tint="@color/plainWhite" />
+        android:tint="@color/plainWhite" />-->
 
 
     <!--<LinearLayout

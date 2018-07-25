@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.gamerequirements.MyApplication
 import com.gamerequirements.R
 import com.google.gson.Gson
@@ -25,7 +26,7 @@ class MainActivityConfig : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_config)
-        val addConf:ImageView = findViewById<ImageView>(R.id.AddConf)
+        val addConf: ImageView = findViewById<ImageView>(R.id.AddConf)
         addConf.setOnClickListener(View.OnClickListener {
             saveChangeMadeInConfig()
             startActivity(Intent(this, SelectConfig::class.java)) //TODO why not overide OnClick method
@@ -75,6 +76,7 @@ class MainActivityConfig : AppCompatActivity()
     {
         super.onResume()
         Log.d("OnResume", "Executed")
+
         val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
         var config: String? = pref.getString("Config", null)
         val gson = Gson()
@@ -86,6 +88,12 @@ class MainActivityConfig : AppCompatActivity()
             configList = gson.fromJson(config, type)
             adapt = ConfigAdapter(configList)
             recyclerView!!.adapter = adapt
+
+            val noConfigText: TextView = findViewById(R.id.noConfigToDisplay)
+            if (configList.size == 0)
+                noConfigText.visibility = View.VISIBLE
+            else
+                noConfigText.visibility = View.GONE
         }
         adapt?.notifyDataSetChanged()
     }
@@ -97,22 +105,22 @@ class MainActivityConfig : AppCompatActivity()
     }
 
 
-
     fun back(view: View)
     {
         saveChangeMadeInConfig()
         finish()
     }
 
-   fun saveChangeMadeInConfig(){
-       val gson = Gson()
-       val json = gson.toJson(configList)
-       val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
-       val editor=pref.edit()
-       editor.putString("Config", json)
-       editor.commit()
-       Log.d("Hello", json)
-   }
+    fun saveChangeMadeInConfig()
+    {
+        val gson = Gson()
+        val json = gson.toJson(configList)
+        val pref: SharedPreferences = this.getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.putString("Config", json)
+        editor.commit()
+        Log.d("Hello", json)
+    }
 
 }
 

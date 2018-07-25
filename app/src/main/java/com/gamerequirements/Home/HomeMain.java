@@ -35,7 +35,6 @@ import com.gamerequirements.Requirements.GameListActivity;
 import com.gamerequirements.SaveCofig.MainActivityConfig;
 import com.gamerequirements.Singelton;
 import com.gamerequirements.TabbedActivity;
-import com.gamerequirements.Utils.DateTimeUtil;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
@@ -327,7 +326,7 @@ public class HomeMain extends Fragment
                 {
                     date = jsonObject.getString("date_gmt");
                     TextView textView = getActivity().findViewById(R.id.date);
-                    textView.setText(DateTimeUtil.formatToYesterdayOrToday(date));
+                   // textView.setText(DateTimeUtil.formatToYesterdayOrToday(date)); //TODO remove this if block if no longer required
                 }
                 // String content = jsonObject.getJSONObject("content").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");

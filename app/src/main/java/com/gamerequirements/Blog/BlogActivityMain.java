@@ -188,8 +188,6 @@ public class BlogActivityMain extends Fragment
             @Override
             public void onErrorResponse(VolleyError error)
             {
-
-
                 try
                 {
                     // if request is made for a page which does not have a data do not do anything. So simply return on status code 400

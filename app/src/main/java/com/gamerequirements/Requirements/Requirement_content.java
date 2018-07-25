@@ -3,6 +3,7 @@ package com.gamerequirements.Requirements;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -14,11 +15,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.gamerequirements.ActivitySuperClass;
 import com.gamerequirements.Canyourunit.CanYouRunIt;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
-import com.gamerequirements.R;
 import com.gamerequirements.MyApplication;
+import com.gamerequirements.R;
+import com.gamerequirements.SaveCofig.MainActivityConfig;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
@@ -26,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Requirement_content extends ActivitySuperClass implements View.OnClickListener
+public class Requirement_content extends AppCompatActivity implements View.OnClickListener
 {
     String requirementurl;
     int id;
@@ -42,6 +43,25 @@ public class Requirement_content extends ActivitySuperClass implements View.OnCl
         setContentView(R.layout.activity_requirement_content);
         //requirementurl = MyApplication.getURL() + "getreq/";   //for python server
         requirementurl = MyApplication.getURL() + "game/";
+
+        findViewById(R.id.back_arrow).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                finish();
+            }
+        });
+
+      findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
+            }
+        });
+
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("id");
         mAdView = findViewById(R.id.adViewContentBottom);

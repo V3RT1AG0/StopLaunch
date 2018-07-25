@@ -63,7 +63,7 @@ public class TabbedActivity extends AppCompatActivity
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_document);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_console);
 

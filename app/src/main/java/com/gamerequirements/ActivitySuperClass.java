@@ -1,13 +1,10 @@
 package com.gamerequirements;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
-import com.gamerequirements.SaveCofig.MainActivityConfig;
 
 /**
  * Created by v3rt1ag0 on 11/25/16.
@@ -68,14 +65,14 @@ public class ActivitySuperClass extends AppCompatActivity
         });
 
 
-        myToolbar.findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
+      /*  myToolbar.findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
-        });
+        });*/
 /*
         myToolbar.findViewById(R.id.Notify).setOnClickListener(new View.OnClickListener()
         {
