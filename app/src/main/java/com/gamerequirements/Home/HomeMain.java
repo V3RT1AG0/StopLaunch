@@ -53,16 +53,17 @@ public class HomeMain extends Fragment
     /**
      * This Information class is taken from Blog package
      **/
-    private static int width;
+   private static  Runnable SCROLLING_RUNNABLE;
+    private static int position  = 0;
     String date = null;
     static Handler mHandler;
-    static Runnable SCROLLING_RUNNABLE;
     static BlogAdapter blogAdapter;
     static RecyclerView recyclerView;
     static LinearLayoutManager lmanager;
     private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,date_gmt,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
     private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
     CircularProgressView progressView;
+
 
     public HomeMain()
     {
@@ -131,57 +132,47 @@ public class HomeMain extends Fragment
         });
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        width = displayMetrics.widthPixels;
-
-        setUpSlider();
-        VolleyOperation();
-        volleyRequestForGamesCount();
-    }
-
-    static void setUpSlider()
-    {
 
 
-        final int duration = 2000;
-        final int pixelsToMove = width - 8; //1300;
-        //Log.d("width",recyclerView.getMeasuredWidth()+""+recyclerView.getWidth()+" "+width);
+
         mHandler = new Handler(Looper.getMainLooper());
+        final int duration = 7000;
         SCROLLING_RUNNABLE = new Runnable()
         {
 
             @Override
             public void run()
             {
-                recyclerView.smoothScrollBy(pixelsToMove, 0);
-                mHandler.postDelayed(this, duration);
+                if(++position==4)
+                    position = 0;
+                recyclerView.smoothScrollToPosition(position);
+                //recyclerView.smoothScrollBy(pixelsToMove, 0);
+                mHandler.postDelayed(SCROLLING_RUNNABLE, duration);
             }
         };
-        onScrollListener = new RecyclerView.OnScrollListener()
-        {
-            @Override
-            public void onScrolled(final RecyclerView recyclerView, int dx, int dy)
-            {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastItem = lmanager.findLastCompletelyVisibleItemPosition();
-                if (lastItem == lmanager.getItemCount() - 1)
-                {
-                    mHandler.removeCallbacks(SCROLLING_RUNNABLE);
-                    Handler postHandler = new Handler();
-                    postHandler.postDelayed(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            recyclerView.scrollToPosition(0);
-                            //  recyclerView.setAdapter(null);
-                            //recyclerView.setAdapter(blogAdapter);
-                            mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
-                        }
-                    }, 7000);
-                }
-            }
-        };
-        recyclerView.addOnScrollListener(onScrollListener);
+
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+      {
+          @Override
+          public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+          {
+              super.onScrolled(recyclerView, dx, dy);
+              position = lmanager.findLastVisibleItemPosition();
+          }
+      });
+
+        setUpSlider();
+        VolleyOperation();
+        volleyRequestForGamesCount();
+    }
+
+    static void cancelSlider()
+    {
+        mHandler.removeCallbacks(SCROLLING_RUNNABLE);
+    }
+
+    static void setUpSlider()
+    {
         mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
     }
 
@@ -259,11 +250,7 @@ public class HomeMain extends Fragment
         displayEnabledConfig();
     }
 
-    public static void cancelSlider()
-    {
-        mHandler.removeCallbacks(SCROLLING_RUNNABLE);
-        recyclerView.removeOnScrollListener(onScrollListener);
-    }
+
 
     void displayEnabledConfig()
     {

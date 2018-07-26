@@ -37,12 +37,14 @@ import java.util.List;
  * Created by v3rt1ag0 on 7/7/18.
  */
 
-class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
+public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
 {
     List<Information> info;
     Context context;
     private Lifecycle lifecycle;
     static SparseArray cats, tags;
+   float time;
+   private YouTubePlayer fullscreenedplayer;
 
     BlogAdapter(List<Information> info, Lifecycle lifecycle, SparseArray cats, SparseArray tags)
     {
@@ -201,14 +203,15 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
         }
     }
 
-    private void addFullScreenOption(final YouTubePlayerView youtubePlayerView, final String url)
+    private void addFullScreenOption(final YouTubePlayerView youtubePlayerView, final String url, final YouTubePlayer initializedYouTubePlayer)
     {
         youtubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener()
         {
             @Override
             public void onYouTubePlayerEnterFullScreen()
             {
-                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id",url));
+                fullscreenedplayer = initializedYouTubePlayer;
+                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id",url).putExtra("time",time));
                 youtubePlayerView.exitFullScreen();
             }
 
@@ -256,9 +259,16 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
                                              @Override
                                              public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer)
                                              {
-                                                 addFullScreenOption(youtubePlayerView,info.get(getAdapterPosition()).getImgvideurl());
+                                                 addFullScreenOption(youtubePlayerView,info.get(getAdapterPosition()).getImgvideurl(),initializedYouTubePlayer);
                                                  initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener()
                                                  {
+                                                     @Override
+                                                     public void onCurrentSecond(float second)
+                                                     {
+                                                         super.onCurrentSecond(second);
+                                                            time = second;
+                                                     }
+
                                                      @Override
                                                      public void onReady()
                                                      {
@@ -272,8 +282,16 @@ class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHolder>
                                                      {
                                                          super.onStateChange(state);
                                                          Log.d("visibility",state.toString());
+
                                                          if(state== PlayerConstants.PlayerState.PLAYING)
+                                                         {
                                                              Singelton.setYouTubePlayer(youtubePlayer);
+                                                             if(YoutubeFullScreenActivity.getactivityStarted()&&youtubePlayer==fullscreenedplayer){
+                                                                 // resume video from time where it was left off AND make sure that seek is done on same video which was fullscreened recently
+                                                                 YoutubeFullScreenActivity.setActivityStarted(false);
+                                                                 youtubePlayer.seekTo(YoutubeFullScreenActivity.getTime());
+                                                             }
+                                                         }
 
 
                                                      }

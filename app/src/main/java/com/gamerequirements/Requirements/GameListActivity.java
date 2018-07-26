@@ -48,9 +48,6 @@ import java.util.TimerTask;
 
 public class GameListActivity extends Fragment implements FloatingSearchView.OnQueryChangeListener
 {
-    /**
-     * code for python server
-     **/
     //private static final String gamelisturl = MyApplication.getURL() + "loadlist";
     private static final String COUNT = "count";
     //private static final String gamelisturl = MyApplication.getURL() + "index.php";
@@ -113,7 +110,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         //notificationCounttextview = getActivity().findViewById(R.id.badge);
         lmanager = new LinearLayoutManager(getActivity());
         errorlayout = getActivity().findViewById(R.id.errorlayout);
-
 
         gameListAdapter = new GameListAdapter(gamelist);
         recyclerView.setHasFixedSize(true);
@@ -224,29 +220,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         }
     }
 
-   /* void genreButtonPressed(Button button)
-    {
-        if (selectedbutton != null)
-        {
-            if (button == selectedbutton)
-            {
-                selectedbutton = null;
-            } else
-            {
-                selectedbutton = button;
-            }
-        } else
-        {
-            selectedbutton = button;
-        }
-// String url = "http://192.168.31.59:5000/gameslistgenre/"+genre;
-        if (selectedbutton != null)
-        {
-            String genre = selectedbutton.getText().toString();
-            VolleySearchRequest(GENREURL + genre);
-        } else
-            VolleyOperation();
-    }*/
+
 
     void genreButtonPressed(Button button)
     {
@@ -353,13 +327,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         {
             e.printStackTrace();
         }
-       /*String finalurl = null;
-        if (sortBy != null)
-            finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy+"&sortby="+sortBy;
-        else
-            finalurl = gamelisturl+"?genre="+genre+"&orderby="+orderBy;
-       */
-       // Toast.makeText(getActivity(),params.toString(),Toast.LENGTH_LONG).show();
         Log.d("array", params.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, gamelisturl, jsonObject, new Response.Listener<JSONObject>()
         {
@@ -508,27 +475,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                            {
                                String url = SEARCHURL + finalNewQuery;
                                VolleySearchRequest(url);
-                        /*for (int j = 0; j < gamelist.size(); j++)
-                        {
-                            final String text = gamelist.get(j).title.toLowerCase();
-                            if (text.contains(finalNewQuery))
-                            {
-                                filteredList.add(gamelist.get(j));
-                            }
-                        }
-
-                        runOnUiThread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                recyclerView.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
-                                gameListAdapter = new GameListAdapter(filteredList);
-                                recyclerView.setAdapter(gameListAdapter);
-                                gameListAdapter.notifyDataSetChanged();
-                            }
-                        });*/
-
                            }
                        },
                 300
@@ -606,7 +552,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     {
 
 
-        JSONArray result;
+        JSONArray result = null;
         try
         {
             filteredList.clear();
@@ -627,10 +573,8 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             e.printStackTrace();
         } finally
         {
-
             searchAdapter.notifyDataSetChanged();
             makeSearchRecyclerViewVisible();
-
         }
 
     }
