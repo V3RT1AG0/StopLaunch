@@ -36,6 +36,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
     AdView mAdView;
     String summary, genre, date, title;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -61,6 +62,8 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
                 startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
         });
+
+
 
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("id");
@@ -192,6 +195,11 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
         {
             e.printStackTrace();
 
+        }
+        finally
+        {
+            findViewById(R.id.progress_view).setVisibility(View.GONE);
+            findViewById(R.id.container).setVisibility(View.VISIBLE);
         }
     }
 

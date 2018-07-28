@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.SaveCofig.SaveFirstConfig;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +48,7 @@ public class Splash extends AppCompatActivity
             @Override
             public void run()
             {
-                if (!isNetworkAvailable(Splash.this))
+              /*  if (!isNetworkAvailable(Splash.this))
                 {
                     runOnUiThread(new Runnable()
                     {
@@ -64,10 +63,10 @@ public class Splash extends AppCompatActivity
                         }
                     });
                     Splash.this.finish();
-                } else
-                {
-                    getdatafrompastebin();
-                }
+                } else*/
+
+                getdatafrompastebin();
+
             }
         }).start();
 
@@ -117,7 +116,7 @@ public class Splash extends AppCompatActivity
                     @Override
                     public void run()
                     {
-                        Toast.makeText(getBaseContext(),"Debug:"+ServerURL,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Debug:" + ServerURL, Toast.LENGTH_LONG).show();
                         Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -138,23 +137,30 @@ public class Splash extends AppCompatActivity
     private void startNextActivity()
     {
 
-        if(appAlreadyOpened())
-        if (getIntent().hasExtra("update"))
-        {
-            intent = new Intent(Splash.this, NotificationActivity.class);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addNextIntentWithParentStack(intent);
-            stackBuilder.startActivities();
-        } else
-        {
-            intent = new Intent(Splash.this, TabbedActivity.class);
-            startActivity(intent);
-        }
+        if (appAlreadyOpened())
+            if (getIntent().hasExtra("update"))
+            {
+                intent = new Intent(Splash.this, NotificationActivity.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                stackBuilder.addNextIntentWithParentStack(intent);
+                stackBuilder.startActivities();
+            } /*else if (getIntent().hasExtra("post"))
+            {
+                intent = new Intent(Splash.this, BlogContent.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                stackBuilder.addNextIntentWithParentStack(intent);
+                stackBuilder.startActivities();
+            }*/ else
+            {
+                intent = new Intent(Splash.this, TabbedActivity.class);
+                startActivity(intent);
+            }
 
     }
 
-    private boolean appAlreadyOpened(){
-        if(!sharedPref.getBoolean("alreadyLaunched",false))  // if app is not already opened start save first config
+    private boolean appAlreadyOpened()
+    {
+        if (!sharedPref.getBoolean("alreadyLaunched", false))  // if app is not already opened start save first config
         {
             editor.putBoolean("alreadyLaunched", true);
             editor.commit();
@@ -163,6 +169,7 @@ public class Splash extends AppCompatActivity
         }
         return true;
     }
+
     void tryfromfirebasedatabase()
     {
         databaseref.child("StopLaunchV3").addListenerForSingleValueEvent(new ValueEventListener()
@@ -174,7 +181,8 @@ public class Splash extends AppCompatActivity
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 if (def.getForcemaintenance() == 1)
                     return;
-                if(def.getNewVersion()== BuildConfig.VERSION_CODE){
+                if (def.getNewVersion() == BuildConfig.VERSION_CODE)
+                {
                     runOnUiThread(new Runnable()
                     {
                         @Override

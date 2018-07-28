@@ -58,6 +58,7 @@
             android:name=".SaveCofig.SaveFirstConfig"
             android:theme="@style/AppTheme" />
         <activity android:name=".Blog.BlogContent"
+            android:parentActivityName=".TabbedActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".Blog.BlogListActivity"
             android:screenOrientation="portrait"/>

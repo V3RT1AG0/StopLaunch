@@ -22,6 +22,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ public class BlogContent extends ActivitySuperClass
     WebView webView;
     TextView blogtitetView;
     Toolbar myToolbar;
+    CircularProgressView circularProgressView;
    // CircularProgressView progressView;
 
     @Override
@@ -48,6 +50,8 @@ public class BlogContent extends ActivitySuperClass
         //progressView.startAnimation();
         webView =  findViewById(R.id.webview1);
         myToolbar =  findViewById(R.id.my_toolbar);
+        circularProgressView = findViewById(R.id.progress_view);
+        circularProgressView.startAnimation();
         blogpostid = getIntent().getIntExtra("id",0);
         setSupportActionBar(myToolbar);
         Jsonrequest();
@@ -138,6 +142,22 @@ public class BlogContent extends ActivitySuperClass
         private int mOriginalSystemUiVisibility;
 
         public MyWebClient() {}
+
+        @Override
+        public void onProgressChanged(WebView view, int progress)
+        {
+            super.onProgressChanged(view, progress);
+            if (progress == 100)
+            {
+                circularProgressView.setVisibility(View.GONE);
+                webView.setVisibility(View.VISIBLE);
+            } else
+            {
+                circularProgressView.setVisibility(View.VISIBLE);
+            }
+        }
+
+
 
         public Bitmap getDefaultVideoPoster()
         {

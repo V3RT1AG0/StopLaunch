@@ -129,7 +129,8 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
     private void createCategoryandTagButtons(final Information bloginfo, MyCommonViewHolder holder)
     {
         TextView catsButton = new TextView(context);
-        catsButton.setText((String) cats.get(bloginfo.category));
+        final String cat_name = (String) cats.get(bloginfo.category);
+        catsButton.setText(cat_name);
         catsButton.setTextColor(context.getResources().getColor(R.color.colorAccent));
         catsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         holder.cats.addView(catsButton);
@@ -138,7 +139,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             @Override
             public void onClick(View view)
             {
-                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category));
+                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category).putExtra("title",cat_name+"s"));
             }
         });
 
@@ -149,8 +150,8 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                 Log.d("taggggs", tags.toString() + cats.toString());
                 final int tagId = bloginfo.tags.getInt(i);
                 TextView tagsButton = new TextView(context);
-                Log.d("taggggs", "" + tags.get(tagId));
-                tagsButton.setText(" #" + (String) tags.get(tagId));
+                final String tag_name = " #" + (String) tags.get(tagId);
+                tagsButton.setText(tag_name);
                 tagsButton.setTextColor(context.getResources().getColor(R.color.colorAccent));
                 tagsButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 holder.tags.addView(tagsButton);
@@ -159,7 +160,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                     @Override
                     public void onClick(View view)
                     {
-                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId));
+                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId).putExtra("title",tag_name));
                     }
                 });
             } catch (JSONException e)

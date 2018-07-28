@@ -53,6 +53,8 @@ public class BlogListActivity extends ActivitySuperClass
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog_list);
 
+
+
         Intent i = getIntent();
         if (i.hasExtra("cats"))
         {
@@ -64,6 +66,9 @@ public class BlogListActivity extends ActivitySuperClass
             blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?tags=" + tagsId + "&_embed=true&orderby=id&fields=id,title,date_gmt,acf,excerpt,categories,tags,_embedded.wp:featuredmedia&page=";
         }
 
+        TextView title = findViewById(R.id.toolbar_name);
+        title.setText(getIntent().getStringExtra("title"));
+
         progressView = findViewById(R.id.progress_view2);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
@@ -74,6 +79,7 @@ public class BlogListActivity extends ActivitySuperClass
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+
         AddOnScrollListenrerToRecyclerView();
         VolleyOperation(1);
     }

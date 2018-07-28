@@ -139,10 +139,10 @@ public class HomeMain extends Fragment
         final int duration = 7000;
         SCROLLING_RUNNABLE = new Runnable()
         {
-
             @Override
             public void run()
             {
+                Log.d("duration","called");
                 if(++position==4)
                     position = 0;
                 recyclerView.smoothScrollToPosition(position);

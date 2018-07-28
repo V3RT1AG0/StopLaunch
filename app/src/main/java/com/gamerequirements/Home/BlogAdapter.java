@@ -2,6 +2,7 @@ package com.gamerequirements.Home;
 
 import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gamerequirements.Blog.BlogContent;
 import com.gamerequirements.Blog.Information;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
@@ -124,6 +126,14 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             title = itemView.findViewById(R.id.title_post);
             subtitle = itemView.findViewById(R.id.subTitle_post);
             imageView = itemView.findViewById(R.id.image_post);
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    view.getContext().startActivity(new Intent(context, BlogContent.class).putExtra("id", info.get(getAdapterPosition()).getId()));
+                }
+            });
         }
     }
 
