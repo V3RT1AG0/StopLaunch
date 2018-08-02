@@ -15,11 +15,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.gamerequirements.Blog.BlogActivityMain;
 import com.gamerequirements.Home.HomeMain;
+import com.gamerequirements.Notification.NotificationBroadCastReceiver;
 import com.gamerequirements.Requirements.GameListActivity;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.codechimp.apprater.AppRater;
 
@@ -61,6 +64,7 @@ public class TabbedActivity extends AppCompatActivity
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
 
+
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard);
@@ -68,24 +72,28 @@ public class TabbedActivity extends AppCompatActivity
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_console);
 
         tabLayout.setOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager)
+                {
 
                     @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
+                    public void onTabSelected(TabLayout.Tab tab)
+                    {
                         super.onTabSelected(tab);
                         int tabIconColor = ContextCompat.getColor(TabbedActivity.this, R.color.colorAccent);
                         tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
                     }
 
                     @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
+                    public void onTabUnselected(TabLayout.Tab tab)
+                    {
                         super.onTabUnselected(tab);
                         int tabIconColor = ContextCompat.getColor(TabbedActivity.this, R.color.plainWhite);
                         tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
                     }
 
                     @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
+                    public void onTabReselected(TabLayout.Tab tab)
+                    {
                         super.onTabReselected(tab);
                     }
                 }
@@ -99,6 +107,19 @@ public class TabbedActivity extends AppCompatActivity
         } catch (Exception e)
         {
             e.printStackTrace();
+        }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("notifications");
+        FirebaseMessaging.getInstance().subscribeToTopic("version2");
+
+
+        if (getIntent().hasExtra("slide"))
+        {
+            Log.d("logger",Integer.toString(getIntent().getIntExtra("slide",0)));
+            mViewPager.setCurrentItem(getIntent().getIntExtra("slide", 0));
+            Intent intent=new Intent(getApplicationContext(),NotificationBroadCastReceiver.class);
+            intent.setAction("com.gr.notification_cancelled");
+            sendBroadcast(intent);
         }
 
     }
@@ -215,8 +236,6 @@ public class TabbedActivity extends AppCompatActivity
             // Show 2 total pages.
             return 3;
         }
-
-
 
 
     }

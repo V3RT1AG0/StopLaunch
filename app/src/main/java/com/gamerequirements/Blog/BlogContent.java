@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -111,7 +112,7 @@ public class BlogContent extends ActivitySuperClass
                     progressView.setVisibility(View.GONE);
                 }
             });*/
-            blogtitetView.setText(title);
+            blogtitetView.setText(Html.fromHtml(title));
         } catch (JSONException e)
         {
             e.printStackTrace();

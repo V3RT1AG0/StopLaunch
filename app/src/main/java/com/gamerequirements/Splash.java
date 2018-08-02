@@ -144,18 +144,15 @@ public class Splash extends AppCompatActivity
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
                 stackBuilder.addNextIntentWithParentStack(intent);
                 stackBuilder.startActivities();
-            } /*else if (getIntent().hasExtra("post"))
+            } else if (getIntent().hasExtra("postID"))
             {
-                intent = new Intent(Splash.this, BlogContent.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addNextIntentWithParentStack(intent);
-                stackBuilder.startActivities();
-            }*/ else
+                intent = new Intent(Splash.this, TabbedActivity.class).putExtra("slide", 1);
+                startActivity(intent);
+            } else
             {
                 intent = new Intent(Splash.this, TabbedActivity.class);
                 startActivity(intent);
             }
-
     }
 
     private boolean appAlreadyOpened()

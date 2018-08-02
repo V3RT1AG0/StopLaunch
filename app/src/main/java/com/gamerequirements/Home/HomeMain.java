@@ -53,8 +53,8 @@ public class HomeMain extends Fragment
     /**
      * This Information class is taken from Blog package
      **/
-   private static  Runnable SCROLLING_RUNNABLE;
-    private static int position  = 0;
+    private static Runnable SCROLLING_RUNNABLE;
+    private static int position = 0;
     String date = null;
     static Handler mHandler;
     static BlogAdapter blogAdapter;
@@ -134,7 +134,6 @@ public class HomeMain extends Fragment
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
 
-
         mHandler = new Handler(Looper.getMainLooper());
         final int duration = 7000;
         SCROLLING_RUNNABLE = new Runnable()
@@ -142,8 +141,8 @@ public class HomeMain extends Fragment
             @Override
             public void run()
             {
-                Log.d("duration","called");
-                if(++position==4)
+                Log.d("duration", "called"+position);
+                if (++position == bloglist.size())
                     position = 0;
                 recyclerView.smoothScrollToPosition(position);
                 //recyclerView.smoothScrollBy(pixelsToMove, 0);
@@ -151,28 +150,78 @@ public class HomeMain extends Fragment
             }
         };
 
-      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
-      {
-          @Override
-          public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-          {
-              super.onScrolled(recyclerView, dx, dy);
-              position = lmanager.findLastVisibleItemPosition();
-          }
-      });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        setUpSlider();
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        cancelSlider();
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        System.out.println("Scroll Settling");
+                        break;
 
-        setUpSlider();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+                position = lmanager.findLastVisibleItemPosition();
+            }
+        });
+
+        /*recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener()
+        {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e)
+            {
+                return true;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e)
+            {
+                Log.d("touchevenr", String.valueOf(e.getAction()));
+                if (e.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    Log.d("touchevenr", "down");
+                    cancelSlider();
+                } else if (e.getAction() == MotionEvent.ACTION_UP)
+                {
+                    setUpSlider();
+                    Log.d("touchevenr", "down");
+                }
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept)
+            {
+
+            }
+        });*/
+
+
         VolleyOperation();
         volleyRequestForGamesCount();
     }
 
     static void cancelSlider()
     {
+        mHandler.removeCallbacksAndMessages(null);
         mHandler.removeCallbacks(SCROLLING_RUNNABLE);
     }
 
     static void setUpSlider()
     {
+        mHandler.removeCallbacksAndMessages(null);
         mHandler.postDelayed(SCROLLING_RUNNABLE, 7000);
     }
 
@@ -251,7 +300,6 @@ public class HomeMain extends Fragment
     }
 
 
-
     void displayEnabledConfig()
     {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
@@ -313,7 +361,7 @@ public class HomeMain extends Fragment
                 {
                     date = jsonObject.getString("date_gmt");
                     TextView textView = getActivity().findViewById(R.id.date);
-                   // textView.setText(DateTimeUtil.formatToYesterdayOrToday(date)); //TODO remove this if block if no longer required
+                    // textView.setText(DateTimeUtil.formatToYesterdayOrToday(date)); //TODO remove this if block if no longer required
                 }
                 // String content = jsonObject.getJSONObject("content").getString("rendered");
                 String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
@@ -340,6 +388,7 @@ public class HomeMain extends Fragment
             progressView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             blogAdapter.notifyDataSetChanged();
+            setUpSlider();
 
         }
     }

@@ -26,6 +26,7 @@ import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class BlogActivityMain extends Fragment
     int curSize;
     Boolean nexttexnupdate = false;
     SparseArray cats, tags;
+    FirebaseAnalytics firebaseAnalytics;
 
     public static BlogActivityMain newInstance()
     {
@@ -64,10 +66,10 @@ public class BlogActivityMain extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+
         blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,date_gmt,categories,tags,_embedded.wp:featuredmedia&page=";
         cats = new SparseArray();
         tags = new SparseArray();
-
         progressView = getActivity().findViewById(R.id.progress_view2);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
@@ -78,6 +80,7 @@ public class BlogActivityMain extends Fragment
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         AddOnScrollListenrerToRecyclerView();
         getTagsAndCategories();
     }
@@ -272,7 +275,10 @@ public class BlogActivityMain extends Fragment
                             videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
                         }
                         else
+                        {
+                            firebaseAnalytics.logEvent("InvalidCategory", null);
                             continue;
+                        }
                         bloglist.add(new Information(id, title, subtitle, videoimgurl, category,tags,date));
                         errorlayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.GONE);
