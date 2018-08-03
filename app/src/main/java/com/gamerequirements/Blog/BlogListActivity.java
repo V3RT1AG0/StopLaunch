@@ -22,6 +22,7 @@ import com.gamerequirements.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Utils.InternetConnectionUtil;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONArray;
@@ -147,7 +148,7 @@ public class BlogListActivity extends ActivitySuperClass
                 if (error instanceof NoConnectionError)
                 {
                     TextView textView = errorlayout.findViewById(R.id.errorMessage2);
-                    textView.setText("Check your connection and try again");
+                        textView.setText(new InternetConnectionUtil(errorlayout.getContext()).Check());
                     //  Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }

@@ -104,7 +104,7 @@ public class BlogContent extends ActivitySuperClass
             webView.setWebViewClient(new Browser());
             webView.setWebChromeClient(new MyWebClient());
             webView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}p{color:#FFFFFF;}</style>"+content, "text/html", "UTF-8");
+            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}p{color:#7F7F7F;text-align:justify;}</style>"+content, "text/html", "UTF-8");
             /*webView.setWebViewClient(new WebViewClient()
             {
                 public void onPageFinished(WebView view, String url)

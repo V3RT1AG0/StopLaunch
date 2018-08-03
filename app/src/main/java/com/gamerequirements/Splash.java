@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.SaveCofig.SaveFirstConfig;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +49,7 @@ public class Splash extends AppCompatActivity
             @Override
             public void run()
             {
-              /*  if (!isNetworkAvailable(Splash.this))
+               if (!isNetworkAvailable())
                 {
                     runOnUiThread(new Runnable()
                     {
@@ -58,13 +59,12 @@ public class Splash extends AppCompatActivity
                             FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(Splash.this);
                             Bundle bundle = new Bundle();
                             bundle.putString("response","No internet access detected");
-                            firebaseAnalytics.logEvent("NoInternetConnection",bundle);
-                            Toast.makeText(Splash.this, "Please check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                            firebaseAnalytics.logEvent("NoInternetConnectionSplash",bundle);
+                            Toast.makeText(Splash.this, "Unable to contact server. Please try again later", Toast.LENGTH_SHORT).show();
                         }
                     });
                     Splash.this.finish();
-                } else*/
-
+                } else
                 getdatafrompastebin();
 
             }
@@ -209,7 +209,7 @@ public class Splash extends AppCompatActivity
 
     }
 
-    private boolean isNetworkAvailable(Context context)
+    private boolean isNetworkAvailable()
     {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

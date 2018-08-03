@@ -74,7 +74,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             case 2:
                 MyViewHolder holder0 = (MyViewHolder) holder;
-                holder0.title.setText(bloginfo.getTitle());
+                holder0.title.setText(Html.fromHtml(bloginfo.getTitle()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     holder0.subtitle.setText(Html.fromHtml(bloginfo.getSubtitle(), Html.FROM_HTML_MODE_COMPACT));
                 else
@@ -89,7 +89,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             case 5:
                 MyVideoViewHolder holder1 = (MyVideoViewHolder) holder;
-                holder1.title.setText(bloginfo.getTitle());
+                holder1.title.setText(Html.fromHtml(bloginfo.getTitle()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                     holder1.subtitle.setText(Html.fromHtml(bloginfo.getSubtitle(), Html.FROM_HTML_MODE_COMPACT));
                 else

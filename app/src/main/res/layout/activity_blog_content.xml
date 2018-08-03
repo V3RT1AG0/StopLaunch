@@ -26,17 +26,21 @@
                 android:layout_marginTop="3sp">
 
                 <LinearLayout
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
 
                     <TextView
+                        android:justificationMode="inter_word"
+                        android:textColor="#7F7F7F"
+                        android:paddingEnd="8sp"
+                        android:paddingStart="8sp"
                         android:id="@+id/blogTitleTView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
                         android:textSize="25sp" />
 
                     <com.github.rahatarmanahmed.cpv.CircularProgressView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -50,6 +54,7 @@
                         app:cpv_indeterminate="true" />
 
                     <WebView
+                        android:layout_marginTop="8sp"
                         android:visibility="gone"
                         android:id="@+id/webview1"
                         android:layout_width="match_parent"

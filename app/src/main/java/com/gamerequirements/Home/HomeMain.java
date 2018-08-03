@@ -338,6 +338,7 @@ public class HomeMain extends Fragment
             @Override
             public void onErrorResponse(VolleyError error)
             {
+                error.printStackTrace();
                 progressView.setVisibility(View.GONE);
             }
         });
@@ -350,7 +351,7 @@ public class HomeMain extends Fragment
         try
         {
 
-            Log.d("TAG", response.toString());
+            Log.d("TAGMAINSLIDER", response.toString());
             for (int i = 0; i < response.length(); i++)
             {
                 JSONObject jsonObject = response.getJSONObject(i);
@@ -389,7 +390,6 @@ public class HomeMain extends Fragment
             recyclerView.setVisibility(View.VISIBLE);
             blogAdapter.notifyDataSetChanged();
             setUpSlider();
-
         }
     }
 

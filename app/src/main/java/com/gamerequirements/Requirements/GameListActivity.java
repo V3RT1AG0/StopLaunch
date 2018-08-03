@@ -32,6 +32,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Utils.InternetConnectionUtil;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -92,12 +93,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         super.onActivityCreated(savedInstanceState);
         sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
         firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-       gamelisturl = MyApplication.getURL() + "api/v1/getgames";
-         //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
+        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
+        //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
         //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
         notificationCountUrl = MyApplication.getURL() + "newgamescount";
         SEARCHURL = MyApplication.getURL() + "gameslist/search/";
-       // GENREURL = MyApplication.getURL() + "gameslistgenre/";
+        // GENREURL = MyApplication.getURL() + "gameslistgenre/";
 
 
         genreLL = getActivity().findViewById(R.id.genre_LL);
@@ -147,7 +148,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onClick(View view)
             {
-                startActivityForResult(new Intent(getActivity(),FilterActivity.class).putExtra("Order",orderBy).putExtra("Sort",sortBy),9418);
+                startActivityForResult(new Intent(getActivity(), FilterActivity.class).putExtra("Order", orderBy).putExtra("Sort", sortBy), 9418);
             }
         });
 
@@ -160,29 +161,34 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     }
 
-    void setEnabledCapsuleBackgound(View v){
+    void setEnabledCapsuleBackgound(View v)
+    {
         selectedview.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_start));
         selectedview = v;
         v.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
 
-        if (requestCode == 9418) {
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == 9418)
+        {
+            if (resultCode == Activity.RESULT_OK)
+            {
 
-                orderBy=data.getStringExtra("order");
-                sortBy=data.getStringExtra("sort");
+                orderBy = data.getStringExtra("order");
+                sortBy = data.getStringExtra("sort");
                 TextView selectedSort = getActivity().findViewById(R.id.selectedSort);
                 selectedSort.setText(data.getStringExtra("label"));
-                Log.d("activityresult",sortBy+","+orderBy);
+                Log.d("activityresult", sortBy + "," + orderBy);
                 recyclerView.setVisibility(View.GONE);
                 progressView.setVisibility(View.VISIBLE);
                 resetRecyclerViewData();
                 VolleyOperation();
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            if (resultCode == Activity.RESULT_CANCELED)
+            {
                 return;
             }
         }
@@ -190,7 +196,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     private void AddGenresToLayoutDynamically()
     {
-        String[] genres = {"All","Action", "Adventure", "Arcade", "Casual", "Fighting", "Management", "Tabletop", "MOBA", "Online", "Platformer", "Puzzler", "Racing", "RPG", "Sandbox", "Shooter", "Sim", "Stealth", "Sport", "Strategy"};
+        String[] genres = {"All", "Action", "Adventure", "Arcade", "Casual", "Fighting", "Management", "Tabletop", "MOBA", "Online", "Platformer", "Puzzler", "Racing", "RPG", "Sandbox", "Shooter", "Sim", "Stealth", "Sport", "Strategy"};
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         for (String genre : genres)
@@ -211,7 +217,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                     genreButtonPressed((Button) view);
                 }
             });
-            if(genre.equals("All"))
+            if (genre.equals("All"))
             {
                 selectedview = button;
                 button.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
@@ -219,7 +225,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             genreLL.addView(button);
         }
     }
-
 
 
     void genreButtonPressed(Button button)
@@ -311,18 +316,18 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         requestqueue.cancelAll("games");
         requestqueue.cancelAll("search");
         HashMap<String, String> params = new HashMap<>();
-       JSONArray jsonArray = new JSONArray(idArrayList);
+        JSONArray jsonArray = new JSONArray(idArrayList);
         if (sortBy != null)
             params.put("sortby", sortBy);
         else
-            params.put("sortby","");
+            params.put("sortby", "");
         params.put("orderby", orderBy);
         params.put("genre", genre);
-      //  params.put("list", jsonArray.toString());
+        //  params.put("list", jsonArray.toString());
         JSONObject jsonObject = new JSONObject(params);
         try
         {
-            jsonObject.put("list",jsonArray);
+            jsonObject.put("list", jsonArray);
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -333,12 +338,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onResponse(JSONObject response)
             {
-               // Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
-                Log.d ("responseMAin",response.toString());
+                // Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
+                Log.d("responseMAin", response.toString());
                 Bundle bundle = new Bundle();
-                bundle.putString("response",response.toString().substring(0,10));
+                bundle.putString("response", response.toString().substring(0, 10));
                 bundle.putString("serverurl", MyApplication.getURL());
-                firebaseAnalytics.logEvent("ListReceived",bundle);
+                firebaseAnalytics.logEvent("ListReceived", bundle);
                 handleresponse(response);
             }
         }, new Response.ErrorListener()
@@ -347,9 +352,9 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             public void onErrorResponse(VolleyError error)
             {
                 Bundle bundle = new Bundle();
-                bundle.putString("response",error.toString());
+                bundle.putString("response", error.toString());
                 bundle.putString("serverurl", MyApplication.getURL());
-                firebaseAnalytics.logEvent("ListError",bundle);
+                firebaseAnalytics.logEvent("ListError", bundle);
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -369,11 +374,12 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 if (error instanceof NoConnectionError)
                 {
                     TextView textView = errorlayout.findViewById(R.id.errorMessage);
-                    textView.setText("Check your connection and try again");
+                    textView.setText(new InternetConnectionUtil(errorlayout.getContext()).Check());
                     //  Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }
-        }){
+        })
+        {
 
             /**
              * Passing some request headers
@@ -385,7 +391,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 return headers;
             }
-
 
 
         };
@@ -451,8 +456,6 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     }
 
 
-
-
     @Override
     public void onSearchTextChanged(String oldQuery, String newQuery)
     {
@@ -514,9 +517,9 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             public void onErrorResponse(VolleyError error)
             {
                 Bundle bundle = new Bundle();
-                bundle.putString("response",error.toString());
+                bundle.putString("response", error.toString());
                 bundle.putString("serverurl", MyApplication.getURL());
-                firebaseAnalytics.logEvent("SearchError",bundle);
+                firebaseAnalytics.logEvent("SearchError", bundle);
                 progressView.setVisibility(View.GONE);
                 errorlayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -537,7 +540,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 if (error instanceof NoConnectionError)
                 {
                     TextView textView = errorlayout.findViewById(R.id.errorMessage);
-                    textView.setText("Check your connection and try again");
+                    textView.setText(new InternetConnectionUtil(errorlayout.getContext()).Check());
                     //Toast.makeText(GameListActivity.this, "Please check your connection and try again", Toast.LENGTH_LONG).show();
                 }
             }

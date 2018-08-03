@@ -43,8 +43,8 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
     Context context;
     private Lifecycle lifecycle;
     static SparseArray cats, tags;
-    float time;
-    private YouTubePlayer fullscreenedplayer;
+   float time;
+   private YouTubePlayer fullscreenedplayer;
 
     BlogAdapter(List<Information> info, Lifecycle lifecycle, SparseArray cats, SparseArray tags)
     {
@@ -84,11 +84,20 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
     }
 
     @Override
+    public void onViewRecycled(MyCommonViewHolder holder)
+    {
+        super.onViewRecycled(holder);
+        holder.cats.removeAllViews();
+        holder.tags.removeAllViews();
+    }
+
+    @Override
     public void onBindViewHolder(MyCommonViewHolder holder, int position)
     {
         final Information bloginfo = info.get(position);
-        holder.title.setText(bloginfo.title);
+        holder.title.setText(Html.fromHtml(bloginfo.title));
         holder.date.setText(DateTimeUtil.formatToYesterdayOrToday(bloginfo.date));
+        //holder.createDynmicViews(bloginfo);
         switch (holder.getItemViewType())
         {
             case 2:
@@ -106,7 +115,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                 Picasso.with(context)
                         .load(url)
                         .into(holder0.imageView);
-                createCategoryandTagButtons(bloginfo, holder0);
+                createCategoryandTagButtons(bloginfo,holder0);
                 break;
 
             case 5:
@@ -120,7 +129,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                 Log.d("triggered2", bloginfo.imgvideurl);
                 //Singelton.setYouTubePlayer(holder1.youtubePlayer);
                 holder1.cueVideo(bloginfo.imgvideurl);
-                createCategoryandTagButtons(bloginfo, holder1);
+                createCategoryandTagButtons(bloginfo,holder1);
                 break;
         }
 
@@ -139,7 +148,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             @Override
             public void onClick(View view)
             {
-                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category).putExtra("title", cat_name + "s"));
+                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category).putExtra("title",cat_name+"s"));
             }
         });
 
@@ -160,7 +169,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                     @Override
                     public void onClick(View view)
                     {
-                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId).putExtra("title", tag_name));
+                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId).putExtra("title",tag_name));
                     }
                 });
             } catch (JSONException e)
@@ -184,11 +193,10 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
         return info.size();
     }
 
-    class MyCommonViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyCommonViewHolder extends RecyclerView.ViewHolder{
 
         // Super class for both video and post view holder. Components common to both the cards will go here
-        TextView title, subtitle, date;
+        TextView title, subtitle,date;
         LinearLayout cats, tags;
 
         public MyCommonViewHolder(View itemView)
@@ -202,7 +210,12 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             tags.setVisibility(View.VISIBLE);
             cats.findViewById(R.id.cats).setVisibility(View.VISIBLE);
             itemView.findViewById(R.id.post_date).setVisibility(View.VISIBLE);
+
         }
+
+       /* private void createDynmicViews(Information information){
+            createCategoryandTagButtons(information,this);
+        }*/
     }
 
     private void addFullScreenOption(final YouTubePlayerView youtubePlayerView, final String url, final YouTubePlayer initializedYouTubePlayer)
@@ -213,7 +226,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             public void onYouTubePlayerEnterFullScreen()
             {
                 fullscreenedplayer = initializedYouTubePlayer;
-                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id", url).putExtra("time", time));
+                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id",url).putExtra("time",time));
                 youtubePlayerView.exitFullScreen();
             }
 
@@ -261,14 +274,14 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                                              @Override
                                              public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer)
                                              {
-                                                 addFullScreenOption(youtubePlayerView, info.get(getAdapterPosition()).getImgvideurl(), initializedYouTubePlayer);
+                                                 addFullScreenOption(youtubePlayerView,info.get(getAdapterPosition()).getImgvideurl(),initializedYouTubePlayer);
                                                  initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener()
                                                  {
                                                      @Override
                                                      public void onCurrentSecond(float second)
                                                      {
                                                          super.onCurrentSecond(second);
-                                                         time = second;
+                                                            time = second;
                                                      }
 
                                                      @Override
@@ -283,13 +296,12 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                                                      public void onStateChange(@NonNull PlayerConstants.PlayerState state)
                                                      {
                                                          super.onStateChange(state);
-                                                         Log.d("visibility", state.toString());
+                                                         Log.d("visibility",state.toString());
 
-                                                         if (state == PlayerConstants.PlayerState.PLAYING)
+                                                         if(state== PlayerConstants.PlayerState.PLAYING)
                                                          {
                                                              Singelton.setYouTubePlayer(youtubePlayer);
-                                                             if (YoutubeFullScreenActivity.getactivityStarted() && youtubePlayer == fullscreenedplayer)
-                                                             {
+                                                             if(YoutubeFullScreenActivity.getactivityStarted()&&youtubePlayer==fullscreenedplayer){
                                                                  // resume video from time where it was left off AND make sure that seek is done on same video which was fullscreened recently
                                                                  YoutubeFullScreenActivity.setActivityStarted(false);
                                                                  youtubePlayer.seekTo(YoutubeFullScreenActivity.getTime());
@@ -305,7 +317,9 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             );
 
 
+
         }
+
 
 
         void cueVideo(String videoId)
