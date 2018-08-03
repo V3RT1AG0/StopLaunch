@@ -116,7 +116,7 @@ public class Splash extends AppCompatActivity
                     @Override
                     public void run()
                     {
-                        Toast.makeText(getBaseContext(), "Debug:" + ServerURL, Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getBaseContext(), "Debug:" + ServerURL, Toast.LENGTH_LONG).show();
                         Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
                     }
                 });

@@ -1,4 +1,4 @@
-package com.gamerequirements;
+package com.gamerequirements.Utils;
 
 /**
  * Created by v3rt1ag0 on 12/24/17.

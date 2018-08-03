@@ -1,8 +1,10 @@
 package com.gamerequirements.Blog;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -23,6 +25,7 @@ import com.gamerequirements.JSONCustom.CustomRequest;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
+import com.gamerequirements.Utils.DateTimeUtil;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.json.JSONException;
@@ -36,7 +39,7 @@ public class BlogContent extends ActivitySuperClass
     String blogUrl = MyApplication.getBlogUrl()+ "wp-json/wp/v2/posts/";
     int blogpostid;
     WebView webView;
-    TextView blogtitetView;
+    TextView blogtitetView,dateBlog;
     Toolbar myToolbar;
     CircularProgressView circularProgressView;
    // CircularProgressView progressView;
@@ -48,6 +51,7 @@ public class BlogContent extends ActivitySuperClass
         setContentView(R.layout.activity_blog_content);
         //progressView = findViewById(R.id.progress_view);
         blogtitetView = findViewById(R.id.blogTitleTView);
+        dateBlog = findViewById(R.id.date_blog);
         //progressView.startAnimation();
         webView =  findViewById(R.id.webview1);
         myToolbar =  findViewById(R.id.my_toolbar);
@@ -98,13 +102,20 @@ public class BlogContent extends ActivitySuperClass
 
             String title = jsonObject.getJSONObject("title").getString("rendered");
             String  content = jsonObject.getJSONObject("content").getString("rendered");
+            String date = DateTimeUtil.formatToYesterdayOrToday(jsonObject.getString("date_gmt"));
             //webView.setWebChromeClient(new WebChromeClient());
             //webView.setWebViewClient(new WebViewClient());
             webView.getSettings().setJavaScriptEnabled(true);
             webView.setWebViewClient(new Browser());
             webView.setWebChromeClient(new MyWebClient());
             webView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            webView.loadData( "<style>img{display: inline;height: auto;width: 100%;}p{color:#7F7F7F;text-align:justify;}</style>"+content, "text/html", "UTF-8");
+            /*webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            webView.getSettings().setDomStorageEnabled(true);
+            webView.getSettings().setAllowFileAccessFromFileURLs(true);
+            webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);*/
+
+            webView.loadData( "<style>a,a:visited,a:hover{color:#44D62C;text-decoration:none}img{display:inline;height:auto;width:100% !important;}p{color:#ECEFF1;font-size:18;line-height:27px;}</style>"+content, "text/html", "UTF-8");
             /*webView.setWebViewClient(new WebViewClient()
             {
                 public void onPageFinished(WebView view, String url)
@@ -113,6 +124,7 @@ public class BlogContent extends ActivitySuperClass
                 }
             });*/
             blogtitetView.setText(Html.fromHtml(title));
+            dateBlog.setText(date);
         } catch (JSONException e)
         {
             e.printStackTrace();
@@ -126,9 +138,23 @@ public class BlogContent extends ActivitySuperClass
     {
         Browser() {}
 
-        public boolean shouldOverrideUrlLoading(WebView paramWebView, String paramString)
+      /*  public boolean shouldOverrideUrlLoading(WebView paramWebView, String paramString)
         {
             paramWebView.loadUrl(paramString);
+            return true;
+        }*/
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            // open in Webview
+            if (url.contains("android_asset") ){
+                // Can be clever about it like so where myshost is defined in your strings file
+                // if (Uri.parse(url).getHost().equals(getString(R.string.myhost)))
+                return false;
+            }
+            // open rest of URLS in default browser
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
             return true;
         }
     }
@@ -143,6 +169,8 @@ public class BlogContent extends ActivitySuperClass
         private int mOriginalSystemUiVisibility;
 
         public MyWebClient() {}
+
+
 
         @Override
         public void onProgressChanged(WebView view, int progress)

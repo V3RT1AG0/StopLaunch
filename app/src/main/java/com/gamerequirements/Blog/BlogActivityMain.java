@@ -20,7 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.gamerequirements.EndlessRecyclerView;
+import com.gamerequirements.Utils.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
@@ -273,7 +273,7 @@ public class BlogActivityMain extends Fragment
                         } else if (category == 2)
                         {
                             Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
-                            videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
+                            videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium_large").getString("source_url");
                         }
                         else
                         {

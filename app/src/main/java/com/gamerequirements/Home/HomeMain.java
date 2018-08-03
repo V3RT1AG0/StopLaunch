@@ -376,7 +376,7 @@ public class HomeMain extends Fragment
                 } else if (category == 2)
                 {
                     Log.d("videoimageurl", jsonObject.getJSONObject("_embedded").toString());
-                    videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium").getString("source_url");
+                    videoimgurl = jsonObject.getJSONObject("_embedded").getJSONArray("wp:featuredmedia").getJSONObject(0).getJSONObject("media_details").getJSONObject("sizes").getJSONObject("medium_large").getString("source_url");
                 } else
                     continue;
                 bloglist.add(new Information(id, title, subtitle, videoimgurl, category));

@@ -35,13 +35,25 @@
 
                     <TextView
                         android:justificationMode="inter_word"
-                        android:textColor="#7F7F7F"
+                        android:textColor="@color/plainWhite"
                         android:paddingEnd="8sp"
                         android:paddingStart="8sp"
                         android:id="@+id/blogTitleTView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="25sp" />
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:justificationMode="inter_word"
+                        android:textColor="@color/whitedark1"
+                        android:gravity="start"
+                        android:layout_marginTop="4sp"
+                        android:paddingEnd="8sp"
+                        android:paddingStart="8sp"
+                        android:id="@+id/date_blog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp" />
 
                     <com.github.rahatarmanahmed.cpv.CircularProgressView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/progress_view"
