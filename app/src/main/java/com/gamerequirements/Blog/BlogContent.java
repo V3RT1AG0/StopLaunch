@@ -61,6 +61,12 @@ public class BlogContent extends ActivitySuperClass
         setSupportActionBar(myToolbar);
         Jsonrequest();
 
+        /*AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("68E07D1A7FD2CC0EB313746EF7621A6C")
+                .build();
+        adView.loadAd(adRequest);*/
+
 
     }
 
@@ -102,7 +108,7 @@ public class BlogContent extends ActivitySuperClass
 
             String title = jsonObject.getJSONObject("title").getString("rendered");
             String  content = jsonObject.getJSONObject("content").getString("rendered");
-            String date = DateTimeUtil.formatToYesterdayOrToday(jsonObject.getString("date_gmt"));
+            String date = DateTimeUtil.formatToYesterdayOrToday(jsonObject.getString("date"));
             //webView.setWebChromeClient(new WebChromeClient());
             //webView.setWebViewClient(new WebViewClient());
             webView.getSettings().setJavaScriptEnabled(true);

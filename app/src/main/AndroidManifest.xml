@@ -54,6 +54,7 @@
             android:name=".TabbedActivity"
             android:theme="@style/MyTheme" />
         <activity
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:name=".SaveCofig.SaveFirstConfig"
             android:theme="@style/AppTheme" />

@@ -20,11 +20,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.gamerequirements.Utils.EndlessRecyclerView;
 import com.gamerequirements.JSONCustom.CustomVolleyRequest;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.gamerequirements.Utils.EndlessRecyclerView;
 import com.gamerequirements.Utils.InternetConnectionUtil;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -51,6 +51,7 @@ public class BlogActivityMain extends Fragment
     Boolean nexttexnupdate = false;
     SparseArray cats, tags;
     FirebaseAnalytics firebaseAnalytics;
+    View v;
 
     public static BlogActivityMain newInstance()
     {
@@ -63,27 +64,14 @@ public class BlogActivityMain extends Fragment
 
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
 
-        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,date_gmt,categories,tags,_embedded.wp:featuredmedia&page=";
-        cats = new SparseArray();
-        tags = new SparseArray();
-        progressView = getActivity().findViewById(R.id.progress_view2);
-        progressView.startAnimation();
-        bloglist = new ArrayList<>();
-        recyclerView = getActivity().findViewById(R.id.blog_recycler);
-        lmanager = new LinearLayoutManager(getActivity());
-        errorlayout = getActivity().findViewById(R.id.errorlayout2);
-        blogAdapter = new BlogAdapter(bloglist, this.getLifecycle(),cats,tags);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(lmanager);
-        recyclerView.setAdapter(blogAdapter);
-        firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        AddOnScrollListenrerToRecyclerView();
-        getTagsAndCategories();
+
     }
 
     private void getTagsAndCategories()
@@ -125,6 +113,23 @@ public class BlogActivityMain extends Fragment
     {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_blog_main, container, false);
+        blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&fields=id,title,acf,excerpt,date,categories,tags,_embedded.wp:featuredmedia&page=";
+        cats = new SparseArray();
+        tags = new SparseArray();
+        progressView = v.findViewById(R.id.progress_view2);
+        progressView.startAnimation();
+        bloglist = new ArrayList<>();
+        recyclerView = v.findViewById(R.id.blog_recycler);
+        lmanager = new LinearLayoutManager(getActivity());
+        errorlayout = v.findViewById(R.id.errorlayout2);
+        blogAdapter = new BlogAdapter(bloglist, this.getLifecycle(),cats,tags);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(lmanager);
+        recyclerView.setAdapter(blogAdapter);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(v.getContext());
+        this.v = v;
+        AddOnScrollListenrerToRecyclerView();
+        getTagsAndCategories();
         return (v);
     }
 
@@ -172,7 +177,7 @@ public class BlogActivityMain extends Fragment
                 10000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(v.getContext().getApplicationContext()).getRequestQueue();
         requestqueue.add(arrayRequest);
     }
 
@@ -231,7 +236,7 @@ public class BlogActivityMain extends Fragment
                 10000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(v.getContext().getApplicationContext()).getRequestQueue();
         requestqueue.add(arrayRequest);
     }
 
@@ -260,7 +265,7 @@ public class BlogActivityMain extends Fragment
                         int category = jsonObject.getJSONArray("categories").getInt(0);
                         JSONArray tags = jsonObject.getJSONArray("tags");
                         String title = jsonObject.getJSONObject("title").getString("rendered");
-                        String date = jsonObject.getString("date_gmt");
+                        String date = jsonObject.getString("date");
                         String subtitle = jsonObject.getJSONObject("excerpt").getString("rendered");
                         String videoimgurl;
                         Log.d("videoimageurl", title + category);
@@ -301,7 +306,7 @@ public class BlogActivityMain extends Fragment
                         JSONObject jsonObject = response.getJSONObject(i);
                         cats.put(jsonObject.getInt("id"),jsonObject.getString("name"));
                     }
-                    String tagsUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/tags?fields=id,name";
+                    String tagsUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/tags?fields=id,name&per_page=100";
                     VolleyOperation(tagsUrl, "tags");
                     break;
                 case "tags":

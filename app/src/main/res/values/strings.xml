@@ -6,6 +6,7 @@
     <!-- <string name="native_bottom_ad">ca-app-pub-1544435087195516/8447157548</string>-->
     <string name="can_u_run_it_ad">ca-app-pub-1544435087195516/3626551024</string>
     <string name="game_content_bottom_ad">ca-app-pub-1544435087195516/1906811682</string>
+    <string name="blog_content_bottom_ad">ca-app-pub-1544435087195516~7128952583</string>
 
     <string name="save">Save</string>
     <string name="title_activity_tabbed_main">TabbedMainActivity</string>

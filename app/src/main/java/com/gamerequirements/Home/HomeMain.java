@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,9 +59,10 @@ public class HomeMain extends Fragment
     static BlogAdapter blogAdapter;
     static RecyclerView recyclerView;
     static LinearLayoutManager lmanager;
-    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,date_gmt,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
+    private final String blogUrl = MyApplication.getBlogUrl() + "wp-json/wp/v2/posts?_embed=true&orderby=id&page=1&fields=id,title,date,excerpt,acf,categories,tags,_embedded.wp:featuredmedia&per_page=4";
     private final String gamesStatusURL = MyApplication.getURL() + "getLastInsertedGameCount";
     CircularProgressView progressView;
+    View v;
 
 
     public HomeMain()
@@ -76,24 +76,10 @@ public class HomeMain extends Fragment
     {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_home_main, container, false);
-        return (v);
-    }
-
-    public static HomeMain newInstance()
-    {
-        HomeMain homeMain = new HomeMain();
-        return homeMain;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-
-        progressView = getActivity().findViewById(R.id.progress_view_blog);
+        progressView = v.findViewById(R.id.progress_view_blog);
         progressView.startAnimation();
         bloglist = new ArrayList<>();
-        recyclerView = getActivity().findViewById(R.id.home_blog_recycler);
+        recyclerView = v.findViewById(R.id.home_blog_recycler);
         lmanager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         blogAdapter = new BlogAdapter(bloglist, this.getLifecycle());
         SnapHelper helper = new LinearSnapHelper();
@@ -102,8 +88,9 @@ public class HomeMain extends Fragment
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lmanager);
         recyclerView.setAdapter(blogAdapter);
+this.v = v;
 
-        getActivity().findViewById(R.id.gameInfoCard).setOnClickListener(new View.OnClickListener()
+        v.findViewById(R.id.gameInfoCard).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -113,7 +100,7 @@ public class HomeMain extends Fragment
         });
 
 
-        getActivity().findViewById(R.id.View_all_config).setOnClickListener(new View.OnClickListener()
+        v.findViewById(R.id.View_all_config).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -122,7 +109,7 @@ public class HomeMain extends Fragment
             }
         });
 
-        getActivity().findViewById(R.id.view_all_articles).setOnClickListener(new View.OnClickListener()
+        v.findViewById(R.id.view_all_articles).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -130,8 +117,8 @@ public class HomeMain extends Fragment
                 ((TabbedActivity) getActivity()).getmViewPager().setCurrentItem(1);
             }
         });
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+      /* DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);*/
 
 
         mHandler = new Handler(Looper.getMainLooper());
@@ -211,6 +198,22 @@ public class HomeMain extends Fragment
 
         VolleyOperation();
         volleyRequestForGamesCount();
+        return (v);
+    }
+
+    public static HomeMain newInstance()
+    {
+        HomeMain homeMain = new HomeMain();
+        return homeMain;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+
+
     }
 
     static void cancelSlider()
@@ -257,10 +260,10 @@ public class HomeMain extends Fragment
             final String last_updated = obj.getString("last_inserted_date");
             String totol_game_count = obj.getString("total_game_count");
             GameListActivity.searchView.setSearchHint("Search from " + totol_game_count + " titles");
-            TextView count = getActivity().findViewById(R.id.games_count);
-            TextView last_updated_TV = getActivity().findViewById(R.id.last_updated);
-            TextView last_added_games_count = getActivity().findViewById(R.id.new_games_added);
-            final LinearLayout newgamesAddedLL = getActivity().findViewById(R.id.new_games_added_LL);
+            TextView count = v.findViewById(R.id.games_count);
+            TextView last_updated_TV = v.findViewById(R.id.last_updated);
+            TextView last_added_games_count = v.findViewById(R.id.new_games_added);
+            final LinearLayout newgamesAddedLL = v.findViewById(R.id.new_games_added_LL);
             count.setText(totol_game_count);
             last_updated_TV.setText("Last updated: " + last_updated);
             last_added_games_count.setOnClickListener(new View.OnClickListener()
@@ -302,25 +305,25 @@ public class HomeMain extends Fragment
 
     void displayEnabledConfig()
     {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = v.getContext().getSharedPreferences(MyApplication.getSharedPrefrenceKey(), Context.MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean("StoredConfigEnabled", false))
         {
             String CPUname = sharedPreferences.getString("CPUname", null),
                     GPUname = sharedPreferences.getString("GPUname", null),
                     RAMname = sharedPreferences.getString("RAMname", null);
-            TextView cpu = getActivity().findViewById(R.id.CPU_text);
+            TextView cpu = v.findViewById(R.id.CPU_text);
             cpu.setText(CPUname);
-            TextView gpu = getActivity().findViewById(R.id.GPU_text);
+            TextView gpu = v.findViewById(R.id.GPU_text);
             gpu.setText(GPUname);
-            TextView ram = getActivity().findViewById(R.id.RAM_text);
+            TextView ram = v.findViewById(R.id.RAM_text);
             ram.setText(RAMname);
-            getActivity().findViewById(R.id.noConfig).setVisibility(View.GONE);
-            getActivity().findViewById(R.id.configLL).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.noConfig).setVisibility(View.GONE);
+            v.findViewById(R.id.configLL).setVisibility(View.VISIBLE);
         } else
         {
-            getActivity().findViewById(R.id.noConfig).setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.configLL).setVisibility(View.GONE);
+            v.findViewById(R.id.noConfig).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.configLL).setVisibility(View.GONE);
         }
     }
 
@@ -360,8 +363,8 @@ public class HomeMain extends Fragment
                 String title = jsonObject.getJSONObject("title").getString("rendered");
                 if (date == null)
                 {
-                    date = jsonObject.getString("date_gmt");
-                    TextView textView = getActivity().findViewById(R.id.date);
+                    date = jsonObject.getString("date");
+                    TextView textView = v.findViewById(R.id.date);
                     // textView.setText(DateTimeUtil.formatToYesterdayOrToday(date)); //TODO remove this if block if no longer required
                 }
                 // String content = jsonObject.getJSONObject("content").getString("rendered");

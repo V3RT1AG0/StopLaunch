@@ -67,10 +67,17 @@ public class TabbedActivity extends AppCompatActivity
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_document);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_console);
-
+        try
+        {
+            tabLayout.getTabAt(0).setIcon(R.drawable.ic_dashboard);
+            tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_document);
+            tabLayout.getTabAt(2).setIcon(R.drawable.ic_console);
+            int tabIconColor = ContextCompat.getColor(TabbedActivity.this, R.color.colorAccent);
+            tabLayout.getTabAt(0).getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
         tabLayout.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(mViewPager)
                 {
@@ -98,6 +105,7 @@ public class TabbedActivity extends AppCompatActivity
                     }
                 }
         );
+
 
         AppRater.setDarkTheme();
         AppRater.app_launched(this);

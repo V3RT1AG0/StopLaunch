@@ -13,7 +13,7 @@ public class MyApplication extends Application
 {
     public static MyApplication sinstance;
     private static String URL;
-    private static final String imageurl = "http://www.game-debate.com/pic.php?g_id=";
+    private static final String imageurl = "https://www.game-debate.com/pic.php?g_id=";
     private static final String SharedPrefrenceKey = "gameRequirementsShared";
     private static String blogUrl;
 

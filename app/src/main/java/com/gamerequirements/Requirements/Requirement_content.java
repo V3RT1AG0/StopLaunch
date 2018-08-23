@@ -2,6 +2,7 @@ package com.gamerequirements.Requirements;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -271,9 +272,21 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
                         , null));
                 ImageView imageView = settingsDialog.findViewById(R.id.imageview1);
                 settingsDialog.show();
+                Log.d("ImageLOading",MyApplication.getImageurl() + id);
                 Picasso.with(this)
                         .load(MyApplication.getImageurl() + id)
                         .into(imageView);
+
+                Picasso.Builder builder = new Picasso.Builder(this);
+                builder.listener(new Picasso.Listener()
+                {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+                    {
+                        Log.d("ImageLOading",exception.getMessage());
+                    }
+                });
+                builder.build().load(MyApplication.getImageurl() + id).into(imageView);
 
 
         }

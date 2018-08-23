@@ -74,6 +74,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     View selectedview;
     String genre = "All", sortBy = null, orderBy = "rand";
     FirebaseAnalytics firebaseAnalytics;
+    View v;
 
     public static GameListActivity newInstance()
     {
@@ -91,81 +92,14 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     {
 
         super.onActivityCreated(savedInstanceState);
-        sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
-        firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
-        //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
-        //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
-        notificationCountUrl = MyApplication.getURL() + "newgamescount";
-        SEARCHURL = MyApplication.getURL() + "gameslist/search/";
-        // GENREURL = MyApplication.getURL() + "gameslistgenre/";
-
-
-        genreLL = getActivity().findViewById(R.id.genre_LL);
-        timer = new Timer();
-        progressView = getActivity().findViewById(R.id.progress_view);
-        progressView.startAnimation();
-        gamelist = new ArrayList<>();
-        recyclerView = getActivity().findViewById(R.id.my_gamelist_recycler);
-        filteredRecyclerView = getActivity().findViewById(R.id.my_filtered_recycler);
-        //notificationCounttextview = getActivity().findViewById(R.id.badge);
-        lmanager = new LinearLayoutManager(getActivity());
-        errorlayout = getActivity().findViewById(R.id.errorlayout);
-
-        gameListAdapter = new GameListAdapter(gamelist);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(lmanager);
-        recyclerView.setAdapter(gameListAdapter);
-
-
-        searchAdapter = new GameListAdapter(filteredList);
-        filteredRecyclerView.setHasFixedSize(true);
-        filteredRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        filteredRecyclerView.setAdapter(searchAdapter);
-
-
-        searchView = getActivity().findViewById(R.id.floating_search_view);
-        searchView.setOnQueryChangeListener(this);
-
-        //searchView.setSearchFocused(true);
-       /* ImageView random = getActivity().findViewById(R.id.random);
-        selectedview = random;
-        random.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
-        random.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                genre = "any";
-                setEnabledCapsuleBackgound(view);
-                resetRecyclerViewData();
-                VolleyOperation();
-            }
-        });*/
-
-        getActivity().findViewById(R.id.filterLL).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                startActivityForResult(new Intent(getActivity(), FilterActivity.class).putExtra("Order", orderBy).putExtra("Sort", sortBy), 9418);
-            }
-        });
-
-        AddGenresToLayoutDynamically();
-        AddOnScrollListenrerToRecyclerView();
-        VolleyOperation();
-        // getNotificationCount();
-
-        Log.e("Error", gamelisturl);
-
+       
     }
 
     void setEnabledCapsuleBackgound(View v)
     {
-        selectedview.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_start));
+        selectedview.setBackground(v.getResources().getDrawable(R.drawable.rounded_button_start));
         selectedview = v;
-        v.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
+        v.setBackground(v.getResources().getDrawable(R.drawable.rounded_button_stop));
     }
 
     @Override
@@ -179,7 +113,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
                 orderBy = data.getStringExtra("order");
                 sortBy = data.getStringExtra("sort");
-                TextView selectedSort = getActivity().findViewById(R.id.selectedSort);
+                TextView selectedSort = v.findViewById(R.id.selectedSort);
                 selectedSort.setText(data.getStringExtra("label"));
                 Log.d("activityresult", sortBy + "," + orderBy);
                 recyclerView.setVisibility(View.GONE);
@@ -197,7 +131,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     private void AddGenresToLayoutDynamically()
     {
         String[] genres = {"All", "Action", "Adventure", "Arcade", "Casual", "Fighting", "Management", "Tabletop", "MOBA", "Online", "Platformer", "Puzzler", "Racing", "RPG", "Sandbox", "Shooter", "Sim", "Stealth", "Sport", "Strategy"};
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(
+        LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         for (String genre : genres)
         {
@@ -220,7 +154,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             if (genre.equals("All"))
             {
                 selectedview = button;
-                button.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_button_stop));
+                button.setBackground(v.getResources().getDrawable(R.drawable.rounded_button_stop));
             }
             genreLL.addView(button);
         }
@@ -292,7 +226,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             }
         });
 
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(v.getContext().getApplicationContext()).getRequestQueue();
         requestqueue.add(jsonObjectRequest);
     }
 
@@ -303,6 +237,60 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
     {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_game_list, container, false);
+        sharedPrefs = MyApplication.getContext().getSharedPreferences("com.gamerequirements", Context.MODE_PRIVATE);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(v.getContext());
+        gamelisturl = MyApplication.getURL() + "api/v1/getgames";
+        //gamelisturl = "http://192.168.31.59:5000/" + "api/v1/getgames";
+        //gamelisturl = "http://192.168.31.59:5000/" + "gameslist";
+        notificationCountUrl = MyApplication.getURL() + "newgamescount";
+        SEARCHURL = MyApplication.getURL() + "gameslist/search/";
+        // GENREURL = MyApplication.getURL() + "gameslistgenre/";
+
+
+        genreLL = v.findViewById(R.id.genre_LL);
+        timer = new Timer();
+        progressView = v.findViewById(R.id.progress_view);
+        progressView.startAnimation();
+        gamelist = new ArrayList<>();
+        recyclerView = v.findViewById(R.id.my_gamelist_recycler);
+        filteredRecyclerView = v.findViewById(R.id.my_filtered_recycler);
+        //notificationCounttextview = v.findViewById(R.id.badge);
+        lmanager = new LinearLayoutManager(v.getContext());
+        errorlayout = v.findViewById(R.id.errorlayout);
+
+        gameListAdapter = new GameListAdapter(gamelist);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(lmanager);
+        recyclerView.setAdapter(gameListAdapter);
+
+
+        searchAdapter = new GameListAdapter(filteredList);
+        filteredRecyclerView.setHasFixedSize(true);
+        filteredRecyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+        filteredRecyclerView.setAdapter(searchAdapter);
+
+
+        searchView = v.findViewById(R.id.floating_search_view);
+        searchView.setOnQueryChangeListener(this);
+        
+        v.findViewById(R.id.filterLL).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                startActivityForResult(new Intent(view.getContext(), FilterActivity.class).putExtra("Order", orderBy).putExtra("Sort", sortBy), 9418);
+            }
+        });
+
+        this.v = v;
+
+        AddGenresToLayoutDynamically();
+        AddOnScrollListenrerToRecyclerView();
+        VolleyOperation();
+        // getNotificationCount();
+
+        Log.e("Error", gamelisturl);
+
         return (v);
     }
 
@@ -312,7 +300,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
         searchView.setOnQueryChangeListener(null);
         searchView.clearQuery();
         searchView.setOnQueryChangeListener(this);
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(v.getContext().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("games");
         requestqueue.cancelAll("search");
         HashMap<String, String> params = new HashMap<>();
@@ -338,7 +326,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
             @Override
             public void onResponse(JSONObject response)
             {
-                // Toast.makeText(getActivity(),"Debug:"+response,Toast.LENGTH_LONG).show();
+                // Toast.makeText(v,"Debug:"+response,Toast.LENGTH_LONG).show();
                 Log.d("responseMAin", response.toString());
                 Bundle bundle = new Bundle();
                 bundle.putString("response", response.toString().substring(0, 10));
@@ -489,19 +477,25 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
 
     void VolleySearchRequest(final String url)
     {
-        getActivity().runOnUiThread(new Runnable()
+        try
         {
-            @Override
-            public void run()
+            getActivity().runOnUiThread(new Runnable()
             {
-                filteredRecyclerView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.GONE);
-                progressView.setVisibility(View.VISIBLE);
-            }
-        });
+                @Override
+                public void run()
+                {
+                    filteredRecyclerView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                    progressView.setVisibility(View.VISIBLE);
+                }
+            });
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
 
-        RequestQueue requestqueue = CustomVolleyRequest.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+
+        RequestQueue requestqueue = CustomVolleyRequest.getInstance(v.getContext().getApplicationContext()).getRequestQueue();
         requestqueue.cancelAll("search");
         requestqueue.cancelAll("games");
         CustomRequest jsonObjectRequest = new CustomRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>()

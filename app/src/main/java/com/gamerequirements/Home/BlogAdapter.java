@@ -19,10 +19,12 @@ import com.gamerequirements.Blog.Information;
 import com.gamerequirements.MyApplication;
 import com.gamerequirements.R;
 import com.gamerequirements.Singelton;
+import com.gamerequirements.Utils.YoutubeFullScreenActivity;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerInitListener;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +39,8 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     List<Information> info;
     Context context;
     private Lifecycle lifecycle;
+    private YouTubePlayer fullscreenedplayer;
+    float time;
 
     BlogAdapter(List<Information> info, Lifecycle lifecycle)
     {
@@ -58,11 +62,31 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case 5:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.blog_card_video, parent, false);
                 YouTubePlayerView youTubePlayerView = v.findViewById(R.id.youtube_player_view);
-                youTubePlayerView.getPlayerUIController().showFullscreenButton(false);
+                youTubePlayerView.getPlayerUIController().showFullscreenButton(true);
                 lifecycle.addObserver(youTubePlayerView);
                 return new MyVideoViewHolder(v,youTubePlayerView);
         }
         return null;
+    }
+
+    private void addFullScreenOption(final YouTubePlayerView youtubePlayerView, final String url, final YouTubePlayer initializedYouTubePlayer)
+    {
+        youtubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener()
+        {
+            @Override
+            public void onYouTubePlayerEnterFullScreen()
+            {
+                fullscreenedplayer = initializedYouTubePlayer;
+                youtubePlayerView.getContext().startActivity(new Intent(context, YoutubeFullScreenActivity.class).putExtra("id",url).putExtra("time",time));
+                youtubePlayerView.exitFullScreen();
+            }
+
+            @Override
+            public void onYouTubePlayerExitFullScreen()
+            {
+
+            }
+        });
     }
 
     @Override
@@ -157,6 +181,7 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                              @Override
                                              public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer)
                                              {
+                                                 addFullScreenOption(youtubePlayerView,info.get(getAdapterPosition()).getImgvideurl(),initializedYouTubePlayer);
                                                  initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener()
                                                  {
                                                      @Override
@@ -165,6 +190,13 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                                          youtubePlayer = initializedYouTubePlayer;
                                                          youtubePlayer.cueVideo(currentVideoId, 0);
 
+                                                     }
+
+                                                     @Override
+                                                     public void onCurrentSecond(float second)
+                                                     {
+                                                         super.onCurrentSecond(second);
+                                                         time = second;
                                                      }
 
                                                      @Override
@@ -177,8 +209,18 @@ class BlogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                                          else if(state== PlayerConstants.PlayerState.PAUSED)
                                                              HomeMain.setUpSlider();
 
+                                                       /*  if(state== PlayerConstants.PlayerState.PLAYING)
+                                                             Singelton.setYouTubePlayer(youtubePlayer);*/
+
                                                          if(state== PlayerConstants.PlayerState.PLAYING)
+                                                         {
                                                              Singelton.setYouTubePlayer(youtubePlayer);
+                                                             if(YoutubeFullScreenActivity.getactivityStarted()&&youtubePlayer==fullscreenedplayer){
+                                                                 // resume video from time where it was left off AND make sure that seek is done on same video which was fullscreened recently
+                                                                 YoutubeFullScreenActivity.setActivityStarted(false);
+                                                                 youtubePlayer.seekTo(YoutubeFullScreenActivity.getTime());
+                                                             }
+                                                         }
 
                                                      }
                                                  });

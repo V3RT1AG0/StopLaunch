@@ -12,18 +12,19 @@ import org.joda.time.format.DateTimeFormatter;
 public class DateTimeUtil
 {
     public static String formatToYesterdayOrToday(String date) {
-        date = "2018-07-17T11:15:23";
+        //date = "2018-07-17T11:15:23";
         DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss").parseDateTime(date);
         DateTime today = new DateTime();
         DateTime yesterday = today.minusDays(1);
-        DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("hh:mma");
+       // DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("hh:mma");
         String daySuffix = getLastDigitSufix(dateTime.getDayOfMonth());
+        //DateTimeFormatter timeFormatter2 = DateTimeFormat.forPattern("dd'"+daySuffix+" '"+"MMMM");
         DateTimeFormatter timeFormatter2 = DateTimeFormat.forPattern("dd'"+daySuffix+" '"+"MMMM");
 
         if (dateTime.toLocalDate().equals(today.toLocalDate())) {
-            return "Today " + timeFormatter.print(dateTime);
+            return "Today "; //+ timeFormatter.print(dateTime);
         } else if (dateTime.toLocalDate().equals(yesterday.toLocalDate())) {
-            return "Yesterday " + timeFormatter.print(dateTime);
+            return "Yesterday " ;//+ timeFormatter.print(dateTime);
         } else {
             return timeFormatter2.print(dateTime);
         }
