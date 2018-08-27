@@ -148,7 +148,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
             @Override
             public void onClick(View view)
             {
-                view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category).putExtra("title",cat_name+"s"));
+                context.startActivity(new Intent(context, BlogListActivity.class).putExtra("cats", bloginfo.category).putExtra("title",cat_name+"s"));
             }
         });
 
@@ -169,7 +169,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyCommonViewHo
                     @Override
                     public void onClick(View view)
                     {
-                        view.getContext().startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId).putExtra("title",tag_name));
+                       context.startActivity(new Intent(context, BlogListActivity.class).putExtra("tags", tagId).putExtra("title",tag_name));
                     }
                 });
             } catch (JSONException e)

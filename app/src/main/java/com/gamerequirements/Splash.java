@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.gamerequirements.Notification.NotificationActivity;
 import com.gamerequirements.SaveCofig.SaveFirstConfig;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -49,7 +53,7 @@ public class Splash extends AppCompatActivity
             @Override
             public void run()
             {
-               if (!isNetworkAvailable())
+                if (!isNetworkAvailable())
                 {
                     runOnUiThread(new Runnable()
                     {
@@ -58,14 +62,15 @@ public class Splash extends AppCompatActivity
                         {
                             FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(Splash.this);
                             Bundle bundle = new Bundle();
-                            bundle.putString("response","No internet access detected");
-                            firebaseAnalytics.logEvent("NoInternetConnectionSplash",bundle);
+                            bundle.putString("response", "No internet access detected");
+                            firebaseAnalytics.logEvent("NoInternetConnectionSplash", bundle);
                             Toast.makeText(Splash.this, "Unable to contact server. Please try again later", Toast.LENGTH_SHORT).show();
                         }
                     });
                     Splash.this.finish();
                 } else
-                getdatafrompastebin();
+                   // getdatafrompastebin();
+                getDaataFromRemoteConfig();
 
             }
         }).start();
@@ -77,6 +82,68 @@ public class Splash extends AppCompatActivity
     {
         return new Intent(this, Requirement_content.class).putExtras(bundle);
     }*/
+    void getDaataFromRemoteConfig()
+    {
+
+        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseRemoteConfig.fetch(0)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            firebaseRemoteConfig.activateFetched();
+                            String serverUrl = firebaseRemoteConfig.getString("serverUrl");
+                            String blogurl = firebaseRemoteConfig.getString("blogUrl");
+                            long maintenanceMode = firebaseRemoteConfig.getLong("maintenaceMode");
+                            long version = firebaseRemoteConfig.getLong("version");
+                           // Log.d("Server", " "+serverUrl+"loaded2");
+                            MyApplication.setBlogUrl(blogurl);
+                            MyApplication.setURL(serverUrl);
+                            editor.putString("url", serverUrl);
+                            editor.putString("blogurl", blogurl);
+                            editor.commit();
+                           // Log.d("Server", "loaded1"+MyApplication.getBlogUrl());
+
+
+                            if (maintenanceMode == 1)
+                            {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        Toast.makeText(getBaseContext(), "We are currently under maintenance. Please try again after some time", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                finish();
+                            }
+
+
+                            if (version!= BuildConfig.VERSION_CODE)
+                            {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                            Log.d("Server" + serverUrl, MyApplication.getURL());
+                            startNextActivity();
+                        } else {
+                           // getdatafrompastebin();
+                            tryfromfirebasedatabase();
+                        }
+                    }
+                });
+
+
+
+
+    }
 
     void getdatafrompastebin()
     {
@@ -104,19 +171,25 @@ public class Splash extends AppCompatActivity
             if (Forcemaintenance == 1)
             {
                 in.close();
-                return;
-            }
-
-
-            if (Integer.parseInt(in.readLine()) != BuildConfig.VERSION_CODE)
-            {
-                // return "forceupdate";
                 runOnUiThread(new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                      //  Toast.makeText(getBaseContext(), "Debug:" + ServerURL, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "We are currently under maintenance. Please try again after some time", Toast.LENGTH_LONG).show();
+                    }
+                });
+                finish();
+            }
+
+
+            if (Integer.parseInt(in.readLine()) != BuildConfig.VERSION_CODE)
+            {
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
                         Toast.makeText(getBaseContext(), "A newer version is available in Google Play", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -177,7 +250,17 @@ public class Splash extends AppCompatActivity
                 Log.d("log", dataSnapshot.getKey());
                 StopLaunch def = dataSnapshot.getValue(StopLaunch.class);
                 if (def.getForcemaintenance() == 1)
-                    return;
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Toast.makeText(getBaseContext(), "We are currently under maintenance. Please try again after some time", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    finish();
+                }
                 if (def.getNewVersion() == BuildConfig.VERSION_CODE)
                 {
                     runOnUiThread(new Runnable()

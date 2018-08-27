@@ -9,8 +9,8 @@ android {
         applicationId "com.gamerequirements"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 14
-        versionName "3.0"
+        versionCode 15
+        versionName "3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,6 +33,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.8.0'
     compile 'com.google.firebase:firebase-ads:11.8.0'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.google.firebase:firebase-config:11.8.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:design:27.0.2'
