@@ -29,8 +29,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
 
     GameListAdapter(List<Information> info)
     {
-        this.info=info;
-        context= MyApplication.getContext();
+        this.info = info;
+        context = MyApplication.getContext();
     }
 
     @Override
@@ -45,29 +45,31 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position)
     {
-        Information in=info.get(position);
+        Information in = info.get(position);
         holder.title_TV.setText(in.title);
 
-        if(in.date.equals(""))
+        if (in.date.equals(""))
             holder.date_TV.setVisibility(View.GONE);
         else
-            holder.date_TV.setText("Release Date: "+in.date);
+            holder.date_TV.setText("Release Date: " + in.date);
         try
         {
-            holder.genre_TV.setText("Genre: " + in.genre.substring(2, in.genre.length() - 2).replace("\\n", ", "));
-        }
-        catch (StringIndexOutOfBoundsException e)
+            if (in.genre.equals(""))
+                holder.genre_TV.setVisibility(View.GONE);
+            else
+                holder.genre_TV.setText("Genre: " + in.genre.substring(2, in.genre.length() - 2).replace("\\n", ", "));
+        } catch (StringIndexOutOfBoundsException e)
         {
-            Log.d("Error",e.toString()  + "gid = " + in.id);
+            Log.d("Error", e.toString() + "gid = " + in.id);
         }
 
 
         holder.summart_TV.setText(in.summary);
-        String url= MyApplication.getImageurl()+in.id;
-        Log.d("custom",url);
+        String url = MyApplication.getImageurl() + in.id;
+        Log.d("custom", url);
         Picasso.with(context)
                 .load(url)
-                 // optional
+                // optional
                 //.error(R.mipmap.ic_launcher)      // optional
                 //.resize(400, 400)
                 .into(holder.imageView);
@@ -83,17 +85,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         LinearLayout linearLayout;
-        TextView title_TV,genre_TV,date_TV,summart_TV;
+        TextView title_TV, genre_TV, date_TV, summart_TV;
         ImageView imageView;
+
         public MyViewHolder(View itemView)
         {
             super(itemView);
-            linearLayout= itemView.findViewById(R.id.Game_list_LL);
-            title_TV= itemView.findViewById(R.id.name_of_game);
-            genre_TV= itemView.findViewById(R.id.genre);
-            date_TV= itemView.findViewById(R.id.date);
-            imageView= itemView.findViewById(R.id.image);
-            summart_TV= itemView.findViewById(R.id.summary);
+            linearLayout = itemView.findViewById(R.id.Game_list_LL);
+            title_TV = itemView.findViewById(R.id.name_of_game);
+            genre_TV = itemView.findViewById(R.id.genre);
+            date_TV = itemView.findViewById(R.id.date);
+            imageView = itemView.findViewById(R.id.image);
+            summart_TV = itemView.findViewById(R.id.summary);
             linearLayout.setOnClickListener(this);
         }
 
@@ -103,9 +106,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.MyView
             switch (view.getId())
             {
                 case R.id.Game_list_LL:
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("id",info.get(getAdapterPosition()).id);
-                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(),Requirement_content.class).putExtras(bundle));
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", info.get(getAdapterPosition()).id);
+                    linearLayout.getContext().startActivity(new Intent(linearLayout.getContext(), Requirement_content.class).putExtras(bundle));
                     break;
             }
         }

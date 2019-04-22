@@ -55,7 +55,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
             }
         });
 
-      findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.Settings).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -63,7 +63,6 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
                 startActivity(new Intent(getApplicationContext(), MainActivityConfig.class));
             }
         });
-
 
 
         Bundle bundle = getIntent().getExtras();
@@ -131,6 +130,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
     void displaydata(int id)
     {
         String url = requirementurl + id;
+        Log.d("ServerURl",url);
         JsonObjectRequest jsonarrayrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>()
         {
             @Override
@@ -157,6 +157,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
         {
             Log.d("TAG", response.toString());
             TextView date_TV = findViewById(R.id.date);
+            TextView genre_TV = findViewById(R.id.genre);
             title = response.getString("title");
             genre = response.getString("genre");
             summary = response.getString("summary");
@@ -171,7 +172,10 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
 
             try
             {
-                ((TextView) findViewById(R.id.genre)).setText("Genre: " + genre.substring(2, genre.length() - 2).replace("\\n", ", "));
+                if (genre.equals(""))
+                    date_TV.setVisibility(View.GONE);
+                else
+                    genre_TV.setText("Genre: " + genre.substring(2, genre.length() - 2).replace("\\n", ", "));
             } catch (StringIndexOutOfBoundsException e)
             {
                 Log.d("Error", e.toString() + "gid = " + id);
@@ -196,8 +200,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
         {
             e.printStackTrace();
 
-        }
-        finally
+        } finally
         {
             findViewById(R.id.progress_view).setVisibility(View.GONE);
             findViewById(R.id.container).setVisibility(View.VISIBLE);
@@ -272,7 +275,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
                         , null));
                 ImageView imageView = settingsDialog.findViewById(R.id.imageview1);
                 settingsDialog.show();
-                Log.d("ImageLOading",MyApplication.getImageurl() + id);
+                Log.d("ImageLOading", MyApplication.getImageurl() + id);
                 Picasso.with(this)
                         .load(MyApplication.getImageurl() + id)
                         .into(imageView);
@@ -283,7 +286,7 @@ public class Requirement_content extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
                     {
-                        Log.d("ImageLOading",exception.getMessage());
+                        Log.d("ImageLOading", exception.getMessage());
                     }
                 });
                 builder.build().load(MyApplication.getImageurl() + id).into(imageView);

@@ -419,6 +419,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 String genre = jsonObject.getString("genre");
                 String date = jsonObject.getString("date");
                 String name = jsonObject.getString("gname");
+                Log.d("DAte",date);
                 // idarray.add(Integer.toString(gid));
                 idArrayList.add(Integer.toString(gid));
                 gamelist.add(new Information(gid, name, summary, genre, date));
@@ -562,6 +563,7 @@ public class GameListActivity extends Fragment implements FloatingSearchView.OnQ
                 String summary = String.valueOf(Html.fromHtml(jsonObject.getString("summary")));
                 String genre = jsonObject.getString("genre");
                 String date = jsonObject.getString("date");
+                Log.d("date3",date);
                 String name = jsonObject.getString("gname");
                 filteredList.add(new Information(gid, name, summary, genre, date));
             }
